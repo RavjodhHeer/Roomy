@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import db, { auth, provider, storage } from "../firebase";
 
 const Container = styled.div`
 	grid-area: left;
@@ -148,6 +149,7 @@ function Left(props) {
 						<Photo photoUrl={photoUrl} />
 						<Link>Welcome, {props.user ? props.user.displayName : "there"}!</Link>
 					</a>
+					<h3>Status</h3>
 					<a>
 						<AddPhotoText>Add a photo</AddPhotoText>
 					</a>
@@ -157,6 +159,8 @@ function Left(props) {
 						<div>
 							<span>Connections</span>
 							<span>Grow Your Network</span>
+							<button onClick={changeToLandlord}>Landlord Profile</button>
+							<button onClick={changeToRenter}>Renter Profile</button>
 						</div>
 						<img src="/images/widget-icon.svg" alt="" />
 					</a>
@@ -189,6 +193,17 @@ function Left(props) {
 	);
 }
 
+const changeToLandlord = () => {
+	db.collection("profiles").doc(auth.currentUser.uid).set({
+		status: 'Landlord'
+	})
+}
+
+const changeToRenter = () => {
+	db.collection("profiles").doc(auth.currentUser.uid).set({
+		status: 'Renter'
+	})
+}
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
