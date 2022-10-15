@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Login from "./Login";
 import Header from "./Header";
 import Home from "./Home";
@@ -20,8 +20,12 @@ function App(props) {
 						<Login />
 					</Route>
 					<Route path="/feed">
-						<Header />
-						<Home />
+						{!props.user ? <Redirect to="/" /> : // Fixed issue where /feed would break due to user info not being passed
+							<span>
+								<Header />
+								<Home />
+							</span>
+						}
 					</Route>
 				</Switch>
 			</Router>
@@ -30,7 +34,9 @@ function App(props) {
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		user: state.userState.user,
+	};
 };
 
 const mapDispatchToProps = (dispatch) => ({
