@@ -43,7 +43,7 @@ const Photo = styled.div`
 	background-clip: content-box;
 	background-color: #fff;
 	background-position: center;
-	/* background-size: 60%; */
+	background-size: 100%;
 	background-repeat: no-repeat;
 	border: 2px solid white;
 	margin: -38px auto 12px;
@@ -139,6 +139,7 @@ const CommunityCard = styled(ArtCard)`
 `;
 
 function Left(props) {
+	console.log(props);
 	let photoUrl = props.user.photoURL ? props.user.photoURL : "/images/photo.svg";
 	return (
 		<Container>

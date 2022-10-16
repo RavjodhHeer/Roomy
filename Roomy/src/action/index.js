@@ -41,6 +41,25 @@ export function signInAPI() {
 	};
 }
 
+export function registerWithEmail(email, password, photoURL, userName, fullName) {
+	return (dispatch) => {
+		auth.createUserWithEmailAndPassword(email, password).then((userAuth) => {
+            userAuth.user.updateProfile({
+                displayName: fullName,
+                photoURL: photoURL
+            }).then(() => dispatch(setUser(userAuth.user)));
+        }).catch((err) => alert(err.message));
+	};
+}
+
+export function signInWithEmail(email, password) {
+	return (dispatch) => {
+		auth.signInWithEmailAndPassword(email,password)
+			.then(userAuth => dispatch(setUser(userAuth.user)))
+			.catch(error => alert(error));
+	};
+}
+
 export function signOutAPI() {
 	return (dispatch) => {
 		auth.signOut()
