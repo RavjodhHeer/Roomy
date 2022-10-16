@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import styled from "styled-components";
-import { signInAPI } from "../action";
+import { signInAPI, registerWithEmail, setUser, signInWithEmail } from "../action";
 
 const Container = styled.div``;
 
@@ -40,9 +40,9 @@ const Join = styled.a`
 `;
 
 const SignIn = styled.a`
-	box-shadow: inset 0 0 0 1px #0a66c2;
+	box-shadow: inset 0 0 0 1px #7822C7;
 	border-radius: 25px;
-	color: #0a66c2;
+	color: #7822C7;
 	font-size: 16px;
 	font-weight: 600;
 	transition-duration: 167ms;
@@ -52,7 +52,7 @@ const SignIn = styled.a`
 	background-color: transparent;
 	&:hover {
 		background-color: rgba(112, 181, 249, 0.15);
-		box-shadow: inset 0 0 0 2px #0a66c2;
+		box-shadow: inset 0 0 0 2px #7822C7;
 	}
 `;
 
@@ -67,6 +67,7 @@ const Section = styled.section`
 	position: relative;
 	width: 100%;
 	max-width: 1128px;
+	justify-content: center;
 	align-items: center;
 	margin: auto;
 	@media (max-width: 768px) {
@@ -78,11 +79,12 @@ const Hero = styled.div`
 	width: 100%;
 	h1 {
 		padding-bottom: 0;
-		width: 55%;
 		font-size: 56px;
-		color: #2977c9;
+		color: #7822C7;
 		font-weight: 200;
 		line-height: 70px;
+		justify-content: center;
+		text-align: center;
 		@media (max-width: 768px) {
 			text-align: center;
 			width: 100%;
@@ -128,6 +130,7 @@ const Google = styled.button`
 	font-size: 20px;
 	color: rgba(0, 0, 0, 0.6);
 	z-index: 0;
+	margin-bottom:10px;
 	&:hover {
 		background-color: rgba(207, 207, 207, 0.25);
 		color: rgba(0, 0, 0, 0.75);
@@ -136,9 +139,23 @@ const Google = styled.button`
 	img {
 		margin-right: 25px;
 	}
+	input {
+		border: none;
+		background: transparent;
+		margin-right: 10%;
+	}
+	input:focus{
+		outline: none;
+	}
 `;
 
 function Login(props) {
+	const [email, setEmail] 	  = useState("");
+	const [password, setPassword] = useState("");
+	const [photoURL, setPhotoURL] = useState("");
+	const [userName, setUserName] = useState("");
+	const [fullName, setFullName] = useState("");
+	const [joinType, setJoinType] = useState(true); // True = Sign In ; False = Register
 	return (
 		<Container>
 			{props.user && <Redirect to="/feed" />}
@@ -146,22 +163,42 @@ function Login(props) {
 				<a href="/">
 					<img src="/images/login-logo.svg" alt="" />
 				</a>
-				<div>
-					<Join>Join Now</Join>
-					<SignIn>Sign In</SignIn>
-				</div>
+				{joinType ?
+					<div>
+						<Join onClick={() => setJoinType(false) }>Register</Join>
+						<SignIn>Sign In</SignIn>
+					</div>
+				:
+					<div>
+						<SignIn>Register</SignIn>
+						<Join onClick={() => setJoinType(true) }>Sign In</Join>
+					</div>
+				}
 			</Nav>
 			<Section>
 				<Hero>
-					<h1>Welcome to your professional community</h1>
-					<img src="/images/login-hero.svg" alt="" />
+					<h1>{joinType ? "Sign In" : "Setup Profile"}</h1>
 				</Hero>
-				<Form>
-					<Google onClick={() => props.signIn()}>
-						<img src="/images/google.svg" alt="" />
-						Sign in with Google
-					</Google>
-				</Form>
+				{ !joinType ? // Register
+					<Form>
+						<Google><input type="text" size="40" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Full Name" /></Google>
+						<Google><input type="text" size="40" value={photoURL} onChange={e => setPhotoURL(e.target.value)} placeholder="Profile Pic URL" /></Google>
+						<Google><input type="text" size="40" value={userName} onChange={e => setUserName(e.target.value)} placeholder="User Name" /></Google>
+						<Google><input type="email" size="40" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" /></Google>
+						<Google><input type="password" size="40" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" /></Google>
+						<SignIn onClick={()=>{props.registerEmail(email, password, photoURL, userName, fullName)}}>Register</SignIn>
+					</Form>
+				:			// Sign In
+					<Form>
+						<Google><input type="email" size="40" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" /></Google>
+						<Google><input type="password" size="40" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" /></Google>
+						<SignIn onClick={()=>{props.signinWithEmail(email, password)}}>Sign In</SignIn>
+						<Google onClick={() => props.signIn()}>
+							<img src="/images/google.svg" alt="" />
+							Sign in with Google
+						</Google>
+					</Form>
+				}
 			</Section>
 		</Container>
 	);
@@ -175,6 +212,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
 	signIn: () => dispatch(signInAPI()),
+	registerEmail: (email, password, photoURL, userName, fullName) => dispatch(registerWithEmail(email, password, photoURL, userName, fullName)),
+	signinWithEmail: (email, password) => dispatch(signInWithEmail(email, password)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
