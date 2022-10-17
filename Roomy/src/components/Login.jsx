@@ -149,6 +149,13 @@ const Google = styled.button`
 	}
 `;
 
+const CenteredDiv = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom:10px;
+`;
+
 function Login(props) {
 	const [email, setEmail] 	  = useState("");
 	const [password, setPassword] = useState("");
@@ -156,6 +163,7 @@ function Login(props) {
 	const [userName, setUserName] = useState("");
 	const [fullName, setFullName] = useState("");
 	const [joinType, setJoinType] = useState(true); // True = Sign In ; False = Register
+	const [userType, setUserType] = useState("Renter"); // Renter or Landlord
 	return (
 		<Container>
 			{props.user && <Redirect to="/feed" />}
@@ -181,18 +189,34 @@ function Login(props) {
 				</Hero>
 				{ !joinType ? // Register
 					<Form>
+						<CenteredDiv><h1>What type of Roomie are you?</h1></CenteredDiv>
+						{userType === "Renter" ?
+							<CenteredDiv>
+								<SignIn>Renter</SignIn>
+								<Join onClick={()=>setUserType("Landlord")}>Landlord</Join>
+							</CenteredDiv>
+						:
+							<CenteredDiv>
+								<Join onClick={()=>setUserType("Renter")}>Renter</Join>
+								<SignIn>Landlord</SignIn>
+							</CenteredDiv>
+						}
 						<Google><input type="text" size="40" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Full Name" /></Google>
 						<Google><input type="text" size="40" value={photoURL} onChange={e => setPhotoURL(e.target.value)} placeholder="Profile Pic URL" /></Google>
 						<Google><input type="text" size="40" value={userName} onChange={e => setUserName(e.target.value)} placeholder="User Name" /></Google>
 						<Google><input type="email" size="40" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" /></Google>
 						<Google><input type="password" size="40" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" /></Google>
-						<SignIn onClick={()=>{props.registerEmail(email, password, photoURL, userName, fullName)}}>Register</SignIn>
+						<CenteredDiv>
+							<SignIn onClick={()=>{props.registerEmail(email, password, photoURL, userName, fullName, userType)}}>Register</SignIn>
+						</CenteredDiv>
 					</Form>
 				:			// Sign In
 					<Form>
 						<Google><input type="email" size="40" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" /></Google>
 						<Google><input type="password" size="40" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" /></Google>
-						<SignIn onClick={()=>{props.signinWithEmail(email, password)}}>Sign In</SignIn>
+						<CenteredDiv>
+							<SignIn onClick={()=>{props.signinWithEmail(email, password)}}>Sign In</SignIn>
+						</CenteredDiv>
 						<Google onClick={() => props.signIn()}>
 							<img src="/images/google.svg" alt="" />
 							Sign in with Google
@@ -212,7 +236,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
 	signIn: () => dispatch(signInAPI()),
-	registerEmail: (email, password, photoURL, userName, fullName) => dispatch(registerWithEmail(email, password, photoURL, userName, fullName)),
+	registerEmail: (email, password, photoURL, userName, fullName, userType) => dispatch(registerWithEmail(email, password, photoURL, userName, fullName, userType)),
 	signinWithEmail: (email, password) => dispatch(signInWithEmail(email, password)),
 });
 
