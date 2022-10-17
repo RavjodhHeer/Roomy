@@ -139,7 +139,6 @@ const CommunityCard = styled(ArtCard)`
 `;
 
 function Left(props) {
-	console.log(props);
 	let photoUrl = props.user.photoURL ? props.user.photoURL : "/images/photo.svg";
 	return (
 		<Container>
