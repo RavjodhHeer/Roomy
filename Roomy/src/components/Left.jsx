@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import db, { auth, provider, storage } from "../firebase";
@@ -149,7 +149,7 @@ function Left(props) {
 						<Photo photoUrl={photoUrl} />
 						<Link>Welcome, {props.user ? props.user.displayName : "there"}!</Link>
 					</a>
-					<h3>Status</h3>
+					<h3>Status: {props.user.userInfo ? props.user.userInfo.status : "N/A"}</h3>
 					<a>
 						<AddPhotoText>Add a photo</AddPhotoText>
 					</a>
