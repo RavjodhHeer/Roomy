@@ -27,7 +27,19 @@ export function getUserAuth() {
 	return (dispatch) => {
 		auth.onAuthStateChanged(async (user) => {
 			if (user) {
-				dispatch(setUser(user));
+				var docRef = db.collection("profiles").doc(user.uid);
+				docRef.get().then((docIncoming) => {
+					if (docIncoming.exists) {
+						user.userInfo = docIncoming.data();
+						console.log("Retrieving DB data");
+						dispatch(setUser(user));
+					} else {
+						console.log("No such document!");
+					}
+				}).catch((error) => {
+					console.log("Error getting document:", error);
+				});
+				// dispatch(setUser(user));
 			}
 		});
 	};
@@ -41,13 +53,16 @@ export function signInAPI() {
 	};
 }
 
-export function registerWithEmail(email, password, photoURL, userName, fullName) {
+export function registerWithEmail(email, password, photoURL, userName, fullName, userType) {
 	return (dispatch) => {
 		auth.createUserWithEmailAndPassword(email, password).then((userAuth) => {
             userAuth.user.updateProfile({
                 displayName: fullName,
                 photoURL: photoURL
-            }).then(() => dispatch(setUser(userAuth.user)));
+            }).then(() => {
+				dispatch(setUser(userAuth.user));
+				setUserInfo(userAuth.user.uid, userType, userName);
+			});
         }).catch((err) => alert(err.message));
 	};
 }
@@ -55,7 +70,20 @@ export function registerWithEmail(email, password, photoURL, userName, fullName)
 export function signInWithEmail(email, password) {
 	return (dispatch) => {
 		auth.signInWithEmailAndPassword(email,password)
-			.then(userAuth => dispatch(setUser(userAuth.user)))
+			.then(userAuth => {
+				var docRef = db.collection("profiles").doc(userAuth.user.uid);
+				docRef.get().then((docIncoming) => {
+					if (docIncoming.exists) {
+						userAuth.user.userInfo = docIncoming.data();
+						dispatch(setUser(userAuth.user));
+					} else {
+						console.log("No such document!");
+					}
+				}).catch((error) => {
+					console.log("Error getting document:", error);
+				});
+				// dispatch(setUser(userAuth.user));
+			})
 			.catch(error => alert(error));
 	};
 }
@@ -162,4 +190,12 @@ export function updateArticleAPI(payload) {
 	return (dispatch) => {
 		db.collection("articles").doc(payload.id).update(payload.update);
 	};
+}
+
+export function setUserInfo(uid, userType, userName){
+	db.collection("profiles").doc(uid).set({
+		looking: true,
+		userName: userName ? userName : uid,
+		status: userType ? userType : "Renter",
+	});
 }
