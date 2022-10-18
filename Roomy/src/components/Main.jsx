@@ -212,6 +212,9 @@ function displayTime(date) {
 	else if (secondsSince < 3600) {
 		return Math.floor(secondsSince/60) + "m"
 	}
+	else if (secondsSince < 86400) {
+		return Math.floor(secondsSince/3600) + "h"
+	}
 	else if (secondsSince < 2628000) {
 		return Math.floor(secondsSince/86400) + "d"
 	}
