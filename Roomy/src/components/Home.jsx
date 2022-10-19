@@ -66,16 +66,9 @@ function Home(props) {
 		<Container>
 			{!props.user && <Redirect to="/" />}
 			<Content>
-				<Section>
-					<h5>
-						<a>Hiring in a hurray..?</a>
-					</h5>
-					<p>- Find talented pros in record time with LinkedIn and keep business moving.</p>
-				</Section>
 				<Layout>
 					<Left />
 					<Main />
-					<Right />
 				</Layout>
 			</Content>
 		</Container>
