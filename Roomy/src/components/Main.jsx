@@ -202,6 +202,30 @@ const Content = styled.div`
 	}
 `;
 
+const monthLookup = ["Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "];
+
+function displayTime(date) {
+	const secondsSince = Math.floor((Date.now() - date.valueOf())/1000)
+	if (secondsSince < 60) {
+		return secondsSince + "s"
+	}
+	else if (secondsSince < 3600) {
+		return Math.floor(secondsSince/60) + "m"
+	}
+	else if (secondsSince < 86400) {
+		return Math.floor(secondsSince/3600) + "h"
+	}
+	else if (secondsSince < 2628000) {
+		return Math.floor(secondsSince/86400) + "d"
+	}
+	else if (new Date().getFullYear() === date.getFullYear()) {
+		return monthLookup[date.getMonth()] + date.getDate()
+	}
+	else {
+		return monthLookup[date.getMonth()] + date.getDate() + ", " + date.getFullYear()
+	}
+}
+
 function Main(props) {
 	const [showModal, setShowModal] = useState("close");
 
@@ -294,7 +318,7 @@ function Main(props) {
 									<div>
 										<span>{article.actor.title}</span>
 										<span>{article.actor.description}</span>
-										<span>{article.actor.date.toDate().toLocaleDateString()}</span>
+										<span>{displayTime(article.actor.date.toDate())}</span>
 									</div>
 								</a>
 								<button>
