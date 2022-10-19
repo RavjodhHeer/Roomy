@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import Login from "./Login";
 import Header from "./Header";
 import Home from "./Home";
+import Profile from './Profile';
 import { useEffect } from "react";
 import { getUserAuth } from "../action";
 import { connect } from "react-redux";
@@ -20,12 +21,15 @@ function App(props) {
 						<Login />
 					</Route>
 					<Route path="/feed">
-						{!props.user ? <Redirect to="/" /> : // Fixed issue where /feed would break due to user info not being passed
+						{!props.user ? <Redirect to="/" /> :
 							<span>
 								<Header />
 								<Home />
 							</span>
 						}
+					</Route>
+					<Route path="/profile/:id">
+						<Profile />
 					</Route>
 				</Switch>
 			</Router>
