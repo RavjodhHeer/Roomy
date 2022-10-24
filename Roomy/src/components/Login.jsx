@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import styled from "styled-components";
-import { signInAPI, registerWithEmail, setUser, signInWithEmail } from "../action";
+import { signInAPI, registerWithEmail, signInWithEmail } from "../action";
 
 const Container = styled.div``;
 
@@ -75,6 +75,24 @@ const Section = styled.section`
 	}
 `;
 
+const PreSection = styled.section`
+	display: flex;
+	flex-wrap: wrap;
+	align-content: start;
+	min-height: 700px;
+	padding-bottom: 138px;
+	padding-top: 40px;
+	padding: 60px 0;
+	position: relative;
+	width: 100%;
+	max-width: 1128px;
+	align-items: center;
+	margin: auto;
+	@media (max-width: 768px) {
+		min-height: 0;
+	}
+`;
+
 const Hero = styled.div`
 	width: 100%;
 	h1 {
@@ -97,6 +115,37 @@ const Hero = styled.div`
 		height: 670px;
 		position: absolute;
 		bottom: -2px;
+		right: -150px;
+		@media (max-width: 768px) {
+			top: 230px;
+			position: initial;
+			width: initial;
+			height: initial;
+		}
+	}
+`;
+
+const PreHero = styled.div`
+	width: 100%;
+	h1 {
+		padding-bottom: 0;
+		width: 55%;
+		font-size: 56px;
+		color: #8f2bb8;
+		font-weight: 200;
+		line-height: 70px;
+		@media (max-width: 768px) {
+			text-align: center;
+			width: 100%;
+			font-size: 20px;
+			line-height: 2;
+		}
+	}
+	img {
+		width: 880px;
+		height: 380px;
+		position: absolute;
+		bottom: 260px;
 		right: -150px;
 		@media (max-width: 768px) {
 			top: 230px;
@@ -149,6 +198,32 @@ const Google = styled.button`
 	}
 `;
 
+const PreSignIn = styled.button`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #fff;
+	height: 56px;
+	width: 100%;
+	border-radius: 30px;
+	box-shadow: inset 0 0 0 1px #8f2bb8, inset 0 0 0 2px rgb(0 0 0 / 0%), inset 0 0 0 1px rgb(0 0 0 / 0);
+	border: none;
+	vertical-align: middle;
+	transition-duration: 167ms;
+	font-size: 20px;
+	color: rgba(0, 0, 0, 0.6);
+	z-index: 0;
+	&:hover {
+		background-color: #EAEDED;
+		color: rgba(0, 0, 0, 0.75);
+		box-shadow: inset 0 0 0 2px #8f2bb8, inset 0 0 0 3px rgb(0 0 0 / 0%), inset 0 0 0 2px rgb(0 0 0 / 0);
+	}
+	img {
+		margin-right: 25px;
+	}
+`;
+
+
 const CenteredDiv = styled.div`
 	display: flex;
 	justify-content: center;
@@ -164,6 +239,8 @@ function Login(props) {
 	const [fullName, setFullName] = useState("");
 	const [joinType, setJoinType] = useState(true); // True = Sign In ; False = Register
 	const [userType, setUserType] = useState("Renter"); // Renter or Landlord
+	const [pastHero, setPastHero] = useState(false); // Splash page before signin / register
+
 	return (
 		<Container>
 			{props.user && <Redirect to="/feed" />}
@@ -183,6 +260,7 @@ function Login(props) {
 					</div>
 				}
 			</Nav>
+			{ pastHero ? 
 			<Section>
 				<Hero>
 					<h1>{joinType ? "Sign In" : "Setup Profile"}</h1>
@@ -224,6 +302,19 @@ function Login(props) {
 					</Form>
 				}
 			</Section>
+			: 
+			<PreSection>
+				<PreHero>
+					<h1>A House isn't a Home</h1>
+					<h1>without Roomy</h1>
+					<img src="/images/Home2.png" class="canvas" alt="" />
+				</PreHero>
+				<Form>
+					<PreSignIn onClick={() => setPastHero(true)}>
+						Sign In
+					</PreSignIn>
+				</Form>
+			</PreSection>}
 		</Container>
 	);
 }
