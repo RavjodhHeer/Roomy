@@ -7,6 +7,7 @@ import Profile from './Profile';
 import { useEffect } from "react";
 import { getUserAuth } from "../action";
 import { connect } from "react-redux";
+import Rentals from "./Rentals";
 
 function App(props) {
 	useEffect(() => {
@@ -30,6 +31,9 @@ function App(props) {
 					</Route>
 					<Route path="/profile/:id">
 						<Profile />
+					</Route>
+					<Route path="/rentals">
+						<Rentals />
 					</Route>
 				</Switch>
 			</Router>
