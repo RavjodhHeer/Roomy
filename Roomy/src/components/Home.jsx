@@ -64,7 +64,6 @@ const Layout = styled.div`
 function Home(props) {
 	return (
 		<Container>
-			{!props.user && <Redirect to="/" />}
 			<Content>
 				<Layout>
 					<Left />
