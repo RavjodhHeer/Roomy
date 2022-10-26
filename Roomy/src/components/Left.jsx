@@ -4,19 +4,19 @@ import styled from "styled-components";
 import db, { auth, provider, storage } from "../firebase";
 
 const Container = styled.div`
-	grid-area: left;
+	grid-area: right;
 `;
 
 const ArtCard = styled.div`
 	text-align: center;
 	overflow: hidden;
 	margin-bottom: 8px;
-	border-radius: 5px;
+	border-radius: 0px;
 	background-color: #fff;
 	transition: box-shadow 83ms;
 	position: relative;
 	border: none;
-	box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 0 0 rgb(0 0 0 / 20%);
+	box-shadow: 0 0 5px #999, 0 0 0 rgb(0 0 0 / 20%);
 `;
 
 const UserInfo = styled.div`
@@ -120,7 +120,7 @@ const CommunityCard = styled(ArtCard)`
 		padding: 4px 12px;
 		font-size: 12px;
 		&:hover {
-			color: #0a66c2;
+			color: #A943D3;
 		}
 		span {
 			display: flex;
@@ -138,6 +138,27 @@ const CommunityCard = styled(ArtCard)`
 	}
 `;
 
+const Button = styled.button`
+  display: inline-block;
+  outline: 0;
+  text-align: left;
+  align-items: bottom;
+  background-color: white;
+  border-color: #fff;
+  border: 1px solid transparent;
+  color: black;
+  font-weight: 400;
+  border-radius: 30px;
+  font-size: 14px;
+  padding: 5px 10px;
+  margin: 10px 0px;
+  cursor: pointer;
+  text-align: center;
+  &:hover {
+    color: #A943D3;
+  }
+`;
+
 function Left(props) {
 	let photoUrl = props.user.photoURL ? props.user.photoURL : "/images/photo.svg";
 	return (
@@ -151,16 +172,16 @@ function Left(props) {
 					</a>
 					<h3>Status: {props.user.userInfo ? props.user.userInfo.status : "N/A"}</h3>
 					<a>
-						<AddPhotoText>Add a photo</AddPhotoText>
+						<AddPhotoText>Edit Profile</AddPhotoText>
 					</a>
 				</UserInfo>
 				<Widget>
 					<a>
 						<div>
-							<span>Connections</span>
-							<span>Grow Your Network</span>
-							<button onClick={changeToLandlord}>Landlord Profile</button>
-							<button onClick={changeToRenter}>Renter Profile</button>
+							<span>Rentals</span>
+							<span>Manage Rentals or Applications</span>
+							<Button onClick={changeToLandlord}>I am a Landlord</Button>
+							<Button onClick={changeToRenter}>I am a Renter</Button>
 						</div>
 						<img src="/images/widget-icon.svg" alt="" />
 					</a>
@@ -168,22 +189,22 @@ function Left(props) {
 				<Item>
 					<span>
 						<img src="/images/item-icon.svg" alt="" />
-						My Items
+						Saved Properties
 					</span>
 				</Item>
 			</ArtCard>
 			<CommunityCard>
 				<a>
-					<span>Groups</span>
+					<span>Roommates</span>
 				</a>
 				<a>
 					<span>
-						Events
+						Social
 						<img src="/images/plus-icon.svg" alt="" />
 					</span>
 				</a>
 				<a>
-					<span>Follow Hashtags</span>
+					<span>Find Rentals</span>
 				</a>
 				<a>
 					<span>Discover More</span>

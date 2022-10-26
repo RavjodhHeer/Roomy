@@ -2,6 +2,7 @@ import React, { Component }  from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Login from "./Login";
 import Header from "./Header";
+import Sidebar from "./Sidebar";
 import Home from "./Home";
 import Profile from './Profile';
 import { useEffect } from "react";
@@ -24,6 +25,11 @@ function App(props) {
 						{!props.user ? <Redirect to="/" /> :
 							<span>
 								<Header />
+								<Sidebar />
+									<Switch>
+										<Route exact path="/" component={Home} />
+										<Route path="/feed" component={Home} />
+									</Switch>
 								<Home />
 							</span>
 						}

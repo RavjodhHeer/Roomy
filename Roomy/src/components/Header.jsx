@@ -5,13 +5,15 @@ import { signOutAPI } from "../action";
 
 const Container = styled.div`
 	background-color: #fff;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+	box-shadow: -5px 0px 5px #999;
+	border-left: 1px solid rgba(0, 0, 0, 0.08);
 	padding: 0 24px;
 	position: sticky;
-	top: 0;
-	left: 0;
+	top: 1;
+	right: 1;
+	height: 60px;
 	/* width: 100vw; */
-	z-index: 10;
+	z-index: 90;
 `;
 
 const Content = styled.div`
@@ -71,6 +73,7 @@ const SearchIcon = styled.div`
 	justify-content: center;
 `;
 
+/*
 const Nav = styled.nav`
 	margin-left: auto;
 	display: block;
@@ -190,80 +193,25 @@ const User = styled(NavList)`
 const Work = styled(User)`
 	border-left: 1px solid rgba(0, 0, 0, 0.08);
 `;
+*/
 
 function Header(props) {
 	return (
 		<Container>
 			<Content>
 				<Logo>
-					<a href="/feed">
+					<a href="/">
 						<img src="/images/home-logo.svg" alt="" />
 					</a>
 				</Logo>
 				<Search>
-					<div>
-						<input type="text" placeholder="Search" />
-					</div>
-					<SearchIcon>
-						<img src="/images/search-icon.svg" alt="" />
-					</SearchIcon>
-				</Search>
-				<SignOutMobile onClick={() => props.signOut()}>
-					<a>Sign Out</a>
-				</SignOutMobile>
-				<Nav>
-					<NavListWrap>
-						<NavList className="active">
-							<a href="/feed">
-								<img src="/images/nav-home.svg" alt="" />
-								<span>Home</span>
-							</a>
-						</NavList>
-						<NavList>
-							<a href="/feed">
-								<img src="/images/nav-network.svg" alt="" />
-								<span>My Network</span>
-							</a>
-						</NavList>
-						<NavList>
-							<a href="/feed">
-								<img src="/images/nav-jobs.svg" alt="" />
-								<span>Jobs</span>
-							</a>
-						</NavList>
-						<NavList>
-							<a href="/feed">
-								<img src="/images/nav-messaging.svg" alt="" />
-								<span>Messaging</span>
-							</a>
-						</NavList>
-						<NavList>
-							<a href="/feed">
-								<img src="/images/nav-notifications.svg" alt="" />
-								<span>Notifications</span>
-							</a>
-						</NavList>
-						<User>
-							<a>
-								{props.user && props.user.photoURL ? <img src={props.user.photoURL} alt="" /> : <img src="/images/user.svg" alt="" />}
-								<span>
-									Me <img src="/images/down-icon.svg" alt="" />
-								</span>
-							</a>
-							<SignOut onClick={() => props.signOut()}>
-								<a>Sign Out</a>
-							</SignOut>
-						</User>
-						<Work>
-							<a>
-								<img src="/images/nav-work.svg" alt="" />
-								<span>
-									Work <img src="/images/down-icon.svg" alt="" />
-								</span>
-							</a>
-						</Work>
-					</NavListWrap>
-				</Nav>
+                    <div>
+                        <input type="text" placeholder="Search" />
+                    </div>
+                    <SearchIcon>
+                        <img src="/images/search-icon.svg" alt="" />
+                    </SearchIcon>	
+                </Search>
 			</Content>
 		</Container>
 	);

@@ -4,7 +4,7 @@ import { Redirect } from "react-router";
 import styled from "styled-components";
 import Left from "./Left";
 import Main from "./Main";
-import Right from "./Right";
+import Right from "./Left";
 
 const Container = styled.div`
 	max-width: 100%;
@@ -67,8 +67,8 @@ function Home(props) {
 			{!props.user && <Redirect to="/" />}
 			<Content>
 				<Layout>
-					<Left />
 					<Main />
+					<Left />
 				</Layout>
 			</Content>
 		</Container>

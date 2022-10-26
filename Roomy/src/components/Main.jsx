@@ -14,10 +14,10 @@ const CommonBox = styled.div`
 	overflow: hidden;
 	margin-bottom: 8px;
 	background-color: #fff;
-	border-radius: 5px;
+	border-radius: 0px;
 	position: relative;
 	border: none;
-	box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 0 0 rgb(0 0 0 / 20%);
+	box-shadow: 0 0 5px #999, 0 0 0 rgb(0 0 0 / 20%);
 `;
 
 const ShareBox = styled(CommonBox)`
@@ -186,11 +186,11 @@ const SocialActions = styled.div`
 	}
 	button.active {
 		span {
-			color: #0a66c2;
+			color: #A943D3;
 			font-weight: 600;
 		}
 		svg {
-			fill: #0a66c2;
+			fill: #A943D3;
 		}
 	}
 `;
@@ -288,24 +288,6 @@ function Main(props) {
 						Start a post
 					</button>
 				</div>
-				<div>
-					<button>
-						<img src="/images/photo-icon.svg" alt="" />
-						<span>Photo</span>
-					</button>
-					<button>
-						<img src="/images/video-icon.svg" alt="" />
-						<span>Video</span>
-					</button>
-					<button>
-						<img src="/images/event-icon.svg" alt="" />
-						<span>Event</span>
-					</button>
-					<button>
-						<img src="/images/article-icon.svg" alt="" />
-						<span>Write article</span>
-					</button>
-				</div>
 			</ShareBox>
 			<Content>
 				{props.loading && <img src="/images/spin-loader.gif" alt="" />}
@@ -340,7 +322,7 @@ function Main(props) {
 											</button>
 										</li>
 										<li>
-											<a>{article.comments} comments (currently not working)</a>
+											<a>{article.comments} comments</a>
 										</li>
 									</>
 								)}
