@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { auth } from "../firebase";
 
 /* This defines the actual bar going down the screen */
 const Container = styled.div`
@@ -131,7 +132,7 @@ class SideNav extends React.Component {
 				</Button>	
 				<Button>
 						<img src="/images/building.svg" alt="" />
-						<span> Rentals</span>
+						<Link to="/rentals"> Rentals</Link>
 				</Button>	
 				<Button>
 					<img src="/images/people-fill.svg" alt="" />
@@ -151,7 +152,7 @@ class SideNav extends React.Component {
 				</Button>
                 <Button>
 					<img src="/images/person-circle.svg" alt="" />
-					<span> Profile</span>
+					<Link to={"/profile/" + auth.currentUser.uid}> Profile</Link>
 				</Button>
                 <Button>
 					<img src="/images/gear.svg" alt="" />
