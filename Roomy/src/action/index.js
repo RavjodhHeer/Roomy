@@ -39,7 +39,6 @@ export function getUserAuth() {
 				}).catch((error) => {
 					console.log("Error getting document:", error);
 				});
-				// dispatch(setUser(user));
 			}
 		});
 	};
@@ -48,7 +47,25 @@ export function getUserAuth() {
 export function signInAPI() {
 	return (dispatch) => {
 		auth.signInWithPopup(provider)
-			.then((payload) => dispatch(setUser(payload.user)))
+		.then(userAuth => {
+			var docRef = db.collection("profiles").doc(userAuth.user.uid);
+			docRef.get().then((docIncoming) => {
+				if (docIncoming.exists) {
+					userAuth.user.userInfo = docIncoming.data();
+					dispatch(setUser(userAuth.user));
+				} else {
+					setUserInfo(userAuth.user.uid, null, null);
+					userAuth.user.userInfo = {
+						looking: true,
+						userName: userAuth.user.uid,
+						status: "Renter",
+					}
+					dispatch(setUser(userAuth.user));
+				}
+			}).catch((error) => {
+				console.log("Error getting document:", error);
+			});
+		})
 			.catch((err) => alert(err.message));
 	};
 }
@@ -82,7 +99,6 @@ export function signInWithEmail(email, password) {
 				}).catch((error) => {
 					console.log("Error getting document:", error);
 				});
-				// dispatch(setUser(userAuth.user));
 			})
 			.catch(error => alert(error));
 	};
