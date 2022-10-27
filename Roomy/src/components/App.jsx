@@ -5,6 +5,7 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Home from "./Home";
 import Profile from './Profile';
+import Rentals from './Rentals';
 import { useEffect } from "react";
 import { getUserAuth } from "../action";
 import { connect } from "react-redux";
@@ -34,9 +35,8 @@ function App(props) {
 							</span>
 						}
 					</Route>
-					<Route path="/profile/:id">
-						<Profile />
-					</Route>
+					<Route path="/profile/:id" component={Profile}/>
+					<Route path="/rentals" component={Rentals}/>
 				</Switch>
 			</Router>
 		</div>
