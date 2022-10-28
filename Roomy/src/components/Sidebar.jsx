@@ -144,7 +144,7 @@ function SideNav({signout, uid}){
 
 function Sidebar(props) {
     return (
-        <SideNav signout={props.signOut} uid={props.user.uid}>
+        <SideNav signout={props.signOut} uid={props.user ? props.user.uid : null}>
             <StyledSideNav></StyledSideNav>
         </SideNav>
     )
