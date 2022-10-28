@@ -8,9 +8,10 @@ const Container = styled.div`
 	box-shadow: -5px 0px 5px #999;
 	border-left: 1px solid rgba(0, 0, 0, 0.08);
 	padding: 0 24px;
-	position: sticky;
-	top: 1;
-	right: 1;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
 	height: 60px;
 	/* width: 100vw; */
 	z-index: 90;
@@ -21,7 +22,6 @@ const Content = styled.div`
 	align-items: center;
 	margin: 0 auto;
 	height: 100%;
-	max-width: 1128px;
 `;
 
 const Logo = styled.span`
@@ -31,7 +31,11 @@ const Logo = styled.span`
 
 const Search = styled.div`
 	opacity: 1;
+	display: flex;
+	flex-direction: row-reverse;
 	flex-grow: 1;
+	align-items: center;
+	justify-content: right;
 	position: relative;
 	@media (max-width: 768px) {
 		flex-grow: unset;
@@ -39,19 +43,19 @@ const Search = styled.div`
 	& > div {
 		max-width: 280px;
 		input {
-			border: none;
+			border: 1px;
 			box-shadow: none;
-			background-color: #eef3f8;
-			border-radius: 2px;
+			background-color: #f9f2f9;
+			border-radius: 100px;
 			color: rgba(0, 0, 0, 0.9);
 			width: 218px;
-			padding: 0 8px 0 40px;
+			padding: 0 10px 0 50px;
 			line-height: 1.75;
 			font-weight: 400;
 			font-size: 14px;
 			height: 34px;
 			vertical-align: text-top;
-			border-color: #dce6f1;
+			border-color: #A943D3;
 			@media (max-width: 768px) {
 				width: 140px;
 			}
@@ -62,138 +66,36 @@ const Search = styled.div`
 const SearchIcon = styled.div`
 	width: 40px;
 	z-index: 1;
-	position: absolute;
-	top: 10px;
-	left: 5px;
+	position: relative;
+	top: 0px;
+	left: 30px;
 	border-radius: 0 2px 2px 0;
 	margin: 0;
 	pointer-events: none;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: right;
 `;
 
-/*
-const Nav = styled.nav`
-	margin-left: auto;
-	display: block;
-	@media (max-width: 768px) {
-		position: fixed;
-		left: 0;
-		bottom: 0;
-		background: white;
-		width: 100%;
-	}
+const Photo = styled.div`
+    img {
+        max-width: 100px;  
+    }
 `;
 
-const NavListWrap = styled.ul`
-	display: flex;
-	flex-wrap: nowrap;
-	list-style-type: none;
-	justify-content: space-between;
-	.active {
-		span::after {
-			content: "";
-			transform: scaleX(1);
-			border-bottom: 2px solid var(--white, #fff);
-			position: absolute;
-			left: 0;
-			bottom: 0;
-			transition: transform 0.2s ease-in-out;
-			width: 100%;
-			border-color: rgba(0, 0, 0, 0.9);
-		}
-	}
-`;
-
-const NavList = styled.li`
-	display: flex;
-	align-items: center;
-	a {
-		align-items: center;
-		background: transparent;
-		display: flex;
-		flex-direction: column;
-		font-size: 12px;
-		font-weight: 400;
-		justify-content: center;
-		line-height: 1.5;
-		min-height: 52px;
-		min-width: 80px;
-		position: relative;
-		text-decoration: none;
-		span {
-			color: rgba(0, 0, 0, 0.6);
-			display: flex;
-			align-items: center;
-			text-align: center;
-		}
-		@media (max-width: 768px) {
-			min-width: 50px;
-			font-size: 9px;
-			span > img {
-				width: 40%;
-			}
-		}
-	}
-	&:hover,
-	&:active {
-		a {
-			span {
-				color: rgba(0, 0, 0, 0.9);
-			}
-		}
-	}
-`;
-
-const SignOut = styled.div`
-	position: absolute;
-	top: 45px;
-	background: white;
-	border-radius: 0 0 5px 5px;
-	width: 100px;
-	height: 40px;
-	font-size: 16px;
+const Text = styled.div`
+	display: inline-block;
+	outline: 0;
 	text-align: center;
-	transition-duration: 167ms;
-	display: none;
-	z-index: 15;
+	align-items: center;
+	color: black;
+	font-weight: 400;
+	font-size: 20px;
+	padding: 10px 24px;
+	margin: 10px 0px;
+	cursor: pointer;
+	text-align: center;
 `;
-
-const SignOutMobile = styled.div`
-	display: none;
-	@media (max-width: 768px) {
-		display: flex;
-		padding-left: 1rem;
-		font-size: 14px;
-	}
-`;
-
-const User = styled(NavList)`
-	a > img {
-		border-radius: 50%;
-		width: 25px;
-		height: 25px;
-	}
-	span {
-		display: flex;
-		align-items: center;
-	}
-	&:hover {
-		${SignOut} {
-			@media (min-width: 768px) {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-		}
-	}
-`;
-
-const Work = styled(User)`
-	border-left: 1px solid rgba(0, 0, 0, 0.08);
-`;
-*/
 
 function Header(props) {
 	return (
@@ -201,9 +103,14 @@ function Header(props) {
 			<Content>
 				<Logo>
 					<a href="/">
-						<img src="/images/home-logo.svg" alt="" />
+						<Photo>
+							<img src="/images/roomylogo.png" alt="" />
+						</Photo>
 					</a>
 				</Logo>
+				<Text>
+					<span> Home</span>
+				</Text>
 				<Search>
                     <div>
                         <input type="text" placeholder="Search" />

@@ -8,10 +8,11 @@ const Container = styled.div`
 `;
 
 const ArtCard = styled.div`
+	top 50px;
 	text-align: center;
 	overflow: hidden;
 	margin-bottom: 8px;
-	border-radius: 0px;
+	border-radius: 2px;
 	background-color: #fff;
 	transition: box-shadow 83ms;
 	position: relative;

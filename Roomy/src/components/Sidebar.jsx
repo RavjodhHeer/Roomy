@@ -10,10 +10,11 @@ const Container = styled.div`
 	border-left: 1px solid rgba(0, 0, 0, 0.08);
 	padding: 0 0px;
 	position: fixed;
-	top: 1;
-	left: 1;
+    width: 100%;
+    top 60px;
+	top: 2;
 	/* width: 100vw; */
-	z-index: 90;
+	z-index: 80;
 `;
 const StyledSideNav = styled.div`
   display: flex;
@@ -74,7 +75,7 @@ const Button = styled.button`
   border: 1px solid transparent;
   color: black;
   font-weight: 400;
-  border-radius: 30px;
+  border-radius: 100px;
   font-size: 20px;
   padding: 10px 24px;
   margin: 10px 0px;
@@ -82,6 +83,7 @@ const Button = styled.button`
   text-align: center;
   &:hover {
     color: #A943D3;
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `;
 
