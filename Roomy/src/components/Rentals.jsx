@@ -1,32 +1,30 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, 
-    Route, Redirect,} from "react-router-dom";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import { getUserAuth } from "../action";
 
-// function Rentals (props){
-//     let {id} = useParams();
-//     return (<div>
-//         <h1>Profile UID: {props.user ? id : null}</h1>
-//     </div>);
-// }
-
-// const mapStateToProps = (state) => {
-// 	return {
-// 		user: state.userState.user,
-// 	};
-// };
-
-// const mapDispatchToProps = (dispatch) => ({
-// 	getUserAuth: () => dispatch(getUserAuth()),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Profile);
-
-const Rentals = () => {
+function Rentals (props){
     return (
-        <div>
-            <h1>Rentals Page</h1>
+        <div className="Rentals">
+            <Header />
+            <Sidebar />
+            <div>
+                <h1> Profile UID: {props.user ? props.user.uid : "ok"} </h1>
+            </div>
         </div>
     );
+}
+
+const mapStateToProps = (state) => {
+	return {
+		user: state.userState.user,
+	};
 };
 
-export default Rentals;
+const mapDispatchToProps = (dispatch) => ({
+	getUserAuth: () => dispatch(getUserAuth()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Rentals);
