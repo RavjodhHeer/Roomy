@@ -162,7 +162,7 @@ const Button = styled.button`
 
 function Left(props) {
 	let user = props.user ? props.user : null;
-	let photoUrl = user ? user.photoUrl : "/images/photo.svg";
+	let photoUrl = user ? user.photoURL : "/images/photo.svg";
 	let status = "";
 	if (user){
 		status = user.userInfo ? user.userInfo.status : "N/A";

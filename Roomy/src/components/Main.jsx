@@ -280,7 +280,7 @@ function Main(props) {
 		props.likeHandler(payload);
 	}
 	let user = props.user ? props.user : null;
-	let photoUrl = user ? user.photoUrl : "/images/photo.svg";
+	let photoUrl = user ? user.photoURL : "/images/photo.svg";
 	let email = user ? user.email : null;
 	return (
 		<Container>

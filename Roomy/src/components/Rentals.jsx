@@ -4,10 +4,12 @@ import Sidebar from "./Sidebar";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getUserAuth } from "../action";
+import { Redirect } from "react-router";
 
 function Rentals (props){
     return (
         <div className="Rentals">
+            {(!props.user && !props.loggingIn) && <Redirect to="/" />}
             <Header />
             <Sidebar />
             <div>
@@ -20,6 +22,7 @@ function Rentals (props){
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
+        loggingIn: state.userState.loggingIn,
 	};
 };
 

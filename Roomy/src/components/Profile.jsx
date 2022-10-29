@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { getUserAuth } from "../action";
 import styled from "styled-components";
 import db, { auth, provider, storage } from "../firebase";
 import { signOutAPI } from "../action";
-
 
 
 const Header = styled.div`
@@ -64,7 +63,7 @@ function Profile(props){
     let {id} = useParams();
     
     return (<div>
-
+        {(!props.user && !props.loggingIn) && <Redirect to="/" />}
         <Header>
             <div className="top">
             
@@ -98,6 +97,7 @@ function Profile(props){
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
+        loggingIn: state.userState.loggingIn,
 	};
 };
 

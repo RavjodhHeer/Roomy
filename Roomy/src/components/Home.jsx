@@ -62,7 +62,6 @@ const Layout = styled.div`
 `;
 
 function Home(props) {
-	console.log(props.user,props.loggingIn);
 	return (
 		<Container>
 			{(!props.user && !props.loggingIn) && <Redirect to="/" />}
