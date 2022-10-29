@@ -23,17 +23,15 @@ function App(props) {
 						<Login />
 					</Route>
 					<Route path="/feed">
-						{!props.user ? <Redirect to="/" /> :
-							<span>
-								<Header />
-								<Sidebar />
-									<Switch>
-										<Route exact path="/" component={Home} />
-										<Route path="/feed" component={Home} />
-									</Switch>
-								<Home />
-							</span>
-						}
+						<span>
+							<Header />
+							<Sidebar />
+								<Switch>
+									<Route exact path="/" component={Home} />
+									<Route path="/feed" component={Home} />
+								</Switch>
+							<Home />
+						</span>
 					</Route>
 					<Route path="/profile/:id" component={Profile}/>
 					<Route path="/rentals" component={Rentals}/>

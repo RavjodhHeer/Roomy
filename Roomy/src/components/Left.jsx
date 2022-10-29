@@ -161,7 +161,14 @@ const Button = styled.button`
 `;
 
 function Left(props) {
-	let photoUrl = props.user.photoURL ? props.user.photoURL : "/images/photo.svg";
+	let user = props.user ? props.user : null;
+	let photoUrl = user ? user.photoUrl : "/images/photo.svg";
+	let status = "";
+	if (user){
+		status = user.userInfo ? user.userInfo.status : "N/A";
+	} else {
+		status = "N/A";
+	}
 	return (
 		<Container>
 			<ArtCard>
@@ -169,9 +176,9 @@ function Left(props) {
 					<CardBackground />
 					<a>
 						<Photo photoUrl={photoUrl} />
-						<Link>Welcome, {props.user ? props.user.displayName : "there"}!</Link>
+						<Link>Welcome, {user ? user.displayName : "there"}!</Link>
 					</a>
-					<h3>Status: {props.user.userInfo ? props.user.userInfo.status : "N/A"}</h3>
+					<h3>Status: {status}</h3>
 					<a>
 						<AddPhotoText>Edit Profile</AddPhotoText>
 					</a>

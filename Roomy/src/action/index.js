@@ -35,10 +35,14 @@ export function getUserAuth() {
 						dispatch(setUser(user));
 					} else {
 						console.log("No such document!");
+						dispatch(setUser(null));
 					}
 				}).catch((error) => {
 					console.log("Error getting document:", error);
+					dispatch(setUser(null));
 				});
+			} else {
+				dispatch(setUser(null));
 			}
 		});
 	};
