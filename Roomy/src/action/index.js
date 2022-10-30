@@ -219,3 +219,28 @@ export function setUserInfo(uid, userType, userName){
 		status: userType ? userType : "Renter",
 	});
 }
+
+export function postRental(payload) {
+	// TODO: Turn local photo links to Firebase links here
+	let photos = [];
+
+    db.collection("rentals").add({
+        price: payload.price,
+        bedrooms: payload.bedrooms,
+        sharedBedroom: payload.sharedBedroom,
+        bathrooms: payload.bathrooms,
+        sharedBathroom: payload.sharedBathroom,
+        description: payload.description ? payload.description : "Description Unavailable",
+        preferences: {
+            smoking: payload.smoking ? payload.smoking : false,
+            pets: payload.pets ? payload.pets : true,
+        },
+        photos: photos ? photos : null,
+        coords: {
+            x: payload.coords.x,
+            y: payload.coords.y
+        },
+		poster: payload.poster,
+		date: payload.date,
+    });
+}
