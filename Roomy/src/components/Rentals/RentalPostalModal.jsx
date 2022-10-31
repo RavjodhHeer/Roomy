@@ -241,7 +241,7 @@ function RentalPostalModal (props){
             price: parseInt(rentPrice),
             bedrooms: parseInt(bedrooms),
             sharedBedroom,
-            bathrooms: parseInt(bedrooms),
+            bathrooms: parseInt(bathrooms),
             sharedBathroom,
             description,
             title,
