@@ -232,7 +232,7 @@ function RentalPostalModal (props){
 	}
     
     function postRental(event){
-        // event.preventDefault();
+        event.preventDefault();
 		if (event.target !== event.currentTarget) {
 			return;
 		}
@@ -244,6 +244,7 @@ function RentalPostalModal (props){
             bathrooms: parseInt(bathrooms),
             sharedBathroom,
             description,
+			address,
             title,
             preferences: {
                 smoking,

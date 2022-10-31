@@ -254,6 +254,7 @@ export function postRental(payload) {
 			title: payload.title ? payload.title : "Title Unavailable",
 			preferences: payload.preferences,
 			photos,
+			address: payload.address,
 			coords: {
 				latitude: payload.coords.latitude,
 				longitude: payload.coords.longitude
