@@ -26,10 +26,6 @@ function App(props) {
 						<span>
 							<Header />
 							<Sidebar />
-								<Switch>
-									<Route exact path="/" component={Home} />
-									<Route path="/feed" component={Home} />
-								</Switch>
 							<Home />
 						</span>
 					</Route>
