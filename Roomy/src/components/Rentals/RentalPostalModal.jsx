@@ -213,6 +213,7 @@ function RentalPostalModal (props){
         setPets(true);
 		setImageFiles([]);
 		setAssetArea("");
+		props.clickHandler(event);
 	};
 
     function handleImage(event) {
