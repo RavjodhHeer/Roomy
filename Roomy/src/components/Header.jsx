@@ -45,7 +45,7 @@ const Search = styled.div`
 		input {
 			border: 1px;
 			box-shadow: none;
-			background-color: #f9f2f9;
+			background-color: rgba(0, 0, 0, 0.1);
 			border-radius: 100px;
 			color: rgba(0, 0, 0, 0.9);
 			width: 218px;

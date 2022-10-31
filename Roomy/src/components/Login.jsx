@@ -305,8 +305,8 @@ function Login(props) {
 			: 
 			<PreSection>
 				<PreHero>
-					<h1>A House isn't a Home</h1>
-					<h1>without Roomy</h1>
+					<h1>Connecting people</h1>
+					<h1>to places</h1>
 					<img src="/images/Home2.png" class="canvas" alt="" />
 				</PreHero>
 				<Form>
