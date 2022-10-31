@@ -220,27 +220,46 @@ export function setUserInfo(uid, userType, userName){
 	});
 }
 
-export function postRental(payload) {
-	// TODO: Turn local photo links to Firebase links here
-	let photos = [];
+async function uploadImage(img){
+	return new Promise(function(resolve, reject){
+		const upload = storage.ref(`rental_images/${img.name}`).put(img);
+		upload.on(
+			"state_changed",
+			(snapshot) => {
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+			},
+			(err) => console.log(err),
+			async () => {
+				const downloadURL = await upload.snapshot.ref.getDownloadURL();
+				resolve(downloadURL);
+			}
+		);
+	});
+}
 
-    db.collection("rentals").add({
-        price: payload.price,
-        bedrooms: payload.bedrooms,
-        sharedBedroom: payload.sharedBedroom,
-        bathrooms: payload.bathrooms,
-        sharedBathroom: payload.sharedBathroom,
-        description: payload.description ? payload.description : "Description Unavailable",
-        preferences: {
-            smoking: payload.smoking ? payload.smoking : false,
-            pets: payload.pets ? payload.pets : true,
-        },
-        photos: photos ? photos : null,
-        coords: {
-            x: payload.coords.x,
-            y: payload.coords.y
-        },
-		poster: payload.poster,
-		date: payload.date,
-    });
+export function postRental(payload) {
+	let photos = [];
+	for (const img of payload.photos ){
+		photos.push(uploadImage(img));
+	}
+	Promise.all(photos).then((urls)=>{
+		photos = urls;
+		db.collection("rentals").add({
+			price: payload.price,
+			bedrooms: payload.bedrooms,
+			sharedBedroom: payload.sharedBedroom,
+			bathrooms: payload.bathrooms,
+			sharedBathroom: payload.sharedBathroom,
+			description: payload.description ? payload.description : "Description Unavailable",
+			title: payload.title ? payload.title : "Title Unavailable",
+			preferences: payload.preferences,
+			photos,
+			coords: {
+				latitude: payload.coords.latitude,
+				longitude: payload.coords.longitude
+			},
+			poster: payload.poster,
+			date: payload.date,
+		});
+	});
 }
