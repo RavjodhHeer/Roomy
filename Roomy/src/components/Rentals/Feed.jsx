@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getRentalsAPI, updateRentalsAPI } from "../../action";
 import styled from "styled-components";
+import RentalPostalModal from "./RentalPostalModal";
 
 const Container = styled.div`
     grid-area: main;
@@ -86,11 +87,31 @@ function Feed(props) {
 		props.getRentals();
 	}, []);
     
+	const clickHandler = (event) => {
+		event.preventDefault();
+		if (event.target !== event.currentTarget) {
+			return;
+		}
+		switch (showModal) {
+			case "open":
+				setShowModal("close");
+				break;
+			case "close":
+				setShowModal("open");
+				break;
+			default:
+				setShowModal("close");
+				break;
+		}
+	};
+	
 	return (
         <Container>
             <CreateRental>
 		 		<div>
                     <a> Some bullshit about creating posts Here {props.loading ? "true" : "false"} </a>
+					<button onClick={()=>setShowModal("open")}>Test</button>
+					<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
 		 		</div>
 		 	</CreateRental>
             <Content>
@@ -107,7 +128,7 @@ function Feed(props) {
                                 </button>
                             </Header>
                             <Body>
-
+							
                             </Body>
                         </Rental>
                 ))}

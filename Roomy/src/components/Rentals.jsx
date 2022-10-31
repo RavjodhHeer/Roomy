@@ -9,25 +9,6 @@ import Feed from "./Rentals/Feed";
 import RentalPostalModal from "./Rentals/RentalPostalModal";
 
 function Rentals (props){
-    const [showModal, setShowModal] = useState("open");
-
-    const clickHandler = (event) => {
-		event.preventDefault();
-		if (event.target !== event.currentTarget) {
-			return;
-		}
-		switch (showModal) {
-			case "open":
-				setShowModal("close");
-				break;
-			case "close":
-				setShowModal("open");
-				break;
-			default:
-				setShowModal("close");
-				break;
-		}
-	};
 
     return (
         <div className="Rentals">
@@ -35,10 +16,6 @@ function Rentals (props){
             <Header />
             <Sidebar />
             <Feed />
-			<div>
-                <h1> Profile UID: {props.user ? props.user.uid : "ok"} </h1>
-				<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
-            </div>
         </div>
     );
 }
