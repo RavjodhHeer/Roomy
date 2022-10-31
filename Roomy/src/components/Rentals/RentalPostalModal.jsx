@@ -2,41 +2,187 @@ import React, {useState} from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getUserAuth, postRental } from "../../action";
-import { Redirect } from "react-router";
 import Firebase from "firebase";
 
-const Google = styled.button`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #fff;
-	height: 56px;
+const Container = styled.div`
+	position: fixed;
+	top: 60px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 11;
+	background-color: rgba(0, 0, 0, 0.8);
+	animation: fadeIn 0.3s ease;
+`;
+
+const Content = styled.div`
 	width: 100%;
-	border-radius: 30px;
-	box-shadow: inset 0 0 0 1px rgb(0 0 0 / 60%), inset 0 0 0 2px rgb(0 0 0 / 0%), inset 0 0 0 1px rgb(0 0 0 / 0);
-	border: none;
-	vertical-align: middle;
-	transition-duration: 167ms;
+	max-width: 552px;
+	max-height: 90%;
+	background-color: #fff;
+	overflow: initial;
+	border-radius: 5px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	top: 32px;
+	margin: 0 auto;
+`;
+
+const Header = styled.div`
+	display: block;
+	padding: 10px 20px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 	font-size: 20px;
-	color: rgba(0, 0, 0, 0.6);
-	z-index: 0;
-	margin-bottom:10px;
-	&:hover {
-		background-color: rgba(207, 207, 207, 0.25);
-		color: rgba(0, 0, 0, 0.75);
-		box-shadow: inset 0 0 0 2px rgb(0 0 0 / 60%), inset 0 0 0 3px rgb(0 0 0 / 0%), inset 0 0 0 2px rgb(0 0 0 / 0);
+	line-height: 1.5;
+	color: rgba(0, 0, 0, 0.9);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	h2 {
+		font-weight: 400;
 	}
+	button {
+		width: 40px;
+		height: 40px;
+		min-width: auto;
+		border: none;
+		outline: none;
+		background: transparent;
+		img,
+		svg {
+			pointer-events: none;
+		}
+	}
+`;
+
+const SharedContent = styled.div`
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	overflow-y: auto;
+	vertical-align: baseline;
+	background: transparent;
+	padding: 5px 12px;
+`;
+
+const UserInfo = styled.div`
+	display: flex;
+	align-items: center;
+	padding: 10px 24px;
 	img {
-		margin-right: 25px;
+		width: 48px;
+		height: 48px;
+		background-clip: content-box;
+		border-radius: 50%;
+		border: 2px solid transparent;
+	}
+	span {
+		font-weight: 600;
+		font-size: 16px;
+		line-height: 1.5;
+		margin-left: 5px;
+	}
+`;
+
+const ShareCreation = styled.div`
+	display: flex;
+	justify-content: space-between;
+	padding: 10px 24px 10px 16px;
+`;
+
+const AttachAsset = styled.div`
+	display: flex;
+	align-items: center;
+`;
+
+const AssetButton = styled.button`
+	display: flex;
+	align-items: center;
+	height: 40px;
+	min-width: auto;
+	margin-right: 8px;
+	border-radius: 50%;
+	border: none;
+	outline: none;
+	justify-content: center;
+	background: transparent;
+	&:hover {
+		background: rgba(0, 0, 0, 0.08);
+	}
+`;
+
+const ShareComment = styled.div`
+	padding-left: 8px;
+	margin-right: auto;
+	border-left: 1px solid rgba(0, 0, 0, 0.08);
+	${AssetButton} {
+		border-radius: 50px;
+		padding: 5px 10px;
+		span {
+			font-size: 16px;
+			font-weight: 600;
+			color: rgba(0, 0, 0, 0.6);
+			padding: 0 5px;
+		}
+	}
+`;
+
+const PostButton = styled.button`
+	min-width: 60px;
+	padding: 0 16px;
+	border-radius: 20px;
+	background: ${(props) => (props.disabled ? "#b8b8b8" : "#A943D3")};
+	color: ${(props) => (props.disabled ? "#5a5a5a" : "#fff")};
+	font-size: 16px;
+	letter-spacing: 1.1px;
+	border: none;
+	outline: none;
+	&:hover {
+		background: ${(props) => (props.disabled ? "#b8b8b8" : "#8f2bb8")};
+	}
+`;
+
+const Editor = styled.div`
+	font-family: Arial, sans-serif;
+	padding: 12px 24px;
+	textarea {
+		width: 100%;
+		min-height: inherit;
+		resize: both;
 	}
 	input {
-		border: none;
-		background: transparent;
-		margin-right: 10%;
+		width: 100%;
+		height: 35px;
+		font-size: 16px;
+		margin-bottom: 20px;
 	}
-	input:focus{
-		outline: none;
+`;
+
+const UploadImage = styled.div`
+	border-radius: 20px;
+	padding: 10px 0px;
+	margin: 10px 0px;
+	cursor: pointer;
+	text-align: center;
+	img {
+		width: 50%;
+        padding: 6px;
 	}
+	&:hover {
+		color: #A943D3;
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+`;
+
+const RentalEntry = styled.div`
+	display: flex;
+    padding: 10px 0px;
+    align-items: center;
+    justify-content: center;
+    h3 {
+        padding-right: 30px;
+    }
 `;
 
 function RentalPostalModal (props){
@@ -46,37 +192,154 @@ function RentalPostalModal (props){
     const [bathrooms, setBathrooms] = useState(1);
     const [rentPrice, setRentPrice] = useState(500);
     const [smoking, setSmoking] = useState(false);
-    const [pets, setPets] = useState(false);
+    const [pets, setPets] = useState(true);
     const [coords, setCoords] = useState({
-        x: 123,
-        y: 345
+        latitude: 37.00035647459514,
+        longitude: -122.0631925615089
     })
-    const [description, setDescription] = useState("Lovely room");
-    const [photos, setPhotos] = useState([]);
+    const [address, setAddress] = useState("606 Engineering Loop, Santa Cruz, CA 95064")
+    const [description, setDescription] = useState();
+    const [title, setTitle] = useState();
+
+	const [imageFiles, setImageFiles] = useState([]);
+	const [videoFile, setVideoFile] = useState("");
+	const [assetArea, setAssetArea] = useState("");
+
+    const reset = (event) => {
+		setBedrooms(1);
+        setBathrooms(1);
+        setRentPrice(500);
+        setSmoking(false);
+        setPets(true);
+		setImageFiles([]);
+		setAssetArea("");
+	};
+
+    function handleImage(event) {
+		let image = event.target.files[0];
+
+		if (image === "" || image === undefined) {
+			alert(`Not an image. This file is: ${typeof imageFiles}`);
+			return;
+		}
+		setImageFiles([...imageFiles, image]);
+	}
+
+	function switchAssetArea(area) {
+		setImageFiles("");
+		setVideoFile("");
+		setAssetArea(area);
+	}
     
-    function postRental(){
+    function postRental(event){
+        // event.preventDefault();
+		if (event.target !== event.currentTarget) {
+			return;
+		}
+
         let payload = {
-            price: rentPrice,
-            bedrooms,
+            price: parseInt(rentPrice),
+            bedrooms: parseInt(bedrooms),
             sharedBedroom,
-            bathrooms,
+            bathrooms: parseInt(bedrooms),
             sharedBathroom,
             description,
+            title,
             preferences: {
                 smoking,
                 pets,
             },
-            photos,
+            photos: imageFiles,
             coords,
             poster: props.user.uid,
             date: Firebase.firestore.Timestamp.now(),
         }
         props.postRental(payload);
     }
+
+    const Checkbox = ({ label, value, onChange }) => {
+        return (
+          <h3>
+            <input type="checkbox" checked={value} onChange={onChange} />
+            {label}
+          </h3>
+        );
+      };
+
     return (
-        <div>
-            <Google><input type="email" size="40" value={bedrooms} onChange={e => setBedrooms(e.target.value)} placeholder="# of Bedrooms" /></Google>
-        </div>
+        <>
+			{props.showModal === "open" && (
+				<Container>
+					<Content>
+						<Header>
+							<h2>Create a Rental Ad</h2>
+							<button onClick={(event) => reset(event)}>
+								<img src="/images/close-icon.svg" alt="" />
+							</button>
+						</Header>
+						<SharedContent>
+							<Editor>
+                                <RentalEntry>
+                                    <h3>Bedrooms</h3>
+								    <input value={bedrooms} onChange={(event) => setBedrooms(event.target.value)} placeholder="# of Bedrooms" autoFocus={true} />
+                                </RentalEntry>
+                                <RentalEntry>
+                                    <h3>Bathrooms</h3>
+                                    <input value={bathrooms} onChange={(event) => setBathrooms(event.target.value)} placeholder="# of Bathrooms" autoFocus={true} />
+                                </RentalEntry>
+                                <RentalEntry>
+                                    <h3>Rent Price</h3>
+                                    <input value={rentPrice} onChange={(event) => setRentPrice(event.target.value)} placeholder="How much is rent?" autoFocus={true} />
+                                </RentalEntry>
+                                <RentalEntry>
+                                    <h3>Address</h3>
+                                    <input value={address} onChange={(event) => setAddress(event.target.value)} placeholder="Where is it?" autoFocus={true} />
+                                </RentalEntry>
+                                <RentalEntry>
+                                    <h3>Title</h3>
+                                    <textarea value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Title of Post" autoFocus={true} />
+                                </RentalEntry>
+                                <RentalEntry>
+                                    <h3>Description</h3>
+                                    <textarea value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Tell us about the rental!" autoFocus={true} />
+                                </RentalEntry>
+                                <RentalEntry>
+                                    <Checkbox
+                                        label="Smoking Allowed?"
+                                        value={smoking}
+                                        onChange={()=>setSmoking(!smoking)}
+                                    />
+                                    <Checkbox
+                                        label="Pets Allowed?"
+                                        value={pets}
+                                        onChange={()=>setPets(!pets)}
+                                    />
+                                </RentalEntry>
+								{assetArea === "image" ? (
+									<UploadImage>
+										<input type="file" accept="image/gif, image/jpeg, image/png" name="image" id="imageFiles" onChange={handleImage} style={{ display: "none" }} />
+										<p>
+											<label htmlFor="imageFiles">Upload Images</label>
+										</p>
+										{imageFiles && imageFiles.map(imgUrl => <img src={URL.createObjectURL(imgUrl)} alt="" />)}
+									</UploadImage>
+								) : null}
+							</Editor>
+						</SharedContent>
+						<ShareCreation>
+							<AttachAsset>
+								<AssetButton onClick={() => switchAssetArea("image")}>
+									<img src="/images/share-image.svg" alt="" />
+								</AssetButton>
+							</AttachAsset>
+							<PostButton onClick={(event) => postRental(event)}>
+								Post
+							</PostButton>
+						</ShareCreation>
+					</Content>
+				</Container>
+			)}
+		</>
     );
 }
 
@@ -88,7 +351,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
 	getUserAuth: () => dispatch(getUserAuth()),
-    postRental: (payload) => dispatch(postRental()),
+    postRental: (payload) => postRental(payload),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RentalPostalModal);

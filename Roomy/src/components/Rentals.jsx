@@ -87,16 +87,10 @@ function Rentals (props){
             {(!props.user && !props.loggingIn) && <Redirect to="/" />}
             <Header />
             <Sidebar />
-            <Container>
-                <ShareBox>
-                    <div>
-                        <h1> Profile UID: {props.user ? props.user.uid : "ok"} </h1>
-                    </div>
-                </ShareBox>
-                <Content>
-                    <RentalPostalModal />
-                </Content>
-            </Container>
+			<div>
+                <h1> Profile UID: {props.user ? props.user.uid : "ok"} </h1>
+				<RentalPostalModal showModal={"open"}/>
+            </div>
         </div>
     );
 }
