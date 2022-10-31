@@ -10,7 +10,7 @@ const Container = styled.div`
 `;
 
 const CommonBox = styled.div`
-	top 50px;
+	top: 50px;
 	text-align: center;
 	overflow: hidden;
 	margin-bottom: 8px;

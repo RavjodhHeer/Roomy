@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { getUserAuth } from "../action";
 import { Redirect } from "react-router";
+import Feed from "./Rentals/Feed";
+
 
 function Rentals (props){
     return (
@@ -12,9 +14,10 @@ function Rentals (props){
             {(!props.user && !props.loggingIn) && <Redirect to="/" />}
             <Header />
             <Sidebar />
-            <div>
-                <h1> Profile UID: {props.user ? props.user.uid : "ok"} </h1>
-            </div>
+            <Feed />
+            {/* <div>
+                <h1> Profile UID: {props.user ? props.user.uid : "oksadfasdfasdfasdfds"} </h1>
+            </div> */}
         </div>
     );
 }
