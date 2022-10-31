@@ -249,3 +249,48 @@ export function setUserInfo(uid, userType, userName){
 		status: userType ? userType : "Renter",
 	});
 }
+
+async function uploadImage(img){
+	return new Promise(function(resolve, reject){
+		const upload = storage.ref(`rental_images/${img.name}`).put(img);
+		upload.on(
+			"state_changed",
+			(snapshot) => {
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+			},
+			(err) => console.log(err),
+			async () => {
+				const downloadURL = await upload.snapshot.ref.getDownloadURL();
+				resolve(downloadURL);
+			}
+		);
+	});
+}
+
+export function postRental(payload) {
+	let photos = [];
+	for (const img of payload.photos ){
+		photos.push(uploadImage(img));
+	}
+	Promise.all(photos).then((urls)=>{
+		photos = urls;
+		db.collection("rentals").add({
+			price: payload.price,
+			bedrooms: payload.bedrooms,
+			sharedBedroom: payload.sharedBedroom,
+			bathrooms: payload.bathrooms,
+			sharedBathroom: payload.sharedBathroom,
+			description: payload.description ? payload.description : "Description Unavailable",
+			title: payload.title ? payload.title : "Title Unavailable",
+			preferences: payload.preferences,
+			photos,
+			address: payload.address,
+			coords: {
+				latitude: payload.coords.latitude,
+				longitude: payload.coords.longitude
+			},
+			poster: payload.poster,
+			date: payload.date,
+		});
+	});
+}
