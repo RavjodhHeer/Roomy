@@ -50,10 +50,17 @@ const Header = styled.div`
 		min-width: auto;
 		border: none;
 		outline: none;
+		border-radius: 100px;
 		background: transparent;
 		img,
 		svg {
 			pointer-events: none;
+		}
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.2);
+			svg {
+				fill: rgba(0, 0, 0, 0.4);
+			}
 		}
 	}
 `;

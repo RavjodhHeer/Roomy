@@ -17,7 +17,7 @@ const ArtCard = styled.div`
 	transition: box-shadow 83ms;
 	position: relative;
 	border: none;
-	box-shadow: 0 0 5px #999, 0 0 0 rgb(0 0 0 / 20%);
+	box-shadow: 0 0 3px #999, 0 0 0 rgb(0 0 0 / 20%);
 `;
 
 const UserInfo = styled.div`
@@ -59,7 +59,7 @@ const Link = styled.div`
 `;
 
 const AddPhotoText = styled.div`
-	color: #0a66c2;
+	color: #8f2bb8;
 	margin-top: 4px;
 	font-size: 12px;
 	line-height: 1.33;
@@ -75,9 +75,6 @@ const Widget = styled.div`
 		justify-content: space-between;
 		align-items: center;
 		padding: 4px 12px;
-		&:hover {
-			background-color: rgba(0, 0, 0, 0.08);
-		}
 		div {
 			display: flex;
 			flex-direction: column;
@@ -160,10 +157,32 @@ const Button = styled.button`
   }
 `;
 
+const LogoButton = styled.button`
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+    cursor: pointer;
+    background-image: linear-gradient(to right,#c82090,#6a14d1)!important;
+    border-radius: 100px;
+    padding: 10px 15px;
+    margin: 2px 0px;
+    white-space: nowrap;
+
+    :hover {
+        background-color: #c82090;
+        background-image: none!important;
+    }
+`;
+
+
 function Left(props) {
 	let user = props.user ? props.user : null;
 	let photoUrl = user ? user.photoURL : "/images/photo.svg";
 	let status = "";
+	let uid = props.user ? props.user.uid : null;
 	if (user){
 		status = user.userInfo ? user.userInfo.status : "N/A";
 	} else {
@@ -179,8 +198,10 @@ function Left(props) {
 						<Link>Welcome, {user ? user.displayName : "there"}!</Link>
 					</a>
 					<h3>Status: {status}</h3>
-					<a>
-						<AddPhotoText>Edit Profile</AddPhotoText>
+					<a href={"/profile/"+uid}>
+						<AddPhotoText>
+							Edit Profile
+						</AddPhotoText>
 					</a>
 				</UserInfo>
 				<Widget>
@@ -188,8 +209,8 @@ function Left(props) {
 						<div>
 							<span>Rentals</span>
 							<span>Manage Rentals or Applications</span>
-							<Button onClick={changeToLandlord}>I am a Landlord</Button>
-							<Button onClick={changeToRenter}>I am a Renter</Button>
+							<LogoButton onClick={changeToLandlord}>I am a Landlord</LogoButton>
+							<LogoButton onClick={changeToRenter}>I am a Renter</LogoButton>
 						</div>
 						<img src="/images/widget-icon.svg" alt="" />
 					</a>

@@ -18,26 +18,29 @@ const CommonBox = styled.div`
 	border-radius: 5px;
 	position: relative;
 	border: none;
-	box-shadow: 0 0 5px #999, 0 0 0 rgb(0 0 0 / 20%);
+	box-shadow: 0 0 3px #999, 0 0 0 rgb(0 0 0 / 20%);
 `;
 
 const ShareBox = styled(CommonBox)`
 	display: flex;
 	flex-direction: column;
+	border: none;
 	margin: 0 0 8px;
 	color: #958b7b;
 	div {
 		button {
-			outline: none;
-			color: rgba(0, 0, 0, 0.6);
-			font-size: 14px;
+			color: #65676b;
+			font-size: 17px;
+			border: none;
 			line-height: 1.5;
 			min-height: 48px;
 			display: flex;
 			align-items: center;
-			border: none;
-			background-color: transparent;
-			font-weight: 600;
+			background-color: rgba(0, 0, 0, 0.1);
+			font-weight: 300;
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.15);
+			}
 		}
 		&:first-child {
 			display: flex;
@@ -52,7 +55,7 @@ const ShareBox = styled(CommonBox)`
 				margin: 4px 0;
 				flex-grow: 1;
 				padding-left: 16px;
-				border: 1px solid rgba(0, 0, 0, 0.15);
+				border: none;
 				border-radius: 35px;
 				text-align: left;
 			}
@@ -178,11 +181,21 @@ const SocialActions = styled.div`
 		align-items: center;
 		padding: 8px;
 		border: none;
+		border-radius: 3px;
 		background: transparent;
 		span {
 			margin-left: 4px;
 			color: rgba(0, 0, 0, 0.6);
 			font-size: 14px;
+		}
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.05);
+			span {
+				color: rgba(0, 0, 0, 0.8);
+			}
+			svg {
+				fill: rgba(0, 0, 0, 0.8);
+			}
 		}
 	}
 	button.active {
@@ -288,7 +301,7 @@ function Main(props) {
 				<div>
 					{photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
 					<button onClick={clickHandler} disabled={props.loading ? true : false}>
-						Start a post
+						What's on your mind?
 					</button>
 				</div>
 			</ShareBox>
