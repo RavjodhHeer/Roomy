@@ -1,5 +1,5 @@
 import db, { auth, provider, storage } from "../firebase";
-import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES } from "./actionType";
+import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES, GET_RENTALS } from "./actionType";
 
 export function setUser(payload) {
 	return {
@@ -18,6 +18,14 @@ export function setLoading(status) {
 export function getArticles(payload, id) {
 	return {
 		type: GET_ARTICLES,
+		payload: payload,
+		id: id,
+	};
+}
+
+export function getRentals(payload, id) {
+	return {
+		type: GET_RENTALS,
 		payload: payload,
 		id: id,
 	};
@@ -209,6 +217,28 @@ export function getArticlesAPI() {
 export function updateArticleAPI(payload) {
 	return (dispatch) => {
 		db.collection("articles").doc(payload.id).update(payload.update);
+	};
+}
+
+export function getRentalsAPI() {
+	return (dispatch) => {
+		dispatch(setLoading(true));
+		let payload;
+		let id;
+		db.collection("rentals")
+			.orderBy("date", "desc") // order by date in descreasing order
+			.onSnapshot((snapshot) => {
+				payload = snapshot.docs.map((doc) => doc.data());
+				id = snapshot.docs.map((doc) => doc.id);
+				dispatch(getRentals(payload, id));
+			});
+		dispatch(setLoading(false));
+	};
+}
+
+export function updateRentalsAPI(payload) {
+	return (dispatch) => {
+		db.collection("rentals").doc(payload.id).update(payload.update);
 	};
 }
 
