@@ -12,7 +12,7 @@ const ArtCard = styled.div`
 	text-align: center;
 	overflow: hidden;
 	margin-bottom: 8px;
-	border-radius: 2px;
+	border-radius: 5px;
 	background-color: #fff;
 	transition: box-shadow 83ms;
 	position: relative;
@@ -28,7 +28,7 @@ const UserInfo = styled.div`
 `;
 
 const CardBackground = styled.div`
-	background: url("/images/card-bg.svg");
+	background: url("/images/card-bg.png");
 	background-position: center;
 	background-size: 462px;
 	height: 54px;

@@ -15,7 +15,7 @@ const CommonBox = styled.div`
 	overflow: hidden;
 	margin-bottom: 8px;
 	background-color: #fff;
-	border-radius: 2px;
+	border-radius: 5px;
 	position: relative;
 	border: none;
 	box-shadow: 0 0 5px #999, 0 0 0 rgb(0 0 0 / 20%);

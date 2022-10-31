@@ -87,6 +87,28 @@ const Button = styled.button`
   }
 `;
 
+const LogoButton = styled.button`
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    font-size: 20px;
+    font-weight: 400;
+    color: #fff;
+    cursor: pointer;
+    background-image: linear-gradient(to right,#c82090,#6a14d1)!important;
+    border-radius: 100px;
+    padding: 10px 24px;
+    margin: 10px 0px;
+    white-space: nowrap;
+
+    :hover {
+        background-color: #c82090;
+        background-image: none!important;
+    }
+`;
+
+
+
 function SideNav({signout, uid}){
     return (
         <Container>
@@ -133,10 +155,9 @@ function SideNav({signout, uid}){
                         <span> Profile</span>
                     </Button>
                 </a>
-                <Button onClick={signout}>
-					<img src="/images/gear.svg" alt="" />
-					<span> Settings</span>
-				</Button>
+                <LogoButton onClick={signout}>
+					<span> Sign Out</span>
+				</LogoButton>
             </StyledSideNav>
           </Container>
     );
