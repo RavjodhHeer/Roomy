@@ -239,7 +239,7 @@ function PostalModal(props) {
 						<Header>
 							<h2>Create a post</h2>
 							<button onClick={(event) => reset(event)}>
-								<img src="/images/close-icon.svg" alt="" />
+								<img src="/images/x-lg.svg" alt="" />
 							</button>
 						</Header>
 						<SharedContent>
