@@ -156,6 +156,7 @@ function SideNav({signout, uid}){
                     </Button>
                 </a>
                 <LogoButton onClick={signout}>
+                    <img src="/images/box-arrow-left.svg" alt="" />
 					<span> Sign Out</span>
 				</LogoButton>
             </StyledSideNav>
