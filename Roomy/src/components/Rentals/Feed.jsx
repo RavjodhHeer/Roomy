@@ -104,13 +104,16 @@ function Feed(props) {
 				break;
 		}
 	};
-	
+	const user = props.user;
+	const userInfo = user ? user.userInfo : null;
+
 	return (
         <Container>
             <CreateRental>
 		 		<div>
-                    <a> Some bullshit about creating posts Here {props.loading ? "true" : "false"} </a>
-					<button onClick={()=>setShowModal("open")}>Test</button>
+					{ userInfo && user.userInfo.status === "Landlord" &&
+						<button onClick={()=>setShowModal("open")}>Create Post</button>
+					}
 					<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
 		 		</div>
 		 	</CreateRental>
@@ -120,7 +123,7 @@ function Feed(props) {
 		 			props.rentals.map((rental, key) => (
 		 				<Rental key={key}>
                             <Header>
-                                <span>{rental.title}</span>
+                                <h3>{rental.title}</h3>
                                 <span>{rental.address}</span>
                                 {/* rental post + picture */}
                                 <button>
@@ -128,7 +131,9 @@ function Feed(props) {
                                 </button>
                             </Header>
                             <Body>
-							
+								{rental.photos && rental.photos.map((x) => (
+									<img src={x} style={{width: "100px"}} />
+								))}
                             </Body>
                         </Rental>
                 ))}
