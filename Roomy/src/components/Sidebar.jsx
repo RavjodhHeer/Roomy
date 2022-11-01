@@ -10,10 +10,11 @@ const Container = styled.div`
 	border-left: 1px solid rgba(0, 0, 0, 0.08);
 	padding: 0 0px;
 	position: fixed;
-	top: 1;
-	left: 1;
+    width: 100%;
+    top 60px;
+	top: 2;
 	/* width: 100vw; */
-	z-index: 90;
+	z-index: 80;
 `;
 const StyledSideNav = styled.div`
   display: flex;
@@ -72,9 +73,9 @@ const Button = styled.button`
   background-color: white;
   border-color: #fff;
   border: 1px solid transparent;
-  color: black;
+  color: rgba(0, 0, 0, 0.7);
   font-weight: 400;
-  border-radius: 30px;
+  border-radius: 100px;
   font-size: 20px;
   padding: 10px 24px;
   margin: 10px 0px;
@@ -82,8 +83,31 @@ const Button = styled.button`
   text-align: center;
   &:hover {
     color: #A943D3;
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `;
+
+const LogoButton = styled.button`
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    font-size: 20px;
+    font-weight: 400;
+    color: #fff;
+    cursor: pointer;
+    background-image: linear-gradient(to right,#c82090,#6a14d1)!important;
+    border-radius: 100px;
+    padding: 10px 24px;
+    margin: 10px 0px;
+    white-space: nowrap;
+
+    :hover {
+        background-color: #c82090;
+        background-image: none!important;
+    }
+`;
+
+
 
 function SideNav({signout, uid}){
     return (
@@ -131,10 +155,10 @@ function SideNav({signout, uid}){
                         <span> Profile</span>
                     </Button>
                 </a>
-                <Button onClick={signout}>
-					<img src="/images/gear.svg" alt="" />
-					<span> Settings</span>
-				</Button>
+                <LogoButton onClick={signout}>
+                    <img src="/images/box-arrow-left.svg" alt="" />
+					<span> Sign Out</span>
+				</LogoButton>
             </StyledSideNav>
           </Container>
     );
@@ -142,7 +166,7 @@ function SideNav({signout, uid}){
 
 function Sidebar(props) {
     return (
-        <SideNav signout={props.signOut} uid={props.user.uid}>
+        <SideNav signout={props.signOut} uid={props.user ? props.user.uid : null}>
             <StyledSideNav></StyledSideNav>
         </SideNav>
     )

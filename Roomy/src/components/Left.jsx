@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import db, { auth, provider, storage } from "../firebase";
@@ -8,15 +8,16 @@ const Container = styled.div`
 `;
 
 const ArtCard = styled.div`
+	top: 50px;
 	text-align: center;
 	overflow: hidden;
 	margin-bottom: 8px;
-	border-radius: 0px;
+	border-radius: 5px;
 	background-color: #fff;
 	transition: box-shadow 83ms;
 	position: relative;
 	border: none;
-	box-shadow: 0 0 5px #999, 0 0 0 rgb(0 0 0 / 20%);
+	box-shadow: 0 0 3px #999, 0 0 0 rgb(0 0 0 / 20%);
 `;
 
 const UserInfo = styled.div`
@@ -27,7 +28,7 @@ const UserInfo = styled.div`
 `;
 
 const CardBackground = styled.div`
-	background: url("/images/card-bg.svg");
+	background: url("/images/card-bg.png");
 	background-position: center;
 	background-size: 462px;
 	height: 54px;
@@ -58,7 +59,7 @@ const Link = styled.div`
 `;
 
 const AddPhotoText = styled.div`
-	color: #0a66c2;
+	color: #8f2bb8;
 	margin-top: 4px;
 	font-size: 12px;
 	line-height: 1.33;
@@ -74,9 +75,6 @@ const Widget = styled.div`
 		justify-content: space-between;
 		align-items: center;
 		padding: 4px 12px;
-		&:hover {
-			background-color: rgba(0, 0, 0, 0.08);
-		}
 		div {
 			display: flex;
 			flex-direction: column;
@@ -159,8 +157,55 @@ const Button = styled.button`
   }
 `;
 
+const LogoButton = styled.button`
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+    cursor: pointer;
+    background-image: linear-gradient(to right,#c82090,#6a14d1)!important;
+    border-radius: 100px;
+    padding: 10px 15px;
+    margin: 2px 0px;
+    white-space: nowrap;
+
+    :hover {
+        background-color: #c82090;
+        background-image: none!important;
+    }
+`;
+
+
 function Left(props) {
-	let photoUrl = props.user.photoURL ? props.user.photoURL : "/images/photo.svg";
+	let user = props.user ? props.user : null;
+	let photoUrl = user ? user.photoURL : "/images/photo.svg";
+	let uid = props.user ? props.user.uid : null;
+	const [userType, setUserType] = useState("Renter");
+
+	useEffect(()=>{
+		if (user){
+			setUserType(user.userInfo ? user.userInfo.status : "Renter");
+		} else {
+			setUserType("Renter");
+		}
+	},[user]);
+
+	const changeToLandlord = () => {
+		db.collection("profiles").doc(auth.currentUser.uid).set({
+			status: 'Landlord'
+		});
+		setUserType("Landlord");
+	}
+	
+	const changeToRenter = () => {
+		db.collection("profiles").doc(auth.currentUser.uid).set({
+			status: 'Renter'
+		});
+		setUserType("Renter");
+	}
+
 	return (
 		<Container>
 			<ArtCard>
@@ -168,11 +213,13 @@ function Left(props) {
 					<CardBackground />
 					<a>
 						<Photo photoUrl={photoUrl} />
-						<Link>Welcome, {props.user ? props.user.displayName : "there"}!</Link>
+						<Link>Welcome, {user ? user.displayName : "there"}!</Link>
 					</a>
-					<h3>Status: {props.user.userInfo ? props.user.userInfo.status : "N/A"}</h3>
-					<a>
-						<AddPhotoText>Edit Profile</AddPhotoText>
+					<h3>Status: {userType}</h3>
+					<a href={"/profile/"+uid}>
+						<AddPhotoText>
+							Edit Profile
+						</AddPhotoText>
 					</a>
 				</UserInfo>
 				<Widget>
@@ -180,8 +227,8 @@ function Left(props) {
 						<div>
 							<span>Rentals</span>
 							<span>Manage Rentals or Applications</span>
-							<Button onClick={changeToLandlord}>I am a Landlord</Button>
-							<Button onClick={changeToRenter}>I am a Renter</Button>
+							<LogoButton onClick={changeToLandlord}>I am a Landlord</LogoButton>
+							<LogoButton onClick={changeToRenter}>I am a Renter</LogoButton>
 						</div>
 						<img src="/images/widget-icon.svg" alt="" />
 					</a>
@@ -214,17 +261,6 @@ function Left(props) {
 	);
 }
 
-const changeToLandlord = () => {
-	db.collection("profiles").doc(auth.currentUser.uid).set({
-		status: 'Landlord'
-	})
-}
-
-const changeToRenter = () => {
-	db.collection("profiles").doc(auth.currentUser.uid).set({
-		status: 'Renter'
-	})
-}
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { getUserAuth } from "../action";
 import styled from "styled-components";
 import db, { auth, provider, storage } from "../firebase";
@@ -98,6 +98,7 @@ function Profile(props){
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
+        loggingIn: state.userState.loggingIn,
 	};
 };
 

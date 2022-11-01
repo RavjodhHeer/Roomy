@@ -8,7 +8,7 @@ import { postArticleAPI } from "../action";
 
 const Container = styled.div`
 	position: fixed;
-	top: 0;
+	top: 60px;
 	bottom: 0;
 	left: 0;
 	right: 0;
@@ -50,10 +50,17 @@ const Header = styled.div`
 		min-width: auto;
 		border: none;
 		outline: none;
+		border-radius: 100px;
 		background: transparent;
 		img,
 		svg {
 			pointer-events: none;
+		}
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.2);
+			svg {
+				fill: rgba(0, 0, 0, 0.4);
+			}
 		}
 	}
 `;
@@ -134,18 +141,19 @@ const PostButton = styled.button`
 	min-width: 60px;
 	padding: 0 16px;
 	border-radius: 20px;
-	background: ${(props) => (props.disabled ? "#b8b8b8" : "#0a66c2")};
+	background: ${(props) => (props.disabled ? "#b8b8b8" : "#A943D3")};
 	color: ${(props) => (props.disabled ? "#5a5a5a" : "#fff")};
 	font-size: 16px;
 	letter-spacing: 1.1px;
 	border: none;
 	outline: none;
 	&:hover {
-		background: ${(props) => (props.disabled ? "#b8b8b8" : "#004182")};
+		background: ${(props) => (props.disabled ? "#b8b8b8" : "#8f2bb8")};
 	}
 `;
 
 const Editor = styled.div`
+	font-family: Arial, sans-serif;
 	padding: 12px 24px;
 	textarea {
 		width: 100%;
@@ -161,9 +169,17 @@ const Editor = styled.div`
 `;
 
 const UploadImage = styled.div`
+	border-radius: 20px;
+	padding: 10px 0px;
+	margin: 10px 0px;
+	cursor: pointer;
 	text-align: center;
 	img {
-		width: 100%;
+		width: 50%;
+	}
+	&:hover {
+		color: #A943D3;
+		background-color: rgba(0, 0, 0, 0.2);
 	}
 `;
 
@@ -223,7 +239,7 @@ function PostalModal(props) {
 						<Header>
 							<h2>Create a post</h2>
 							<button onClick={(event) => reset(event)}>
-								<img src="/images/close-icon.svg" alt="" />
+								<img src="/images/x-lg.svg" alt="" />
 							</button>
 						</Header>
 						<SharedContent>
@@ -232,13 +248,13 @@ function PostalModal(props) {
 								<span>{props.user.displayName ? props.user.displayName : "Name"}</span>
 							</UserInfo>
 							<Editor>
-								<textarea value={editorText} onChange={(event) => setEditorText(event.target.value)} placeholder="What do you want to talk about?" autoFocus={true} />
+								<textarea value={editorText} onChange={(event) => setEditorText(event.target.value)} placeholder="What's happening?" autoFocus={true} />
 
 								{assetArea === "image" ? (
 									<UploadImage>
 										<input type="file" accept="image/gif, image/jpeg, image/png" name="image" id="imageFile" onChange={handleImage} style={{ display: "none" }} />
 										<p>
-											<label htmlFor="imageFile">Select an image to share</label>
+											<label htmlFor="imageFile">Attach image</label>
 										</p>
 										{imageFile && <img src={URL.createObjectURL(imageFile)} alt="" />}
 									</UploadImage>

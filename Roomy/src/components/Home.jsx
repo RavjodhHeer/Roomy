@@ -64,7 +64,7 @@ const Layout = styled.div`
 function Home(props) {
 	return (
 		<Container>
-			{!props.user && <Redirect to="/" />}
+			{(!props.user && !props.loggingIn) && <Redirect to="/" />}
 			<Content>
 				<Layout>
 					<Main />
@@ -78,6 +78,7 @@ function Home(props) {
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
+		loggingIn: state.userState.loggingIn,
 	};
 };
 

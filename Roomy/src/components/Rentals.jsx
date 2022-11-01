@@ -1,32 +1,34 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, 
-    Route, Redirect,} from "react-router-dom";
+import React, {useState} from "react";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import { getUserAuth } from "../action";
+import { Redirect } from "react-router";
+import Feed from "./Rentals/Feed";
+import RentalPostalModal from "./Rentals/RentalPostalModal";
 
-// function Rentals (props){
-//     let {id} = useParams();
-//     return (<div>
-//         <h1>Profile UID: {props.user ? id : null}</h1>
-//     </div>);
-// }
+function Rentals (props){
 
-// const mapStateToProps = (state) => {
-// 	return {
-// 		user: state.userState.user,
-// 	};
-// };
-
-// const mapDispatchToProps = (dispatch) => ({
-// 	getUserAuth: () => dispatch(getUserAuth()),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Profile);
-
-const Rentals = () => {
     return (
-        <div>
-            <h1>Rentals Page</h1>
+        <div className="Rentals">
+            {(!props.user && !props.loggingIn) && <Redirect to="/" />}
+            <Header />
+            <Sidebar />
+            <Feed />
         </div>
     );
+}
+
+const mapStateToProps = (state) => {
+	return {
+		user: state.userState.user,
+        loggingIn: state.userState.loggingIn,
+	};
 };
 
-export default Rentals;
+const mapDispatchToProps = (dispatch) => ({
+	getUserAuth: () => dispatch(getUserAuth()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Rentals);
