@@ -5,10 +5,10 @@ import { getUserAuth } from "../action";
 import styled from "styled-components";
 import db, { auth, provider, storage } from "../firebase";
 import { signOutAPI } from "../action";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
 
-
-
-const Header = styled.div`
+const Head = styled.div`
     .top {                                           //This is all the top of the header stuff where the purple banner is
         display: flex;
         align-items: center;
@@ -35,61 +35,61 @@ const Photo = styled.div`
     }
 `;
 const Grid = styled.div`
-    display: flex;
+    display: grid;
     justify-content: center;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-rows: repeat(4, 100px);
     grid-gap: 20px;
 
 `;
 const Div = styled.div`
     display: flex;
     border: 1px solid #ccc;
-    box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
     justify-content: center;
+    border-radius: 20px;
+    //border-color: gray
+    height: 200px;
+    width: 1200px;
     text-align: center;
-    background-color: #8F808F;
-    //border-radius: 20px;
-    height: 800px;
-    width: 600px;
 
     h2 {
         font-size: 40px;
-        font: SF-Pro;
-        color: white;
+        font: Lucida Console;
+        color: black;
+    }
+
+    h1 {
+        margin-right: 900px
+    }
+
+    span {
+        font-size: 45px;
     }
 `;
 
 
 function Profile(props){
-    let {id} = useParams();
-    
+    let user = props.user ? props.user : null;
+    let photoUrl = props.user ? props.user.photoUrl : null;
     return (<div>
-
-        <Header>
+        <Header />
+        <Sidebar />
+        <Head>
             <div className="top">
             
-            <Photo>{<img src="https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg" />}</Photo>
+            <Photo>{<img src={photoUrl} />}</Photo>
 
             </div>
 
-        </Header>
+        </Head>
         <Grid>
             <Div>
-            <h1>Profile UID: {props.user ? id : null}</h1>
-            </Div>
-            
-            <Div>
-            <div className="card">
-            <h2>Tejvir Virk</h2>
-         
-            </div>
-            
-            </Div>
 
-            <Div>
-            <h2>Hi daddy</h2>
+            <span>{user ? user.displayName : null}</span>
+            
             </Div>
+            
         </Grid>
+        
   
 
     </div>);
@@ -104,5 +104,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
 	getUserAuth: () => dispatch(getUserAuth()),
 });
+
+
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
