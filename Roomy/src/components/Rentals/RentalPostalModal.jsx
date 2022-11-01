@@ -257,6 +257,7 @@ function RentalPostalModal (props){
             date: Firebase.firestore.Timestamp.now(),
         }
         props.postRental(payload);
+		reset(event);
     }
 
     const Checkbox = ({ label, value, onChange }) => {
