@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import db, { auth, provider, storage } from "../firebase";
@@ -8,7 +8,7 @@ const Container = styled.div`
 `;
 
 const ArtCard = styled.div`
-	top 50px;
+	top: 50px;
 	text-align: center;
 	overflow: hidden;
 	margin-bottom: 8px;
@@ -181,13 +181,31 @@ const LogoButton = styled.button`
 function Left(props) {
 	let user = props.user ? props.user : null;
 	let photoUrl = user ? user.photoURL : "/images/photo.svg";
-	let status = "";
 	let uid = props.user ? props.user.uid : null;
-	if (user){
-		status = user.userInfo ? user.userInfo.status : "N/A";
-	} else {
-		status = "N/A";
+	const [userType, setUserType] = useState("Renter");
+
+	useEffect(()=>{
+		if (user){
+			setUserType(user.userInfo ? user.userInfo.status : "Renter");
+		} else {
+			setUserType("Renter");
+		}
+	},[user]);
+
+	const changeToLandlord = () => {
+		db.collection("profiles").doc(auth.currentUser.uid).set({
+			status: 'Landlord'
+		});
+		setUserType("Landlord");
 	}
+	
+	const changeToRenter = () => {
+		db.collection("profiles").doc(auth.currentUser.uid).set({
+			status: 'Renter'
+		});
+		setUserType("Renter");
+	}
+
 	return (
 		<Container>
 			<ArtCard>
@@ -197,7 +215,7 @@ function Left(props) {
 						<Photo photoUrl={photoUrl} />
 						<Link>Welcome, {user ? user.displayName : "there"}!</Link>
 					</a>
-					<h3>Status: {status}</h3>
+					<h3>Status: {userType}</h3>
 					<a href={"/profile/"+uid}>
 						<AddPhotoText>
 							Edit Profile
@@ -243,17 +261,6 @@ function Left(props) {
 	);
 }
 
-const changeToLandlord = () => {
-	db.collection("profiles").doc(auth.currentUser.uid).set({
-		status: 'Landlord'
-	})
-}
-
-const changeToRenter = () => {
-	db.collection("profiles").doc(auth.currentUser.uid).set({
-		status: 'Renter'
-	})
-}
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
