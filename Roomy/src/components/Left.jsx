@@ -227,8 +227,6 @@ function Left(props) {
 						<div>
 							<span>Rentals</span>
 							<span>Manage Rentals or Applications</span>
-							<LogoButton onClick={changeToLandlord}>I am a Landlord</LogoButton>
-							<LogoButton onClick={changeToRenter}>I am a Renter</LogoButton>
 						</div>
 						<img src="/images/widget-icon.svg" alt="" />
 					</a>

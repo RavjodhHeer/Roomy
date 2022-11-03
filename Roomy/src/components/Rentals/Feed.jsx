@@ -24,14 +24,14 @@ const CommonBox = styled.div`
 `;
 
 const CreateRental = styled(CommonBox)`
-	display: flex;=
-	flex-direction: column;
+	display: flex;
+	flex-direction: row;
 	border: none;
 	margin: 0 0 8px;
 	color: #958b7b;
 	button {
 		display: flex;
-		align-items: center;
+		align-items: left;
 		outline: 0;
 		border: 0;
 		font-size: 20px;
@@ -69,10 +69,15 @@ const Content = styled.div`
 `;
 
 const Header = styled.div`
-	padding: 10px 10px;
+	padding: 10px 13px;
 	overflow: hidden;
 	font-size: 16px;
 	text-align: left;
+	icon {
+		img {
+			margin-top: 10px;
+		}
+	}
 	a {
 		margin-right: 12px;
 		flex-grow: 1;
@@ -154,17 +159,37 @@ const SocialActions = styled.div`
 	}
 `;
 
+const Description = styled.div`
+	padding: 0 13px;
+	overflow: hidden;
+	font-size: 14px;
+	text-align: left;
+`;
+
+const RentalDetails = styled.div`
+	padding: 0 13px;
+	color: rgba(0, 0, 0, 0.8);
+	overflow: hidden;
+	font-size: 15px;
+	font-weight: 800;
+	text-align: left;
+	separator {
+		font-weight: 400;
+	}
+`;
+
 const Body = styled.div`
 	margin-left: 10px;
-	padding: 0px 0px 8px 0px;
+	padding: 8px 0px 8px 0px;
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: row;
 	flex-basis: calc(100% / 3)
-	margin: 8px 16px 0px;
+	margin: 8px 16px 8px 8px;
 	border-color: rgba(0, 0, 0, 0.2);
 	img {
 		border: 3px solid white;
+		border-radius: 5px;
 		width: 100%;
 		height: 100%;
 	}
@@ -247,17 +272,32 @@ function Feed(props) {
 										<span>{rental.address}</span>
 										<span>{displayTime(rental.date.toDate())}</span>
 										{/* rental post + picture */}
-										<button>
-											<img src="/images/bookmark.svg" alt="" />
-										</button>
 									</div>
 								</a>
+								<icon>
+									<button>
+										<img src="/images/bookmark-fill.svg" alt="" />
+									</button>
+								</icon>
                             </Header>
+							<Description>{rental.description}</Description>
                             <Body>
 								{rental.photos && rental.photos.map((x) => (
 									<img src={x} style={{width: "40%"}} />
 								))}
                             </Body>
+							<RentalDetails>
+								<span>Rent: $</span>
+								{rental.price}
+								<span>/mo </span>
+								<separator>  |  </separator>
+								<span>Bds: </span>
+								{rental.bedrooms}
+								<span> </span>
+								<separator>  |  </separator>
+								<span>Ba: </span>
+								{rental.bathrooms}
+							</RentalDetails>
 							<SocialActions>
 								<button>
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 1 26 26" data-supported-dps="26x26" fill="rgba(0, 0, 0, 0.6)" width="22" height="22" focusable="false">
@@ -275,7 +315,7 @@ function Feed(props) {
 								</button>
 								<button>
 									<img src="/images/send-icon.svg" alt="" />
-									<span>Send</span>
+									<span>Send application</span>
 								</button>
 							</SocialActions>
                         </Rental>
