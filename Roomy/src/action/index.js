@@ -115,7 +115,15 @@ export function signInWithEmail(email, password) {
 						userAuth.user.userInfo = docIncoming.data();
 						dispatch(setUser(userAuth.user));
 					} else {
-						console.log("No such document!");
+						setUserInfo(userAuth.user.uid, "Renter", userAuth.user.displayName, userAuth.user.photoURL);
+						userAuth.user.userInfo = {
+							looking: true,
+							displayName: userAuth.user.displayName,
+							status: "Renter",
+							uid: userAuth.user.uid,
+							photoURL: userAuth.user.photoURL,
+						}
+						dispatch(setUser(userAuth.user));
 					}
 				}).catch((error) => {
 					console.log("Error getting document:", error);
