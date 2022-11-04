@@ -5,16 +5,13 @@ import db, { auth, provider, storage } from "../firebase";
 import { getOtherUser } from "../action";
 import Sidebar from "./Sidebar"
 import Header from "./Header"
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 
 const Container = styled.div`
 	grid-area: center;
     align-items: center;
     background-size: cover;
     padding: 70px 20px 0px 255px;
-
-
-
 	input {
 		background-color: #ffffff;
 		border-radius: 20px;
@@ -248,56 +245,59 @@ function Profile(props) {
 
 	return (
         <span>
-        <Header /> 
-        <Sidebar />
-		<Container>
-			<ArtCard>
-				<UserInfo>
-					<CardBackground />
-					<a>
-						<Photo photoUrl={photoUrl} />
-						<Link>{otherUser ? otherUser.displayName : "N/A"}</Link>
-					</a>
-					<h3>Status: {userType}</h3>
-					<a href={"/profile/"+myUID}>
-						<AddPhotoText>
-							Edit Profile
-						</AddPhotoText>
-					</a>
-				</UserInfo>
-			</ArtCard>
-			<CommunityCard>
-                <Title> About Me</Title>
-					<a>
-						<h2>{info}</h2>
-						{otherUser && user && otherUser.uid == user.uid && 
-							<form onSubmit={writeData}>
-								<input type="text" placeholder="Edit Bio" id="bio"/>
-								<LogoButton type="submit">Edit</LogoButton>
-							</form>
-						}
-					</a>
-					{otherUser && user && otherUser.uid == user.uid && 
+			{/* Force out if not logged in */}
+			{(!props.user && !props.loggingIn) && <Redirect to="/" />}
+			
+			<Header /> 
+			<Sidebar />
+			<Container>
+				<ArtCard>
+					<UserInfo>
+						<CardBackground />
 						<a>
-							<span>Change Your Status</span>
-							<span>
-							<LogoButton onClick={changeToLandlord}>Landlord</LogoButton>
-							</span>
-							<LogoButton onClick={changeToRenter}>Renter</LogoButton>
+							<Photo photoUrl={photoUrl} />
+							<Link>{otherUser ? otherUser.displayName : "N/A"}</Link>
 						</a>
-					}
-            </CommunityCard>
-            <CommunityCard>
-                <Title> Experiences</Title>
-					<a>
-							<span>Rented 217 Berry St. for 3.5 years</span>
-                            <span> - </span>
-							<span>Leased Your Mom for 15 years </span>
-					</a>
-			
-            </CommunityCard>
-			
-		</Container>
+						<h3>Status: {userType}</h3>
+						<a href={"/profile/"+myUID}>
+							<AddPhotoText>
+								Edit Profile
+							</AddPhotoText>
+						</a>
+					</UserInfo>
+				</ArtCard>
+				<CommunityCard>
+					<Title> About Me</Title>
+						<a>
+							<h2>{info}</h2>
+							{otherUser && user && otherUser.uid == user.uid && 
+								<form onSubmit={writeData}>
+									<input type="text" placeholder="Edit Bio" id="bio"/>
+									<LogoButton type="submit">Edit</LogoButton>
+								</form>
+							}
+						</a>
+						{otherUser && user && otherUser.uid == user.uid && 
+							<a>
+								<span>Change Your Status</span>
+								<span>
+								<LogoButton onClick={changeToLandlord}>Landlord</LogoButton>
+								</span>
+								<LogoButton onClick={changeToRenter}>Renter</LogoButton>
+							</a>
+						}
+				</CommunityCard>
+				<CommunityCard>
+					<Title> Experiences</Title>
+						<a>
+								<span>Rented 217 Berry St. for 3.5 years</span>
+								<span> - </span>
+								<span>Leased Your Mom for 15 years </span>
+						</a>
+				
+				</CommunityCard>
+				
+			</Container>
         </span>
 	);
 }
@@ -305,7 +305,8 @@ function Profile(props) {
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
-		otherUser: state.otherUserState.otherUser
+		otherUser: state.otherUserState.otherUser,
+		loggingIn: state.userState.loggingIn,
 	};
 };
 
