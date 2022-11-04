@@ -5,7 +5,6 @@ const INITIAL_STATE = {
 };
 
 const otherUserReducer = (state = INITIAL_STATE, action) => {
-	console.log("Logging in")
 	switch (action.type) {
 		case SET_OTHER_USER:
 			return {
