@@ -188,14 +188,14 @@ const LogoButton = styled.button`
 `;
 
 const Title = styled.div`
-    font-size = 50px;
+    font-size: 50px;
     padding: 10px 15px;
     font-weight: bold;
     color: #8f2bb8;
 `;
 
 const sub = styled.div`
-    font-size = 25px:
+    font-size: 25px;
 `;
 
 
