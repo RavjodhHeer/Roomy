@@ -3,13 +3,16 @@ import { connect } from "react-redux";
 import { getRentalsAPI, updateRentalsAPI } from "../../action";
 import styled from "styled-components";
 import RentalPostalModal from "./RentalPostalModal";
+import ImageDisplay from "./ImageDisplay";
 
 const Container = styled.div`
     grid-area: main;
-	align-items: center;
+	/* align-items: center;
 	margin-top: 70px;
 	margin-left: 255px;
-	margin-right: 295px;
+	margin-right: 295px; */
+	max-width: 500px;
+	float: right;
 `;
 
 const CommonBox = styled.div`
@@ -24,7 +27,7 @@ const CommonBox = styled.div`
 `;
 
 const CreateRental = styled(CommonBox)`
-	display: flex;=
+	display: flex;
 	flex-direction: column;
 	border: none;
 	margin: 0 0 8px;
@@ -155,19 +158,40 @@ const SocialActions = styled.div`
 `;
 
 const Body = styled.div`
+	/* position: relative;
 	margin-left: 10px;
 	padding: 0px 0px 8px 0px;
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: row;
-	flex-basis: calc(100% / 3)
+	flex-basis: calc(100% / 3);
 	margin: 8px 16px 0px;
-	border-color: rgba(0, 0, 0, 0.2);
+	border-color: rgba(0, 0, 0, 0.2); */
+	padding: 0px 0px 8px 0px;
+	position: relative;
+	width: 100%;
+	height: 300px;
 	img {
 		border: 3px solid white;
 		width: 100%;
 		height: 100%;
+		object-fit: cover;
 	}
+`;
+
+
+const Indicator = styled.div`
+	position: absolute;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 10px 25px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(49, 49, 49, 0.7);
+	color: white;
+	border-radius: 50px;
 `;
 
 const monthLookup = ["Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "];
@@ -254,9 +278,10 @@ function Feed(props) {
 								</a>
                             </Header>
                             <Body>
-								{rental.photos && rental.photos.map((x) => (
-									<img src={x} style={{width: "40%"}} />
-								))}
+								{rental.photos && rental.photos.length >= 1 ?
+									<ImageDisplay images={rental.photos} /> :
+									<ImageDisplay images={["/images/no-image-available.png"]} />
+								}
                             </Body>
 							<SocialActions>
 								<button>
