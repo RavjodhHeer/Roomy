@@ -2,17 +2,16 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import db, { auth, provider, storage } from "../firebase";
+import { getOtherUser } from "../action";
 import Sidebar from "./Sidebar"
 import Header from "./Header"
+import { useParams, Redirect } from 'react-router-dom';
 
 const Container = styled.div`
 	grid-area: center;
     align-items: center;
     background-size: cover;
     padding: 70px 20px 0px 255px;
-
-
-
 	input {
 		background-color: #ffffff;
 		border-radius: 20px;
@@ -188,29 +187,35 @@ const LogoButton = styled.button`
 `;
 
 const Title = styled.div`
-    font-size = 50px;
+    font-size: 50px;
     padding: 10px 15px;
     font-weight: bold;
     color: #8f2bb8;
 `;
 
 const sub = styled.div`
-    font-size = 25px:
+    font-size: 25px;
 `;
 
 
-function Left(props) {
+function Profile(props) {
 	let user = props.user ? props.user : null;
-	let photoUrl = user ? user.photoURL : "/images/photo.svg";
-	let uid = props.user ? props.user.uid : null;
+	let otherUser = props.otherUser ? props.otherUser : null;
+	let photoUrl = otherUser ? otherUser.photoURL : "/images/photo.svg";
+	let myUID = props.user ? props.user.uid : null;
 	const [userType, setUserType] = useState("Renter");
 	const [info, changeBio] = useState("About You");
+	let { id } = useParams();
 
 	useEffect(()=>{
+		props.getOtherUser(id);
 		if (user){
 			setUserType(user.userInfo ? user.userInfo.status : "Renter");
 		} else {
 			setUserType("Renter");
+		}
+		if(otherUser) {
+			changeBio(otherUser.bio);
 		}
 	},[user]);
 
@@ -240,59 +245,59 @@ function Left(props) {
 
 	return (
         <span>
-        <Header /> 
-        <Sidebar />
-		<Container>
-			<ArtCard>
-				<UserInfo>
-					<CardBackground />
-					<a>
-						<Photo photoUrl={photoUrl} />
-						<Link>{user ? user.displayName : "there"}</Link>
-					</a>
-					<h3>Status: {userType}</h3>
-					<a href={"/profile/"+uid}>
-						<AddPhotoText>
-							Edit Profile
-						</AddPhotoText>
-					</a>
-				</UserInfo>
-			</ArtCard>
-			<CommunityCard>
-                <Title> About Me</Title>
-					<a>
+			{/* Force out if not logged in */}
+			{(!props.user && !props.loggingIn) && <Redirect to="/" />}
+			
+			<Header /> 
+			<Sidebar />
+			<Container>
+				<ArtCard>
+					<UserInfo>
+						<CardBackground />
+						<a>
+							<Photo photoUrl={photoUrl} />
+							<Link>{otherUser ? otherUser.displayName : "N/A"}</Link>
+						</a>
+						<h3>Status: {userType}</h3>
+						<a href={"/profile/"+myUID}>
+							<AddPhotoText>
+								Edit Profile
+							</AddPhotoText>
+						</a>
+					</UserInfo>
+				</ArtCard>
+				<CommunityCard>
+					<Title> About Me</Title>
+						<a>
 							<h2>{info}</h2>
-							<form onSubmit={writeData}>
-								<input type="text" placeholder="Edit Bio" id="bio"/>
-								<LogoButton type="submit">Edit</LogoButton>
-							</form>
-						
-					</a>
-
-					<a>
-							<span>Change Your Status</span>
-                            <span>
-							<LogoButton onClick={changeToLandlord}>Landlord</LogoButton>
-                            </span>
-							<LogoButton onClick={changeToRenter}>Renter</LogoButton>
-						
-					</a>
-			
-            </CommunityCard>
-            <CommunityCard>
-                <Title> Experiences</Title>
-					<a>
-						
-							<span>Rented 217 Berry St. for 3.5 years</span>
-                            <span> - </span>
-							<span>Leased Your Mom for 15 years </span>
-
-						
-					</a>
-			
-            </CommunityCard>
-			
-		</Container>
+							{otherUser && user && otherUser.uid == user.uid && 
+								<form onSubmit={writeData}>
+									<input type="text" placeholder="Edit Bio" id="bio"/>
+									<LogoButton type="submit">Edit</LogoButton>
+								</form>
+							}
+						</a>
+						{otherUser && user && otherUser.uid == user.uid && 
+							<a>
+								<span>Change Your Status</span>
+								<span>
+								<LogoButton onClick={changeToLandlord}>Landlord</LogoButton>
+								</span>
+								<LogoButton onClick={changeToRenter}>Renter</LogoButton>
+							</a>
+						}
+				</CommunityCard>
+				<CommunityCard>
+					<Title> Experiences</Title>
+						<a>
+								<span>Rented 217 Berry St. for 3.5 years</span>
+								<span> - </span>
+								<span>Leased Your Mom for 15 years </span>
+						</a>
+				
+				</CommunityCard>
+				
+			</Container>
         </span>
 	);
 }
@@ -300,7 +305,13 @@ function Left(props) {
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
+		otherUser: state.otherUserState.otherUser,
+		loggingIn: state.userState.loggingIn,
 	};
 };
 
-export default connect(mapStateToProps)(Left);
+const mapDispatchToProps = (dispatch) => ({
+	getOtherUser: (uid) => dispatch(getOtherUser(uid)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
