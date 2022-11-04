@@ -1,5 +1,5 @@
 import db, { auth, provider, storage } from "../firebase";
-import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES, GET_RENTALS } from "./actionType";
+import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES, GET_RENTALS, SET_OTHER_USER } from "./actionType";
 
 export function setUser(payload) {
 	return {
@@ -29,6 +29,13 @@ export function getRentals(payload, id) {
 		payload: payload,
 		id: id,
 	};
+}
+
+export function setOtherUser(payload) {
+	return {
+		type: SET_OTHER_USER,
+		otherUser: payload,
+	}
 }
 
 export function getUserAuth() {
@@ -66,11 +73,13 @@ export function signInAPI() {
 					userAuth.user.userInfo = docIncoming.data();
 					dispatch(setUser(userAuth.user));
 				} else {
-					setUserInfo(userAuth.user.uid, null, null);
+					setUserInfo(userAuth.user.uid, "Renter", userAuth.user.displayName, userAuth.user.photoURL);
 					userAuth.user.userInfo = {
 						looking: true,
-						userName: userAuth.user.uid,
+						displayName: userAuth.user.displayName,
 						status: "Renter",
+						uid: userAuth.user.uid,
+						photoURL: userAuth.user.photoURL,
 					}
 					dispatch(setUser(userAuth.user));
 				}
@@ -90,7 +99,7 @@ export function registerWithEmail(email, password, photoURL, userName, fullName,
                 photoURL: photoURL
             }).then(() => {
 				dispatch(setUser(userAuth.user));
-				setUserInfo(userAuth.user.uid, userType, userName);
+				setUserInfo(userAuth.user.uid, userType, fullName, photoURL);
 			});
         }).catch((err) => alert(err.message));
 	};
@@ -242,11 +251,13 @@ export function updateRentalsAPI(payload) {
 	};
 }
 
-export function setUserInfo(uid, userType, userName){
+export function setUserInfo(uid, userType, displayName, photoURL){
 	db.collection("profiles").doc(uid).set({
 		looking: true,
-		userName: userName ? userName : uid,
+		displayName: displayName,
 		status: userType ? userType : "Renter",
+		uid: uid,
+		photoURL: photoURL
 	});
 }
 
@@ -293,4 +304,19 @@ export function postRental(payload) {
 			date: payload.date,
 		});
 	});
+}
+
+export function getOtherUser(uid) {
+	return (dispatch) => {
+		var docRef = db.collection("profiles").doc(uid);
+		docRef.get().then((docIncoming) => {
+			if (docIncoming.exists) {
+				dispatch(setOtherUser(docIncoming.data()));
+			} else {
+				console.log("No such document!");
+			}
+		}).catch((error) => {
+			console.log("Error getting document:", error);
+		});
+	}
 }
