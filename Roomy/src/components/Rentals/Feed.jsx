@@ -25,33 +25,54 @@ const CommonBox = styled.div`
 
 const CreateRental = styled(CommonBox)`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	border: none;
 	margin: 0 0 8px;
 	color: #958b7b;
-	button {
-		display: flex;
-		align-items: left;
-		outline: 0;
-		border: 0;
-		font-size: 20px;
-		font-weight: 400;
-		color: #fff;
-		cursor: pointer;
-		background-image: linear-gradient(to right,#c82090,#6a14d1)!important;
-		border-radius: 100px;
-		padding: 10px 24px;
-		white-space: nowrap;
-		:hover {
-			background-color: #c82090;
-			background-image: none!important;
+	div {
+		button {
+			color: #65676b;
+			font-size: 18px;
+			border: none;
+			line-height: 1.5;
+			min-height: 48px;
+			display: flex;
+			align-items: center;
+			background-color: rgba(0, 0, 0, 0.1);
+			font-weight: 300;
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.15);
+			}
 		}
-	}
-	img {
-		margin-left: 10px;
-		margin-top: 10px;
-		width: 48px;
-		border-radius: 50%;
+		&:first-child {
+			display: flex;
+			align-items: center;
+			padding: 8px 16px;
+			img {
+				width: 48px;
+				border-radius: 50%;
+				margin-right: 8px;
+			}
+			button {
+				margin: 4px 0;
+				flex-grow: 1;
+				padding-left: 16px;
+				border: none;
+				border-radius: 35px;
+				text-align: left;
+			}
+		}
+		&:nth-child(2) {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-around;
+			padding-bottom: 4px;
+			button {
+				img {
+					margin: 0 4px 0 -2px;
+				}
+			}
+		}
 	}
 `;
 
@@ -195,6 +216,7 @@ const Body = styled.div`
 	}
 `;
 
+
 const monthLookup = ["Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "];
 
 function displayTime(date) {
@@ -253,12 +275,12 @@ function Feed(props) {
 				 	{photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
 					{ userInfo && user.userInfo.status === "Landlord" &&
 						<button onClick={()=>setShowModal("open")}>
-							Create Post
+							<span> List a property</span>
 						</button>
 					}
-					<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
-		 		</div>
+				</div>
 		 	</CreateRental>
+			<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
             <Content>
                 {props.loading && <img src="/images/spin-loader.gif" alt="" />}
 		 		{props.rentals && props.rentals.length > 0 &&

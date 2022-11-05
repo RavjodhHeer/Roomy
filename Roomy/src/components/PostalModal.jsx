@@ -138,18 +138,23 @@ const ShareComment = styled.div`
 `;
 
 const PostButton = styled.button`
-	min-width: 60px;
-	padding: 0 16px;
-	border-radius: 20px;
-	background: ${(props) => (props.disabled ? "#b8b8b8" : "#A943D3")};
-	color: ${(props) => (props.disabled ? "#5a5a5a" : "#fff")};
-	font-size: 16px;
-	letter-spacing: 1.1px;
-	border: none;
-	outline: none;
-	&:hover {
-		background: ${(props) => (props.disabled ? "#b8b8b8" : "#8f2bb8")};
-	}
+	display: inline-block;
+    outline: 0;
+    border: 0;
+    font-size: 20px;
+    font-weight: 400;
+    color: #fff;
+    cursor: pointer;
+    background-image: linear-gradient(to right,#c82090,#6a14d1)!important;
+    border-radius: 100px;
+    padding: 10px 24px;
+    margin: 10px 0px;
+    white-space: nowrap;
+
+    :hover {
+        background-color: #c82090;
+        background-image: none!important;
+    }
 `;
 
 const Editor = styled.div`
@@ -284,12 +289,6 @@ function PostalModal(props) {
 									<img src="/images/share-video.svg" alt="" />
 								</AssetButton>
 							</AttachAsset>
-							<ShareComment>
-								<AssetButton>
-									<img src="/images/share-comment.svg" alt="" />
-									<span>Anyone</span>
-								</AssetButton>
-							</ShareComment>
 							<PostButton disabled={!editorText ? true : false} onClick={(event) => postArticle(event)}>
 								Post
 							</PostButton>

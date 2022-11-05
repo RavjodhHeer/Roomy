@@ -48,10 +48,17 @@ const Header = styled.div`
 		min-width: auto;
 		border: none;
 		outline: none;
+		border-radius: 100px;
 		background: transparent;
 		img,
 		svg {
 			pointer-events: none;
+		}
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.2);
+			svg {
+				fill: rgba(0, 0, 0, 0.4);
+			}
 		}
 	}
 `;
@@ -87,6 +94,7 @@ const UserInfo = styled.div`
 
 const ShareCreation = styled.div`
 	display: flex;
+	flex-direction: row;
 	justify-content: space-between;
 	padding: 10px 24px 10px 16px;
 `;
@@ -129,17 +137,22 @@ const ShareComment = styled.div`
 `;
 
 const PostButton = styled.button`
-	min-width: 60px;
-	padding: 0 16px;
-	border-radius: 20px;
-	background: ${(props) => (props.disabled ? "#b8b8b8" : "#A943D3")};
-	color: ${(props) => (props.disabled ? "#5a5a5a" : "#fff")};
-	font-size: 16px;
-	letter-spacing: 1.1px;
-	border: none;
-	outline: none;
-	&:hover {
-		background: ${(props) => (props.disabled ? "#b8b8b8" : "#8f2bb8")};
+	display: inline-block;
+	outline: 0;
+	border: 0;
+	font-size: 20px;
+	font-weight: 400;
+	color: #fff;
+	cursor: pointer;
+	background-image: linear-gradient(to right,#c82090,#6a14d1)!important;
+	border-radius: 100px;
+	padding: 10px 24px;
+	margin: 10px 0px;
+	white-space: nowrap;
+
+	:hover {
+		background-color: #c82090;
+		background-image: none!important;
 	}
 `;
 
@@ -277,7 +290,7 @@ function RentalPostalModal (props){
 						<Header>
 							<h2>Create a Rental Ad</h2>
 							<button onClick={(event) => reset(event)}>
-								<img src="/images/close-icon.svg" alt="" />
+								<img src="/images/x-lg.svg" alt="" />
 							</button>
 						</Header>
 						<SharedContent>
@@ -305,18 +318,6 @@ function RentalPostalModal (props){
                                 <RentalEntry>
                                     <h3>Description</h3>
                                     <textarea value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Tell us about the rental!" autoFocus={true} />
-                                </RentalEntry>
-                                <RentalEntry>
-                                    <Checkbox
-                                        label="Smoking Allowed?"
-                                        value={smoking}
-                                        onChange={()=>setSmoking(!smoking)}
-                                    />
-                                    <Checkbox
-                                        label="Pets Allowed?"
-                                        value={pets}
-                                        onChange={()=>setPets(!pets)}
-                                    />
                                 </RentalEntry>
 								{assetArea === "image" ? (
 									<UploadImage>
