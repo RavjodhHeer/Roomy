@@ -149,7 +149,6 @@ const PostButton = styled.button`
 	padding: 10px 24px;
 	margin: 10px 0px;
 	white-space: nowrap;
-
 	:hover {
 		background-color: #c82090;
 		background-image: none!important;
