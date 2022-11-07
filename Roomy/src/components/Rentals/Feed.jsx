@@ -3,13 +3,16 @@ import { connect } from "react-redux";
 import { getRentalsAPI, updateRentalsAPI } from "../../action";
 import styled from "styled-components";
 import RentalPostalModal from "./RentalPostalModal";
+import ImageDisplay from "../ImageDisplay";
 
 const Container = styled.div`
     grid-area: main;
-	align-items: center;
+	/* align-items: center;
 	margin-top: 70px;
 	margin-left: 255px;
-	margin-right: 295px;
+	margin-right: 295px; */
+	max-width: 500px;
+ 	float: right;
 `;
 
 const CommonBox = styled.div`
@@ -25,54 +28,33 @@ const CommonBox = styled.div`
 
 const CreateRental = styled(CommonBox)`
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	border: none;
 	margin: 0 0 8px;
 	color: #958b7b;
-	div {
-		button {
-			color: #65676b;
-			font-size: 18px;
-			border: none;
-			line-height: 1.5;
-			min-height: 48px;
-			display: flex;
-			align-items: center;
-			background-color: rgba(0, 0, 0, 0.1);
-			font-weight: 300;
-			&:hover {
-				background-color: rgba(0, 0, 0, 0.15);
-			}
+	button {
+		display: flex;
+		align-items: left;
+		outline: 0;
+		border: 0;
+		font-size: 20px;
+		font-weight: 400;
+		color: #fff;
+		cursor: pointer;
+		background-image: linear-gradient(to right,#c82090,#6a14d1)!important;
+		border-radius: 100px;
+		padding: 10px 24px;
+		white-space: nowrap;
+		:hover {
+			background-color: #c82090;
+			background-image: none!important;
 		}
-		&:first-child {
-			display: flex;
-			align-items: center;
-			padding: 8px 16px;
-			img {
-				width: 48px;
-				border-radius: 50%;
-				margin-right: 8px;
-			}
-			button {
-				margin: 4px 0;
-				flex-grow: 1;
-				padding-left: 16px;
-				border: none;
-				border-radius: 35px;
-				text-align: left;
-			}
-		}
-		&:nth-child(2) {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-around;
-			padding-bottom: 4px;
-			button {
-				img {
-					margin: 0 4px 0 -2px;
-				}
-			}
-		}
+	}
+	img {
+		margin-left: 10px;
+		margin-top: 10px;
+		width: 48px;
+		border-radius: 50%;
 	}
 `;
 
@@ -205,7 +187,7 @@ const Body = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: row;
-	flex-basis: calc(100% / 3)
+	flex-basis: calc(100% / 3);
 	margin: 8px 16px 8px 8px;
 	border-color: rgba(0, 0, 0, 0.2);
 	img {
@@ -215,7 +197,6 @@ const Body = styled.div`
 		height: 100%;
 	}
 `;
-
 
 const monthLookup = ["Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "];
 
@@ -275,12 +256,12 @@ function Feed(props) {
 				 	{photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
 					{ userInfo && user.userInfo.status === "Landlord" &&
 						<button onClick={()=>setShowModal("open")}>
-							<span> List a property</span>
+							Create Post
 						</button>
 					}
-				</div>
+					<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
+		 		</div>
 		 	</CreateRental>
-			<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
             <Content>
                 {props.loading && <img src="/images/spin-loader.gif" alt="" />}
 		 		{props.rentals && props.rentals.length > 0 &&
@@ -304,9 +285,10 @@ function Feed(props) {
                             </Header>
 							<Description>{rental.description}</Description>
                             <Body>
-								{rental.photos && rental.photos.map((x) => (
-									<img src={x} style={{width: "40%"}} />
-								))}
+								{rental.photos && rental.photos.length >= 1 ?
+ 									<ImageDisplay images={rental.photos} /> :
+ 									<ImageDisplay images={["/images/no-image-available.png"]} />
+ 								}
                             </Body>
 							<RentalDetails>
 								<span>Rent: $</span>
