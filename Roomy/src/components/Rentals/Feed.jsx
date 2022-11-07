@@ -275,14 +275,14 @@ function Feed(props) {
 	return (
         <Container>
             <CreateRental>
-		 		<div>
-				 	{photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
-					{ userInfo && user.userInfo.status === "Landlord" &&
+				{ userInfo && user.userInfo.status === "Landlord" &&
+		 			<div>
+				 		{photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
 						<button onClick={()=>setShowModal("open")}>
 							<span> List a property</span>
 						</button>
-					}
-				</div>
+					</div>
+				}				
 		 	</CreateRental>
 			<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
             <Content>
