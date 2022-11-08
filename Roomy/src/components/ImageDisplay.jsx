@@ -43,7 +43,7 @@ function ImageDisplay({images}) {
     const [current, setCurrent] = useState(0);
     const length = images.length;
 
-    if (images.length == 1) {
+    if (images.length === 1) {
         return <img src={images[0]} style={{width: "100%", height: "auto"}} />
     }
 
