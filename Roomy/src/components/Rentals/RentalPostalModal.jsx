@@ -229,13 +229,15 @@ function RentalPostalModal (props){
 	};
 
     function handleImage(event) {
-		let image = event.target.files[0];
-
-		if (image === "" || image === undefined) {
-			alert(`Not an image. This file is: ${typeof imageFiles}`);
-			return;
+		let arr = [];
+		for(let image of event.target.files){
+			if (image === "" || image === undefined) {
+				alert(`Not an image. This file is: ${typeof imageFiles}`);
+				return;
+			}
+			arr.push(image);
 		}
-		setImageFiles([...imageFiles, image]);
+		setImageFiles([...imageFiles, ...arr]);
 	}
 
 	function switchAssetArea(area) {
@@ -320,7 +322,7 @@ function RentalPostalModal (props){
                                 </RentalEntry>
 								{assetArea === "image" ? (
 									<UploadImage>
-										<input type="file" accept="image/gif, image/jpeg, image/png" name="image" id="imageFiles" onChange={handleImage} style={{ display: "none" }} />
+										<input type="file" accept="image/gif, image/jpeg, image/png" name="image" id="imageFiles" onChange={handleImage} style={{ display: "none" }} multiple/>
 										<p>
 											<label htmlFor="imageFiles">Upload Images</label>
 										</p>
