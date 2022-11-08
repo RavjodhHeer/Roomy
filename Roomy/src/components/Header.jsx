@@ -108,9 +108,6 @@ function Header(props) {
 						</Photo>
 					</a>
 				</Logo>
-				<Text>
-					<span> Home</span>
-				</Text>
 				<Search>
                     <div>
                         <input type="text" placeholder="Search" />

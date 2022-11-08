@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar";
 import Home from "./Home";
 import Profile from './Profile';
 import Rentals from './Rentals';
+import Roommates from './Roommates';
 import { useEffect } from "react";
 import { getUserAuth } from "../action";
 import { connect } from "react-redux";
@@ -31,6 +32,7 @@ function App(props) {
 					</Route>
 					<Route path="/profile/:id" component={Profile}/>
 					<Route path="/rentals" component={Rentals}/>
+					<Route path="/roommates" componnent={Roommates}/>
 				</Switch>
 			</Router>
 		</div>

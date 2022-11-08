@@ -125,7 +125,7 @@ function SideNav({signout, uid}){
                         <span> Rentals</span>
                     </Button>
                 </a>
-                <a href="/feed">
+                <a href="/roommates">
                     <Button>
                         <img src="/images/people-fill.svg" alt="" />
                         <span> Roommates</span>
