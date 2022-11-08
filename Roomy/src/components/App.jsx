@@ -32,7 +32,7 @@ function App(props) {
 					</Route>
 					<Route path="/profile/:id" component={Profile}/>
 					<Route path="/rentals" component={Rentals}/>
-					<Route path="/roommates" componnent={Roommates}/>
+					<Route path="/roommates" component={Roommates}/>
 				</Switch>
 			</Router>
 		</div>
