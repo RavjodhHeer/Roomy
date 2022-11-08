@@ -149,7 +149,7 @@ function SideNav({signout, uid}){
                         <span> Saved Properties</span>
                     </Button>
                 </a>
-                <a href={"/profile/"+uid}>
+                <a href={uid ? "/profile/"+uid : "/feed"} data-testid="profile">
                     <Button>
                         <img src="/images/person-circle.svg" alt="" />
                         <span> Profile</span>
