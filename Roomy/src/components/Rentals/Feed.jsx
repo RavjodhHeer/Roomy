@@ -6,15 +6,8 @@ import RentalPostalModal from "./RentalPostalModal";
 import ImageDisplay from "../ImageDisplay";
 
 const Container = styled.div`
-    grid-area: main;
-	/* align-items: center;
-	margin-top: 70px;
-	margin-left: 255px;
-	margin-right: 295px; */
-	margin-top: 70px;
-	margin-right: 8px;
-	max-width: 500px;
-  	float: right;
+	flex-direction: column;
+	/* background-color: white; */
 `;
 
 const CommonBox = styled.div`
