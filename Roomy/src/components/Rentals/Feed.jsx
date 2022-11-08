@@ -92,9 +92,9 @@ const Header = styled.div`
 	overflow: hidden;
 	font-size: 16px;
 	text-align: left;
-	icon {
+	button {
 		img {
-			margin-top: 10px;
+			margin-top: 15px;
 		}
 	}
 	a {
@@ -192,9 +192,10 @@ const RentalDetails = styled.div`
 	font-size: 15px;
 	font-weight: 800;
 	text-align: left;
-	separator {
-		font-weight: 400;
-	}
+`;
+
+const Separator = styled.span`
+	font-weight: 400;
 `;
 
 const Body = styled.div`
@@ -294,7 +295,7 @@ function Feed(props) {
 									</div>
 								</a>
 								<button>
-									<img src="/images/bookmark-fill.svg" alt="" />
+										<img src="/images/bookmark-fill.svg" alt="" />
 								</button>
                             </Header>
 							<Description>{rental.description}</Description>
@@ -308,11 +309,11 @@ function Feed(props) {
 								<span>Rent: $</span>
 								{rental.price}
 								<span>/mo </span>
-								<separator>  |  </separator>
+								<Separator>  |  </Separator>
 								<span>Bds: </span>
 								{rental.bedrooms}
 								<span> </span>
-								<separator>  |  </separator>
+								<Separator>  |  </Separator>
 								<span>Ba: </span>
 								{rental.bathrooms}
 							</RentalDetails>
