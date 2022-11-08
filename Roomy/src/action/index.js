@@ -1,5 +1,5 @@
 import db, { auth, provider, storage } from "../firebase";
-import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES, GET_RENTALS, SET_OTHER_USER } from "./actionType";
+import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES, GET_RENTALS, GET_ROOMMATES, SET_OTHER_USER } from "./actionType";
 
 export function setUser(payload) {
 	return {
@@ -26,6 +26,14 @@ export function getArticles(payload, id) {
 export function getRentals(payload, id) {
 	return {
 		type: GET_RENTALS,
+		payload: payload,
+		id: id,
+	};
+}
+
+export function getRoommates(payload, id) {
+	return {
+		type: GET_ROOMMATES,
 		payload: payload,
 		id: id,
 	};
@@ -259,6 +267,28 @@ export function updateRentalsAPI(payload) {
 	};
 }
 
+export function getRoommatesAPI() {
+	return (dispatch) => {
+		dispatch(setLoading(true));
+		let payload;
+		let id;
+		db.collection("roommates")
+			.orderBy("date", "desc") // order by date in descreasing order
+			.onSnapshot((snapshot) => {
+				payload = snapshot.docs.map((doc) => doc.data());
+				id = snapshot.docs.map((doc) => doc.id);
+				dispatch(getRoommates(payload, id));
+			});
+		dispatch(setLoading(false));
+	};
+}
+
+export function updateRoommatesAPI(payload) {
+	return (dispatch) => {
+		db.collection("roommates").doc(payload.id).update(payload.update);
+	};
+}
+
 export function setUserInfo(uid, userType, displayName, photoURL){
 	db.collection("profiles").doc(uid).set({
 		looking: true,
@@ -286,6 +316,25 @@ async function uploadImage(img){
 	});
 }
 
+/*
+async function uploadImageRoommates(img){
+	return new Promise(function(resolve, reject){
+		const upload = storage.ref(`roommates_images/${img.name}`).put(img);
+		upload.on(
+			"state_changed",
+			(snapshot) => {
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+			},
+			(err) => console.log(err),
+			async () => {
+				const downloadURL = await upload.snapshot.ref.getDownloadURL();
+				resolve(downloadURL);
+			}
+		);
+	});
+}
+*/
+
 export function postRental(payload) {
 	let photos = [];
 	for (const img of payload.photos ){
@@ -294,6 +343,35 @@ export function postRental(payload) {
 	Promise.all(photos).then((urls)=>{
 		photos = urls;
 		db.collection("rentals").add({
+			price: payload.price,
+			bedrooms: payload.bedrooms,
+			sharedBedroom: payload.sharedBedroom,
+			bathrooms: payload.bathrooms,
+			sharedBathroom: payload.sharedBathroom,
+			description: payload.description ? payload.description : "Description Unavailable",
+			title: payload.title ? payload.title : "Title Unavailable",
+			preferences: payload.preferences,
+			photos,
+			address: payload.address,
+			coords: {
+				latitude: payload.coords.latitude,
+				longitude: payload.coords.longitude
+			},
+			poster: payload.poster,
+			image: payload.poster.photoURL,
+			date: payload.date,
+		});
+	});
+}
+
+export function postRoommate(payload) {
+	let photos = [];
+	for (const img of payload.photos ){
+		photos.push(uploadImage(img));
+	}
+	Promise.all(photos).then((urls)=>{
+		photos = urls;
+		db.collection("roommates").add({
 			price: payload.price,
 			bedrooms: payload.bedrooms,
 			sharedBedroom: payload.sharedBedroom,

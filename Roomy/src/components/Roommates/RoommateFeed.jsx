@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { getRentalsAPI, updateRentalsAPI } from "../../action";
+import { getRoommatesAPI, updateRoommatesAPI } from "../../action";
 import styled from "styled-components";
-import RentalPostalModal from "./RentalPostalModal";
+import RoommatePostalModal from "./RoommatePostalModal";
 
 const Container = styled.div`
     grid-area: main;
@@ -23,7 +23,7 @@ const CommonBox = styled.div`
 	box-shadow: 0 0 3px #999, 0 0 0 rgb(0 0 0 / 20%);
 `;
 
-const CreateRental = styled(CommonBox)`
+const CreateRoommate = styled(CommonBox)`
 	display: flex;
 	flex-direction: column;
 	border: none;
@@ -76,7 +76,7 @@ const CreateRental = styled(CommonBox)`
 	}
 `;
 
-const Rental = styled(CommonBox)`
+const Roommate = styled(CommonBox)`
 	padding: 0;
 	margin: 0 0 8px;
 	overflow: visible;
@@ -187,7 +187,7 @@ const Description = styled.div`
 	text-align: left;
 `;
 
-const RentalDetails = styled.div`
+const RoommateDetails = styled.div`
 	padding: 0 13px;
 	color: rgba(0, 0, 0, 0.8);
 	overflow: hidden;
@@ -241,11 +241,11 @@ function displayTime(date) {
 	}
 }
 
-function Feed(props) {
+function RoommateFeed(props) {
 	const [showModal, setShowModal] = useState("close");
 
 	useEffect(() => {
-		props.getRentals();
+		props.getRoommates();
 	}, []);
     
 	const clickHandler = (event) => {
@@ -270,54 +270,56 @@ function Feed(props) {
 	let photoUrl = user ? user.photoURL : "/images/photo.svg";
 	return (
         <Container>
-            <CreateRental>
+            <CreateRoommate>
 		 		<div>
 				 	{photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
-					{ userInfo && user.userInfo.status === "Landlord" &&
+					{ userInfo && user.userInfo.status === "Renter" &&
 						<button onClick={()=>setShowModal("open")}>
-							<span> List a property</span>
+							<span> Post a Roomie</span>
 						</button>
 					}
 				</div>
-		 	</CreateRental>
-			<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
+		 	</CreateRoommate>
+			<RoommatePostalModal showModal={showModal} clickHandler={clickHandler}/>
             <Content>
                 {props.loading && <img src="/images/spin-loader.gif" alt="" />}
-		 		{props.rentals && props.rentals.length > 0 &&
-		 			props.rentals.map((rental, key) => (
-		 				<Rental key={key}>
+		 		{props.roommates && props.roommates.length > 0 &&
+		 			props.roommates.map((roommate, key) => (
+		 				<Roommate key={key}>
                             <Header>
 								<a>
-									{rental.poster.image ? <img src={rental.poster.image} alt="" /> : <img src="/images/user.svg" alt="" />}
+									{photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
 									<div>
-										<h3>{rental.title}</h3>
-										<span>{rental.address}</span>
-										<span>{displayTime(rental.date.toDate())}</span>
-										{/* rental post + picture */}
+										<h3>{roommate.title}</h3>
+										<span>{roommate.address}</span>
+										<span>{displayTime(roommate.date.toDate())}</span>
+										{/* roommate post + picture */}
 									</div>
 								</a>
-								<button>
-									<img src="/images/bookmark-fill.svg" alt="" />
-								</button>
+								<icon>
+									<button>
+										<img src="/images/bookmark-fill.svg" alt="" />
+									</button>
+								</icon>
                             </Header>
-							<Description>{rental.description}</Description>
+							<Description>{roommate.description}</Description>
                             <Body>
-								{rental.photos && rental.photos.map((x) => (
+								{roommate.photos && roommate.photos.map((x) => (
 									<img src={x} style={{width: "40%"}} />
 								))}
                             </Body>
-							<RentalDetails>
+							<RoommateDetails>
 								<span>Rent: $</span>
-								{rental.price}
+								{roommate.price}
 								<span>/mo </span>
 								<separator>  |  </separator>
 								<span>Bds: </span>
-								{rental.bedrooms}
+								{roommate.bedrooms}
 								<span> </span>
 								<separator>  |  </separator>
 								<span>Ba: </span>
-								{rental.bathrooms}
-							</RentalDetails>
+								{roommate.bathrooms}
+							</RoommateDetails>
 							<SocialActions>
 								<button>
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 1 26 26" data-supported-dps="26x26" fill="rgba(0, 0, 0, 0.6)" width="22" height="22" focusable="false">
@@ -338,7 +340,7 @@ function Feed(props) {
 									<span>Send application</span>
 								</button>
 							</SocialActions>
-                        </Rental>
+                        </Roommate>
                 ))}
             </Content>
         </Container>
@@ -348,15 +350,15 @@ function Feed(props) {
 const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
-		loading: state.rentalState.loading,
-		rentals: state.rentalState.rentals,
-		ids: state.rentalState.ids,
+		loading: state.roommateState.loading,
+		roommates: state.roommateState.roommate,
+		ids: state.roommateState.ids,
 	};
 };
 
 const mapDispatchToProps = (dispatch) => ({
-	getRentals: () => dispatch(getRentalsAPI()),
-	likeHandler: (payload) => dispatch(updateRentalsAPI(payload)),
+	getRoommates: () => dispatch(getRoommatesAPI()),
+	likeHandler: (payload) => dispatch(updateRoommatesAPI(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Feed);
+export default connect(mapStateToProps, mapDispatchToProps)(RoommateFeed);
