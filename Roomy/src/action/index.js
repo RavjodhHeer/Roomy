@@ -344,8 +344,8 @@ export function postRental(payload) {
 		photos = urls;
 		db.collection("rentals").add({
 			price: payload.price,
-			bedrooms: payload.bedrooms,
-			sharedBedroom: payload.sharedBedroom,
+ 			bedrooms: payload.bedrooms,
+ 			sharedBedroom: payload.sharedBedroom,
 			bathrooms: payload.bathrooms,
 			sharedBathroom: payload.sharedBathroom,
 			description: payload.description ? payload.description : "Description Unavailable",
@@ -358,7 +358,6 @@ export function postRental(payload) {
 				longitude: payload.coords.longitude
 			},
 			poster: payload.poster,
-			image: payload.poster.photoURL,
 			date: payload.date,
 		});
 	});
