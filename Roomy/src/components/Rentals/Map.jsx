@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { GoogleMap, LoadScript} from "@react-google-maps/api";
+import { GoogleMap, LoadScript, Marker} from "@react-google-maps/api";
+import { getRentalsAPI } from "../../action";
+import { connect } from "react-redux";
 
 // https://react-google-maps-api-docs.netlify.app
 
@@ -23,9 +25,20 @@ function Map(props) {
                 mapContainerStyle={containerStyle}
                 center={center}
                 zoom={10}>
+                    {props.rentals &&
+                        props.rentals.map((rental, key)=> (
+                            <Marker key={key} position={{ lat: rental.coords.latitude, lng: rental.coords.longitude}} />
+                        ))
+                    }
             </GoogleMap>
         </LoadScript>
     );
 }
 
-export default Map;
+const mapStateToProps = (state) => {
+	return {
+		rentals: state.rentalState.rentals,
+	};
+};
+
+export default connect(mapStateToProps)(Map);
