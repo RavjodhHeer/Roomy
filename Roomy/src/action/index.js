@@ -1,5 +1,6 @@
-import db, { auth, provider, storage } from "../firebase";
+import db, { auth, provider, storage, firebase } from "../firebase";
 import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES, GET_RENTALS, GET_ROOMMATES, SET_OTHER_USER } from "./actionType";
+import "firebase/firestore";
 
 export function setUser(payload) {
 	return {
@@ -407,4 +408,17 @@ export function getOtherUser(uid) {
 			console.log("Error getting document:", error);
 		});
 	}
+}
+
+export function postExperience(target_uid, message, when) {
+	const data = {
+		experience: message,
+		when: when,
+		uid: auth.currentUser.uid,
+		displayName: auth.currentUser.displayName
+	}
+	const profile = db.collection("profiles").doc(target_uid);
+	profile.update({
+		experiences: firebase.firestore.FieldValue.arrayUnion(data)
+	})
 }
