@@ -242,10 +242,6 @@ function displayTime(date) {
 function Feed(props) {
 	const [showModal, setShowModal] = useState("close");
 
-	useEffect(() => {
-		props.getRentals();
-	}, []);
-    
 	const clickHandler = (event) => {
 		event.preventDefault();
 		if (event.target !== event.currentTarget) {

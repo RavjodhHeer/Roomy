@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { getUserAuth } from "../action";
+import { getUserAuth, getRentalsAPI } from "../action";
 import { Redirect } from "react-router";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
@@ -43,6 +43,10 @@ const FeedWrapper = styled.div`
 `;
 
 function Rentals (props) {
+    useEffect(()=>{
+        props.getRentals();
+    },[]);
+
     return (
         <div className="Rentals">
             {(!props.user && !props.loggingIn) && <Redirect to="/" />}
@@ -79,6 +83,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
 	getUserAuth: () => dispatch(getUserAuth()),
+    getRentals: () => dispatch(getRentalsAPI()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Rentals);
