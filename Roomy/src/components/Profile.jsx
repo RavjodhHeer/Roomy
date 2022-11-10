@@ -239,6 +239,17 @@ function Profile(props) {
 		});
 	}
 
+	const postUserExperience = () => {
+		if(!experience.length || !expWhen){
+			alert("Fill the Experience Form Out Completely!");
+		} else {
+			postExperience(otherUser.uid, experience, expWhen);
+			setExperience("");
+			setExpWhen("");
+			props.getOtherUser(id);
+		}
+	}
+
 	return (
         <span>
 			{/* Force out if not logged in */}
@@ -295,7 +306,7 @@ function Profile(props) {
 									<input type="text" value={expWhen}
 										onChange={(e)=>setExpWhen(e.target.value)}
 										placeholder="When was this?" id="when" />
-									<LogoButton onClick={()=>postExperience(otherUser.uid, experience, expWhen)}>Submit</LogoButton>
+									<LogoButton onClick={postUserExperience}>Submit</LogoButton>
 								</span>
 							</a>
 						}
