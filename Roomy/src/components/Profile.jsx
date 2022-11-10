@@ -219,18 +219,11 @@ function Profile(props) {
 		}
 	},[user]);
 
-	const changeToLandlord = () => {
+	const changeTo = (uType) => {
 		db.collection("profiles").doc(auth.currentUser.uid).update({
-			status: 'Landlord'
+			status: uType
 		});
-		setUserType("Landlord");
-	}
-	
-	const changeToRenter = () => {
-		db.collection("profiles").doc(auth.currentUser.uid).update({
-			status: 'Renter'
-		});
-		setUserType("Renter");
+		setUserType(uType);
 	}
 
 	const writeData = event => {
@@ -281,22 +274,30 @@ function Profile(props) {
 							<a>
 								<span>Change Your Status</span>
 								<span>
-								<LogoButton onClick={changeToLandlord}>Landlord</LogoButton>
+								<LogoButton onClick={()=> changeTo('Landlord')}>Landlord</LogoButton>
 								</span>
-								<LogoButton onClick={changeToRenter}>Renter</LogoButton>
+								<LogoButton onClick={()=> changeTo('Renter')}>Renter</LogoButton>
 							</a>
 						}
 				</CommunityCard>
 				<CommunityCard>
 					<Title> Experiences</Title>
 						<a>
-								<span>Rented 217 Berry St. for 3.5 years</span>
-								<span> - </span>
-								<span>Leased Your Mom for 15 years </span>
+							{otherUser && otherUser.experiences ?
+								<>
+									{otherUser.experiences.map((exp) => (
+										<>
+											<span>Poster: {exp.uid}</span>
+											<h3>Experience: {exp.experience}</h3>
+											<span>When: {exp.when}</span>
+										</>
+									))}
+								</>
+							:
+								<span>No Experiences Listed</span>
+							}
 						</a>
-				
 				</CommunityCard>
-				
 			</Container>
         </span>
 	);

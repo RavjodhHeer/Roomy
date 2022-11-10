@@ -88,6 +88,7 @@ export function signInAPI() {
 						status: "Renter",
 						uid: userAuth.user.uid,
 						photoURL: userAuth.user.photoURL,
+						experiences: []
 					}
 					dispatch(setUser(userAuth.user));
 				}
@@ -95,7 +96,7 @@ export function signInAPI() {
 				console.log("Error getting document:", error);
 			});
 		})
-			.catch((err) => alert(err.message));
+		.catch((err) => alert(err.message));
 	};
 }
 
@@ -130,6 +131,7 @@ export function signInWithEmail(email, password) {
 							status: "Renter",
 							uid: userAuth.user.uid,
 							photoURL: userAuth.user.photoURL,
+							experiences: []
 						}
 						dispatch(setUser(userAuth.user));
 					}
@@ -295,7 +297,8 @@ export function setUserInfo(uid, userType, displayName, photoURL){
 		displayName: displayName,
 		status: userType ? userType : "Renter",
 		uid: uid,
-		photoURL: photoURL
+		photoURL: photoURL,
+		experiences: []
 	});
 }
 
