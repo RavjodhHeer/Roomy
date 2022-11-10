@@ -344,8 +344,17 @@ export function postRental(payload) {
 	for (const img of payload.photos ){
 		photos.push(uploadImage(img));
 	}
-	Promise.all(photos).then((urls)=>{
+	let [lat, long] = [0, 0];
+	Promise.all(photos).then(async (urls)=>{
 		photos = urls;
+		const address = payload.address;
+		const geoCodeToken = "pk.eyJ1IjoibWF0dGhld2dhaW0iLCJhIjoiY2xhYXN6ZnNhMGEzYzNwcnoycjBlZmlnMSJ9.VMZ9zv6-BBkRG_kcYx9naQ";
+        await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${geoCodeToken}`)
+        .then((resp)=>resp.json())
+        .then((data)=>{
+            lat = data.features[0].center[1];
+            long = data.features[0].center[0];
+        });
 		db.collection("rentals").add({
 			price: payload.price,
  			bedrooms: payload.bedrooms,
@@ -358,8 +367,8 @@ export function postRental(payload) {
 			photos,
 			address: payload.address,
 			coords: {
-				latitude: payload.coords.latitude,
-				longitude: payload.coords.longitude
+				latitude: lat,
+				longitude: long
 			},
 			poster: payload.poster,
 			date: payload.date,
