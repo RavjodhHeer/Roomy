@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import db, { auth, provider, storage } from "../firebase";
-import { getOtherUser } from "../action";
+import { getOtherUser, postExperience } from "../action";
 import Sidebar from "./Sidebar"
 import Header from "./Header"
 import { useParams, Redirect } from 'react-router-dom';
@@ -138,7 +138,7 @@ const CommunityCard = styled(ArtCard)`
 			justify-content: space-between;
 		}
 		&:last-child {
-			color: rgba(0, 0, 0, 0.6);
+			color: black;
 			border-top: 1px solid #d6cec2;
 			padding: 12px;
 		}
@@ -207,6 +207,10 @@ function Profile(props) {
 	const [info, changeBio] = useState("About You");
 	let { id } = useParams();
 
+	//Experience
+	const [expWhen, setExpWhen] = useState("");
+	const [experience, setExperience] = useState("");
+	
 	useEffect(()=>{
 		props.getOtherUser(id);
 		if (user){
@@ -219,18 +223,11 @@ function Profile(props) {
 		}
 	},[user]);
 
-	const changeToLandlord = () => {
+	const changeTo = (uType) => {
 		db.collection("profiles").doc(auth.currentUser.uid).update({
-			status: 'Landlord'
+			status: uType
 		});
-		setUserType("Landlord");
-	}
-	
-	const changeToRenter = () => {
-		db.collection("profiles").doc(auth.currentUser.uid).update({
-			status: 'Renter'
-		});
-		setUserType("Renter");
+		setUserType(uType);
 	}
 
 	const writeData = event => {
@@ -240,7 +237,17 @@ function Profile(props) {
 		db.collection("profiles").doc(auth.currentUser.uid).update({
 			bio: info
 		});
+	}
 
+	const postUserExperience = () => {
+		if(!experience.length || !expWhen){
+			alert("Fill the Experience Form Out Completely!");
+		} else {
+			postExperience(otherUser.uid, experience, expWhen);
+			setExperience("");
+			setExpWhen("");
+			props.getOtherUser(id);
+		}
 	}
 
 	return (
@@ -269,7 +276,7 @@ function Profile(props) {
 				<CommunityCard>
 					<Title> About Me</Title>
 						<a>
-							<h2>{info}</h2>
+							<h2>{info ? info : "This user has no bio."}</h2>
 							{otherUser && user && otherUser.uid == user.uid && 
 								<form onSubmit={writeData}>
 									<input type="text" placeholder="Edit Bio" id="bio"/>
@@ -281,22 +288,44 @@ function Profile(props) {
 							<a>
 								<span>Change Your Status</span>
 								<span>
-								<LogoButton onClick={changeToLandlord}>Landlord</LogoButton>
+								<LogoButton onClick={()=> changeTo('Landlord')}>Landlord</LogoButton>
 								</span>
-								<LogoButton onClick={changeToRenter}>Renter</LogoButton>
+								<LogoButton onClick={()=> changeTo('Renter')}>Renter</LogoButton>
 							</a>
 						}
 				</CommunityCard>
 				<CommunityCard>
 					<Title> Experiences</Title>
-						<a>
-								<span>Rented 217 Berry St. for 3.5 years</span>
-								<span> - </span>
-								<span>Leased Your Mom for 15 years </span>
-						</a>
-				
+						{/* Add your experience */}
+						{otherUser && user && otherUser.uid != myUID && 
+							<a>
+								<span>
+									<textarea value={experience}
+										onChange={(e)=>setExperience(e.target.value)}
+										placeholder="Your Experience" id="experience" />
+									<input type="text" value={expWhen}
+										onChange={(e)=>setExpWhen(e.target.value)}
+										placeholder="When was this?" id="when" />
+									<LogoButton onClick={postUserExperience}>Submit</LogoButton>
+								</span>
+							</a>
+						}
+						{otherUser && otherUser.experiences && otherUser.experiences.length ?
+							<>
+								{otherUser.experiences.map((exp, index) => (
+									<a key={index}>
+										<span>Poster: {exp.displayName}</span>
+										<h3>Experience: {exp.experience}</h3>
+										<span>When: {exp.when}</span>
+									</a>
+								))}
+							</>
+						:
+							<a>
+								<span>No Experiences Listed</span>
+							</a>
+						}
 				</CommunityCard>
-				
 			</Container>
         </span>
 	);

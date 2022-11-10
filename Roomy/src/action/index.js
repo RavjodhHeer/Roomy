@@ -1,5 +1,6 @@
-import db, { auth, provider, storage } from "../firebase";
+import db, { auth, provider, storage, firebase } from "../firebase";
 import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES, GET_RENTALS, GET_ROOMMATES, SET_OTHER_USER } from "./actionType";
+import "firebase/firestore";
 
 export function setUser(payload) {
 	return {
@@ -88,6 +89,7 @@ export function signInAPI() {
 						status: "Renter",
 						uid: userAuth.user.uid,
 						photoURL: userAuth.user.photoURL,
+						experiences: []
 					}
 					dispatch(setUser(userAuth.user));
 				}
@@ -95,7 +97,7 @@ export function signInAPI() {
 				console.log("Error getting document:", error);
 			});
 		})
-			.catch((err) => alert(err.message));
+		.catch((err) => alert(err.message));
 	};
 }
 
@@ -130,6 +132,7 @@ export function signInWithEmail(email, password) {
 							status: "Renter",
 							uid: userAuth.user.uid,
 							photoURL: userAuth.user.photoURL,
+							experiences: []
 						}
 						dispatch(setUser(userAuth.user));
 					}
@@ -295,7 +298,8 @@ export function setUserInfo(uid, userType, displayName, photoURL){
 		displayName: displayName,
 		status: userType ? userType : "Renter",
 		uid: uid,
-		photoURL: photoURL
+		photoURL: photoURL,
+		experiences: []
 	});
 }
 
@@ -404,4 +408,17 @@ export function getOtherUser(uid) {
 			console.log("Error getting document:", error);
 		});
 	}
+}
+
+export function postExperience(target_uid, message, when) {
+	const data = {
+		experience: message,
+		when: when,
+		uid: auth.currentUser.uid,
+		displayName: auth.currentUser.displayName
+	}
+	const profile = db.collection("profiles").doc(target_uid);
+	profile.update({
+		experiences: firebase.firestore.FieldValue.arrayUnion(data)
+	})
 }
