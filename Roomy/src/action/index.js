@@ -89,7 +89,10 @@ export function signInAPI() {
 						status: "Renter",
 						uid: userAuth.user.uid,
 						photoURL: userAuth.user.photoURL,
-						experiences: []
+						experiences: [],
+						preferences: {},
+						phoneNumber: "",
+						gender: ""
 					}
 					dispatch(setUser(userAuth.user));
 				}
@@ -132,7 +135,10 @@ export function signInWithEmail(email, password) {
 							status: "Renter",
 							uid: userAuth.user.uid,
 							photoURL: userAuth.user.photoURL,
-							experiences: []
+							experiences: [],
+							preferences: {},
+							phoneNumber: "",
+							gender: ""
 						}
 						dispatch(setUser(userAuth.user));
 					}
@@ -299,7 +305,10 @@ export function setUserInfo(uid, userType, displayName, photoURL){
 		status: userType ? userType : "Renter",
 		uid: uid,
 		photoURL: photoURL,
-		experiences: []
+		experiences: [],
+		preferences: {},
+		phoneNumber: "",
+		gender: ""
 	});
 }
 
@@ -429,5 +438,11 @@ export function postExperience(target_uid, message, when) {
 	const profile = db.collection("profiles").doc(target_uid);
 	profile.update({
 		experiences: firebase.firestore.FieldValue.arrayUnion(data)
-	})
+	});
+}
+
+export function updateProfileData(newProfileData) {
+	const uid = auth.currentUser.uid;
+	const profile = db.collection("profiles").doc(uid);
+	profile.update(newProfileData);
 }

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import db, { auth, provider, storage } from "../firebase";
-import { getOtherUser, postExperience } from "../action";
+import db, { auth } from "../firebase";
+import { getOtherUser, postExperience, updateProfileData } from "../action";
 import Sidebar from "./Sidebar"
 import Header from "./Header"
 import { useParams, Redirect } from 'react-router-dom';
@@ -78,48 +78,6 @@ const AddPhotoText = styled.div`
 	font-weight: 400;
 `;
 
-const Widget = styled.div`
-	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-	padding: 12px 0;
-	& > a {
-		text-decoration: none;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 4px 12px;
-		div {
-			display: flex;
-			flex-direction: column;
-			text-align: left;
-			span {
-				font-size: 12px;
-				line-height: 1.333;
-				&:first-child {
-					color: rgba(0, 0, 0, 0.6);
-				}
-				&:nth-child(2) {
-					color: #000;
-				}
-			}
-		}
-	}
-`;
-
-const Item = styled.a`
-	display: block;
-	border-color: rgba(0, 0, 0, 0.6);
-	text-align: left;
-	padding: 12px;
-	font-size: 12px;
-	span {
-		display: flex;
-		align-items: center;
-	}
-	&:hover {
-		background-color: rgba(0, 0, 0, 0.08);
-	}
-`;
-
 const CommunityCard = styled(ArtCard)`
 	padding: 8px 0 0;
 	text-align: left;
@@ -129,9 +87,6 @@ const CommunityCard = styled(ArtCard)`
 		color: #000;
 		padding: 4px 12px;
 		font-size: 15px;
-		&:hover {
-			color: #A943D3;
-		}
 		span {
 			display: flex;
 			align-items: center;
@@ -177,7 +132,7 @@ const LogoButton = styled.button`
     cursor: pointer;
     border-radius: 100px;
     padding: 10px 15px;
-    margin: 6px 0px;
+    margin: 6px 10px;
     white-space: nowrap;
 
     :hover {
@@ -193,8 +148,21 @@ const Title = styled.div`
     color: #8f2bb8;
 `;
 
-const sub = styled.div`
-    font-size: 25px;
+const SignIn = styled.a`
+	box-shadow: inset 0 0 0 1px #7822C7;
+	border-radius: 25px;
+	color: #7822C7;
+	font-size: 16px;
+	font-weight: 600;
+	transition-duration: 167ms;
+	line-height: 40px;
+	padding: 10px 25px;
+	text-align: center;
+	background-color: transparent;
+	&:hover {
+		background-color: rgba(112, 181, 249, 0.15);
+		box-shadow: inset 0 0 0 2px #7822C7;
+	}
 `;
 
 
@@ -205,11 +173,20 @@ function Profile(props) {
 	let myUID = props.user ? props.user.uid : null;
 	const [userType, setUserType] = useState("Renter");
 	const [info, changeBio] = useState("About You");
+	const [editMode, setEditMode] = useState(false);
 	let { id } = useParams();
 
 	//Experience
 	const [expWhen, setExpWhen] = useState("");
 	const [experience, setExperience] = useState("");
+
+	// Edit profile data
+	const [phoneNumber, setPhoneNumber] = useState("");
+	const [gender, setGender] = useState("");
+	const [roomWith, setRoomWith] = useState("");
+	const [pets, setPets] = useState("");
+	const [smoking, setSmoking] = useState("");
+	const [visibility, setProfileVisibility] = useState(false);
 	
 	useEffect(()=>{
 		props.getOtherUser(id);
@@ -220,6 +197,12 @@ function Profile(props) {
 		}
 		if(otherUser) {
 			changeBio(otherUser.bio);
+			setPhoneNumber(otherUser.phoneNumber);
+			setGender(otherUser.gender);
+			setProfileVisibility(otherUser.looking);
+			setRoomWith(otherUser.preferences ? otherUser.preferences.roomWith : null);
+			setPets(otherUser.preferences ? otherUser.preferences.pets : null);
+			setSmoking(otherUser.preferences ? otherUser.preferences.smoking : null);
 		}
 	},[user]);
 
@@ -228,15 +211,6 @@ function Profile(props) {
 			status: uType
 		});
 		setUserType(uType);
-	}
-
-	const writeData = event => {
-		event.preventDefault();
-		var info = event.target.elements.bio.value;
-		changeBio(info);
-		db.collection("profiles").doc(auth.currentUser.uid).update({
-			bio: info
-		});
 	}
 
 	const postUserExperience = () => {
@@ -250,12 +224,29 @@ function Profile(props) {
 		}
 	}
 
+	const updateProfile = () => {
+		const newProfileData = {
+			bio: info,
+			phoneNumber: phoneNumber,
+			gender: gender,
+			preferences: {
+				roomWith: roomWith,
+				pets: pets,
+				smoking: smoking,
+			},
+			looking: visibility
+		};
+		updateProfileData(newProfileData);
+		props.getOtherUser(id);
+		setEditMode(false);
+	}
+
 	return (
         <span>
 			{/* Force out if not logged in */}
 			{(!props.user && !props.loggingIn) && <Redirect to="/" />}
 			
-			<Header /> 
+			<Header />
 			<Sidebar />
 			<Container>
 				<ArtCard>
@@ -266,36 +257,122 @@ function Profile(props) {
 							<Link>{otherUser ? otherUser.displayName : "N/A"}</Link>
 						</a>
 						<h3>Status: {userType}</h3>
-						<a href={"/profile/"+myUID}>
-							<AddPhotoText>
-								Edit Profile
-							</AddPhotoText>
-						</a>
+						{ otherUser && user && otherUser.uid == user.uid ?
+							<>
+							{editMode ?
+								<>
+									<LogoButton type="submit" onClick={updateProfile}>Save</LogoButton>
+									<LogoButton type="submit" onClick={()=>setEditMode(false)}>Cancel</LogoButton>
+								</>
+							:	
+								<LogoButton type="submit" onClick={()=>setEditMode(true)}>Edit</LogoButton>
+							}
+							</>
+						:null
+						}
 					</UserInfo>
 				</ArtCard>
-				<CommunityCard>
-					<Title> About Me</Title>
-						<a>
-							<h2>{info ? info : "This user has no bio."}</h2>
-							{otherUser && user && otherUser.uid == user.uid && 
-								<form onSubmit={writeData}>
-									<input type="text" placeholder="Edit Bio" id="bio"/>
-									<LogoButton type="submit">Edit</LogoButton>
-								</form>
-							}
-						</a>
-						{otherUser && user && otherUser.uid == user.uid && 
+				{/* Make profile public / private */}
+				{editMode && 
+					<CommunityCard>
+						<Title>Profile Visibility</Title>
+							<span>
+								<SignIn onClick={()=>setProfileVisibility(!visibility)}>{visibility ? "Make Profile Private" : "Make Profile Public"}</SignIn>
+							</span>
+					</CommunityCard>
+				}
+				{ visibility || (otherUser && user && otherUser.uid == user.uid) ? <>
+					<CommunityCard>
+						<Title> About Me</Title>
 							<a>
-								<span>Change Your Status</span>
-								<span>
-								<LogoButton onClick={()=> changeTo('Landlord')}>Landlord</LogoButton>
-								</span>
-								<LogoButton onClick={()=> changeTo('Renter')}>Renter</LogoButton>
+								{!editMode ?
+									<>
+										<a>
+											<h1>Bio:</h1>
+											<span>{otherUser && otherUser.bio && otherUser.bio.length ? otherUser.bio : "This user has no bio."}</span>
+										</a>
+										<a>
+											<h1>Phone Number:</h1>
+											<span>{otherUser && otherUser.phoneNumber && otherUser.phoneNumber.length ? otherUser.phoneNumber : "This user has no phone number linked."}</span>
+										</a>
+										<a>
+											<h1>Gender:</h1>
+											<span>{otherUser && otherUser.gender && otherUser.gender.length ? otherUser.gender : "This user doesn't have their gender set."}</span>
+										</a>
+									</>
+								:
+									<>
+										{otherUser && user && otherUser.uid == user.uid && 
+											<>
+												<div>
+													<h2>Bio:</h2>
+													<textarea type="text" placeholder="Edit Bio" value={info} onChange={(e)=>changeBio(e.target.value)} id="bio"/>
+												</div>
+												<div>
+													<h2>Phone Number:</h2>
+													<input type="number" placeholder="Edit Bio" value={phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)} id="phoneNumber"/>
+												</div>
+												<div>
+													<h2>I identify as:</h2>
+													<input type="text" placeholder="Your Gender" value={gender} onChange={(e)=>setGender(e.target.value)} id="gender"/>
+												</div>
+											</>
+										}
+									</>
+								}
 							</a>
-						}
-				</CommunityCard>
-				<CommunityCard>
-					<Title> Experiences</Title>
+							{otherUser && user && otherUser.uid == user.uid && editMode &&
+								<a>
+									<span>Change Your Status</span>
+									<span>
+									<LogoButton onClick={()=> changeTo('Landlord')}>Landlord</LogoButton>
+									</span>
+									<LogoButton onClick={()=> changeTo('Renter')}>Renter</LogoButton>
+								</a>
+							}
+					</CommunityCard>
+					<CommunityCard>
+						<Title>Preferences</Title>
+							<a>
+								{!editMode ?
+									<>
+										<a>
+											<h1>Gender Preference:</h1>
+											<span>{otherUser && otherUser.preferences && otherUser.preferences.roomWith ? otherUser.preferences.roomWith : "Any"}</span>
+										</a>
+										<a>
+											<h1>Pets:</h1>
+											<span>{otherUser && otherUser.preferences && otherUser.preferences.pets ? otherUser.preferences.pets : "OK with pets"}</span>
+										</a>
+										<a>
+											<h1>Do they want to live with a smoker:</h1>
+											<span>{otherUser && otherUser.preferences && otherUser.preferences.smoking ? otherUser.preferences.smoking : "Doesn't matter"}</span>
+										</a>
+									</>
+								:
+									<>
+										{otherUser && user && otherUser.uid == user.uid && 
+											<>
+												<div>
+													<h2>Prefers to room with:</h2>
+													<input type="text" placeholder="Male / Female / Any" value={roomWith} onChange={(e)=>setRoomWith(e.target.value)}/>
+												</div>
+												<div>
+													<h2>Are you OK with pets? / Do you have any?</h2>
+													<textarea type="text" placeholder="Are you OK with pets? / Do you have any?" value={pets} onChange={(e)=>setPets(e.target.value)}/>
+												</div>
+												<div>
+													<h2>Do you want to live with a smoker?</h2>
+													<input type="text" placeholder="Yes / No" value={smoking} onChange={(e)=>setSmoking(e.target.value)}/>
+												</div>
+											</>
+										}
+									</>
+								}
+							</a>
+					</CommunityCard>
+					<CommunityCard>
+						<Title> Experiences</Title>
 						{/* Add your experience */}
 						{otherUser && user && otherUser.uid != myUID && 
 							<a>
@@ -325,7 +402,13 @@ function Profile(props) {
 								<span>No Experiences Listed</span>
 							</a>
 						}
+					</CommunityCard>
+				</>
+				: 
+				<CommunityCard> 
+					<Title style={{ textAlign:'center' }}> This page is private</Title>
 				</CommunityCard>
+				}
 			</Container>
         </span>
 	);
