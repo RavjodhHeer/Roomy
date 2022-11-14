@@ -266,6 +266,7 @@ function Feed(props) {
 				break;
 		}
 	};
+	if(props.rentals) console.log(props.rentals);
 	const user = props.user;
 	const userInfo = user ? user.userInfo : null;
 	let photoUrl = user ? user.photoURL : "/images/photo.svg";
@@ -288,8 +289,8 @@ function Feed(props) {
 		 			props.rentals.map((rental, key) => (
 		 				<Rental id={key} key={key}>
                             <Header>
-								<a>
-									{rental.poster.image ? <img src={rental.poster.image} alt="" /> : <img src="/images/user.svg" alt="" />}
+								<a href={rental.poster && "/profile/"+rental.poster} style={{textDecoration: 'none'}}>
+									{rental.profilePic ? <img src={rental.profilePic} alt="" /> : <img src="/images/user.svg" alt="" />}
 									<div>
 										<h3>{rental.title}</h3>
 										<span>{rental.address}</span>

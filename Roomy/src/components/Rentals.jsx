@@ -8,7 +8,6 @@ import Sidebar from "./Sidebar";
 import Feed from "./Rentals/Feed";
 import Map from "./Rentals/Map";
 import { RemoveScrollBar } from 'react-remove-scroll-bar';
-import { useLoadScript } from "@react-google-maps/api";
 
 const Container = styled.div`
     height: 100vh;
@@ -43,7 +42,7 @@ const FeedWrapper = styled.div`
 `;
 
 function Rentals (props) {
-    let [scrollKey, setScrollKey] = useState(null);
+    let [scrollKey, setScrollKey] = useState(0);
     useEffect(()=>{
         props.getRentals();
     },[]);
@@ -71,7 +70,7 @@ function Rentals (props) {
                 </MapWrapper>
 
                 <FeedWrapper>
-                    <Feed scrollKey={scrollKey}/>
+                    <Feed scrollKey={scrollKey} />
                 </FeedWrapper>
 
             </Container>

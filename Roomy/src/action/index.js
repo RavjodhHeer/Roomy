@@ -257,6 +257,16 @@ export function updateArticleAPI(payload) {
 	};
 }
 
+async function getProfilePic(uid){
+	return new Promise(function(resolve, reject){
+		var docRef = db.collection("profiles").doc(uid);
+		docRef.get().then((docIncoming)=>{
+			const photoURL = docIncoming.data().photoURL;
+			resolve(photoURL);
+		});
+	});
+}
+
 export function getRentalsAPI() {
 	return (dispatch) => {
 		dispatch(setLoading(true));
@@ -267,6 +277,11 @@ export function getRentalsAPI() {
 			.onSnapshot((snapshot) => {
 				payload = snapshot.docs.map((doc) => doc.data());
 				id = snapshot.docs.map((doc) => doc.id);
+				payload.map((post)=>{
+					getProfilePic(post.poster).then((url)=>{
+						post.profilePic = url;
+					});
+				});
 				dispatch(getRentals(payload, id));
 			});
 		dispatch(setLoading(false));
