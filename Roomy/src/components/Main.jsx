@@ -311,7 +311,7 @@ function Main(props) {
 					props.articles.map((article, key) => (
 						<Article key={key}>
 							<SharedActor>
-								<a>
+								<a href={article.actor.uid && "/profile/"+article.actor.uid} style={{textDecoration: 'none'}}>
 									{article.actor.image ? <img src={article.actor.image} alt="" /> : <img src="/images/user.svg" alt="" />}
 									<div>
 										<span>{article.actor.title}</span>

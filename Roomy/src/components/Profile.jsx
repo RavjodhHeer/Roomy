@@ -404,10 +404,14 @@ function Profile(props) {
 						}
 					</CommunityCard>
 				</>
-				: 
-				<CommunityCard> 
-					<Title style={{ textAlign:'center' }}> This page is private</Title>
-				</CommunityCard>
+				:
+				<>
+					{ !props.loggingIn &&
+						<CommunityCard> 
+							<Title style={{ textAlign:'center' }}> This page is private</Title>
+						</CommunityCard>
+					}
+				</>
 				}
 			</Container>
         </span>
