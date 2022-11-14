@@ -43,9 +43,14 @@ const FeedWrapper = styled.div`
 `;
 
 function Rentals (props) {
+    let [scrollKey, setScrollKey] = useState(null);
     useEffect(()=>{
         props.getRentals();
     },[]);
+
+    function handleClickScroll(key){
+        setScrollKey(key);
+    }
 
     return (
         <div className="Rentals">
@@ -62,11 +67,11 @@ function Rentals (props) {
                 </SidebarWrapper>
 
                 <MapWrapper>
-                    <Map />
+                    <Map handleClickScroll={handleClickScroll}/>
                 </MapWrapper>
 
                 <FeedWrapper>
-                    <Feed/>
+                    <Feed scrollKey={scrollKey}/>
                 </FeedWrapper>
 
             </Container>

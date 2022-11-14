@@ -54,6 +54,7 @@ function Map(props) {
         }
 
         setInfoOpen(true);
+        props.handleClickScroll(key);
     };
 
     return (

@@ -242,6 +242,13 @@ function displayTime(date) {
 function Feed(props) {
 	const [showModal, setShowModal] = useState("close");
 
+	useEffect(()=>{
+		const element = document.getElementById(props.scrollKey);
+		if(element){
+			element.scrollIntoView({behavior: "smooth"});
+		}
+	},[props.scrollKey]);
+
 	const clickHandler = (event) => {
 		event.preventDefault();
 		if (event.target !== event.currentTarget) {
@@ -279,7 +286,7 @@ function Feed(props) {
                 {props.loading && <img src="/images/spin-loader.gif" alt="" />}
 		 		{props.rentals && props.rentals.length > 0 &&
 		 			props.rentals.map((rental, key) => (
-		 				<Rental key={key}>
+		 				<Rental id={key} key={key}>
                             <Header>
 								<a>
 									{rental.poster.image ? <img src={rental.poster.image} alt="" /> : <img src="/images/user.svg" alt="" />}
