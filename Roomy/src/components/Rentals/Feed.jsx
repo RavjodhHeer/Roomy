@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { getRentalsAPI, updateRentalsAPI } from "../../action";
+import { getRentalsAPI, updateRentalsAPI, saveProperty } from "../../action";
 import styled from "styled-components";
 import RentalPostalModal from "./RentalPostalModal";
 import ImageDisplay from "../ImageDisplay";
@@ -298,7 +298,7 @@ function Feed(props) {
 										{/* rental post + picture */}
 									</div>
 								</a>
-								<button>
+								<button onClick={()=>saveProperty(props.ids[key])}>
 										<img src="/images/bookmark-fill.svg" alt="" />
 								</button>
                             </Header>
