@@ -274,15 +274,20 @@ export function getRentalsAPI() {
 		let id;
 		db.collection("rentals")
 			.orderBy("date", "desc") // order by date in descreasing order
-			.onSnapshot((snapshot) => {
+			.onSnapshot(async (snapshot) => {
 				payload = snapshot.docs.map((doc) => doc.data());
 				id = snapshot.docs.map((doc) => doc.id);
-				payload.map((post)=>{
+				var pay = payload.map((post)=>{
 					getProfilePic(post.poster).then((url)=>{
 						post.profilePic = url;
 					});
+					return post;
 				});
-				dispatch(getRentals(payload, id));
+				Promise.all(pay).then(function(results) {
+					console.log(results)
+					dispatch(getRentals(pay, id));
+				})
+				
 			});
 		dispatch(setLoading(false));
 	};

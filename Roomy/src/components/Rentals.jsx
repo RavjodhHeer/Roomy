@@ -43,9 +43,18 @@ const FeedWrapper = styled.div`
 
 function Rentals (props) {
     let [scrollKey, setScrollKey] = useState(0);
+
     useEffect(()=>{
         props.getRentals();
     },[]);
+
+    useEffect(()=>{
+        // (Need to come back) temporary solution to profile pics already being
+        // loaded in but for some reason needing a feed value to change to render
+        setTimeout(() => {
+            setScrollKey("abc");
+          }, 2000);
+    },[props.rentals]);
 
     function handleClickScroll(key){
         setScrollKey(key);
@@ -82,6 +91,7 @@ const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
         loggingIn: state.userState.loggingIn,
+        rentals: state.rentalState.rentals,
 	};
 };
 
