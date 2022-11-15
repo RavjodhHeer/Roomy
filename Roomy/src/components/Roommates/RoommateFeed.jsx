@@ -351,7 +351,7 @@ const mapStateToProps = (state) => {
 	return {
 		user: state.userState.user,
 		loading: state.roommateState.loading,
-		roommates: state.roommateState.roommate,
+		roommates: state.roommateState.roommates,
 		ids: state.roommateState.ids,
 	};
 };
