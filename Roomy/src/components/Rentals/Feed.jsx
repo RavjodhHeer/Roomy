@@ -269,6 +269,7 @@ function Feed(props) {
 	if(props.rentals) console.log(props.rentals);
 	const user = props.user;
 	const userInfo = user ? user.userInfo : null;
+	const savedProperties = userInfo ? userInfo.savedProperties : null
 	let photoUrl = user ? user.photoURL : "/images/photo.svg";
 	return (
         <Container>
@@ -298,8 +299,13 @@ function Feed(props) {
 										{/* rental post + picture */}
 									</div>
 								</a>
+								
 								<button onClick={()=>saveProperty(props.ids[key])}>
-										<img src="/images/bookmark-fill.svg" alt="" />
+									{savedProperties && savedProperties.includes(props.ids[key]) ?
+											<img src="/images/bookmark-fill.svg" style={{background:'#8928af'}} alt="" />
+										:
+											<img src="/images/bookmark-fill.svg" alt="" />
+									}
 								</button>
                             </Header>
 							<Description>{rental.description}</Description>
