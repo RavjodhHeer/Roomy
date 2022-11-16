@@ -469,3 +469,11 @@ export function updateProfileData(newProfileData) {
 	const profile = db.collection("profiles").doc(uid);
 	profile.update(newProfileData);
 }
+
+export function saveProperty(key){
+	const uid = auth.currentUser.uid;
+	const propertyList = db.collection("profiles").doc(uid);
+	propertyList.update({
+		savedProperties: firebase.firestore.FieldValue.arrayUnion(key)
+	});
+}
