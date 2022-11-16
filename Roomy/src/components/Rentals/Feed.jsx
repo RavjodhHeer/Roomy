@@ -302,9 +302,9 @@ function Feed(props) {
 								
 								<button onClick={()=>saveProperty(props.ids[key])}>
 									{savedProperties && savedProperties.includes(props.ids[key]) ?
-											<img src="/images/bookmark-fill.svg" style={{background:'#8928af'}} alt="" />
+											<img src="/images/bookmark-filled.svg" width="80%" height="80%" alt="" />
 										:
-											<img src="/images/bookmark-fill.svg" alt="" />
+											<img src="/images/bookmark-unfilled.svg" width="80%" height="80%" alt="" />
 									}
 								</button>
                             </Header>
