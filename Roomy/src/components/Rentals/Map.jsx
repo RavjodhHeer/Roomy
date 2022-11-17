@@ -1,8 +1,6 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { GoogleMap, LoadScript, Marker, InfoWindow } from "@react-google-maps/api";
-import { getRentalsAPI } from "../../action";
-import { connect } from "react-redux";
 
 // https://react-google-maps-api-docs.netlify.app
 
@@ -59,39 +57,29 @@ function Map(props) {
 
     return (
         <LoadScript googleMapsApiKey="AIzaSyBX1z5nvjcjzyxSMT-QCVS3ERu6Y3iNSb0">
-            <GoogleMap 
-                mapContainerStyle={containerStyle} 
-                center={center} 
-                zoom={zoom}>
-                    {props.rentals &&
-                        props.rentals.map((rental, key)=> (
-                            <Marker
-                                key={key}
-                                position={{ lat: rental.coords.latitude, lng: rental.coords.longitude }}
-                                onLoad={event => markerOnLoadHandler(event, key)}
-                                onClick={() => markerOnClickHandler(rental, key)}
-                                onMouseOver={() => {rentalMap[key].setIcon("/images/rental-marker-highlight.png");}}
-                                onMouseOut={() => {rentalMap[key].setIcon("/images/rental-marker.png");}}
-                            />
-                        ))}
-                        {infoOpen && selectedPlace && (
-                            <InfoWindow anchor={rentalMap[selectedPlace[1]]} onCloseClick={() => setInfoOpen(false)}>
-                                <MyWindow>
-                                    {selectedPlace[0].photos.length > 0 && <img src={selectedPlace[0].photos[0]} alt="" />}
-                                    <h1>{selectedPlace[0].title}</h1>
-                                    <div>{selectedPlace[0].description}</div>
-                                </MyWindow>
-                            </InfoWindow>
-                        )}
+            <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
+                {props.rentals && props.rentals.map((rental, key)=> (
+                    <Marker
+                        key={key}
+                        position={{ lat: rental.coords.latitude, lng: rental.coords.longitude }}
+                        onLoad={event => markerOnLoadHandler(event, key)}
+                        onClick={() => markerOnClickHandler(rental, key)}
+                        onMouseOver={() => {rentalMap[key].setIcon("/images/rental-marker-highlight.png");}}
+                        onMouseOut={() => {rentalMap[key].setIcon("/images/rental-marker.png");}}
+                    />
+                ))}
+                {infoOpen && selectedPlace && (
+                    <InfoWindow anchor={rentalMap[selectedPlace[1]]} onCloseClick={() => setInfoOpen(false)}>
+                        <MyWindow>
+                            {selectedPlace[0].photos.length > 0 && <img src={selectedPlace[0].photos[0]} alt="" />}
+                            <h1>{selectedPlace[0].title}</h1>
+                            <div>{selectedPlace[0].description}</div>                                
+                        </MyWindow>
+                    </InfoWindow>
+                )}
             </GoogleMap>
         </LoadScript>
     );
 }
 
-const mapStateToProps = (state) => {
-	return {
-		rentals: state.rentalState.rentals,
-	};
-};
-
-export default connect(mapStateToProps)(Map);
+export default Map;

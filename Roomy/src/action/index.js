@@ -284,7 +284,6 @@ export function getRentalsAPI() {
 					return post;
 				});
 				Promise.all(pay).then(function(results) {
-					console.log(results)
 					dispatch(getRentals(pay, id));
 				})
 				
@@ -470,10 +469,17 @@ export function updateProfileData(newProfileData) {
 	profile.update(newProfileData);
 }
 
-export function saveProperty(key){
+// Save : Boolean (True -> Add, False -> Remove)
+export function saveProperty(key, save){
 	const uid = auth.currentUser.uid;
 	const propertyList = db.collection("profiles").doc(uid);
-	propertyList.update({
-		savedProperties: firebase.firestore.FieldValue.arrayUnion(key)
-	});
+	if (save === "True") {
+		propertyList.update({
+			savedProperties: firebase.firestore.FieldValue.arrayUnion(key)
+		});
+	} else {
+		propertyList.update({
+			savedProperties: firebase.firestore.FieldValue.arrayRemove(key)
+		});
+	}
 }

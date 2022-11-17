@@ -75,11 +75,17 @@ function Rentals (props) {
                 </SidebarWrapper>
 
                 <MapWrapper>
-                    <Map handleClickScroll={handleClickScroll}/>
+                    <Map rentals={props.rentals} handleClickScroll={handleClickScroll}/>
                 </MapWrapper>
 
                 <FeedWrapper>
-                    <Feed scrollKey={scrollKey} />
+                    <Feed 
+                        user={props.user}
+                        rentals={props.rentals}
+                        loading={props.loading}
+                        ids={props.ids}
+                        scrollKey={scrollKey}
+                    />
                 </FeedWrapper>
 
             </Container>
@@ -92,6 +98,8 @@ const mapStateToProps = (state) => {
 		user: state.userState.user,
         loggingIn: state.userState.loggingIn,
         rentals: state.rentalState.rentals,
+        loading: state.rentalState.loading,
+        ids: state.rentalState.ids,
 	};
 };
 

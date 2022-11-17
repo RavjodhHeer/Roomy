@@ -41,7 +41,7 @@ const FeedWrapper = styled.div`
     overflow-x: hidden; // Somehow enables vertical scrolling??? idk but its lit
 `;
 
-function Rentals (props) {
+function SavedProperties (props) {
     let [scrollKey, setScrollKey] = useState(0);
 
     useEffect(()=>{
@@ -60,6 +60,21 @@ function Rentals (props) {
         setScrollKey(key);
     }
 
+
+                            // props.rentals.filter((rental, key) => (savedProperties && savedProperties.includes(props.ids[key])))}
+    
+    const savedProperties = props.user ? props.user.userInfo.savedProperties : null;
+
+    function getSavedIds() {
+        return savedProperties;
+    }
+    
+    function getSavedRentals() {
+        while (props.rentals && savedProperties) {
+            return props.rentals.filter((rental, key) => (savedProperties && savedProperties.includes(props.ids[key])));
+        }
+    }
+
     return (
         <div className="Rentals">
             {(!props.user && !props.loggingIn) && <Redirect to="/" />}
@@ -75,11 +90,17 @@ function Rentals (props) {
                 </SidebarWrapper>
 
                 <MapWrapper>
-                    <Map handleClickScroll={handleClickScroll}/>
+                    <Map rentals={getSavedRentals()} handleClickScroll={handleClickScroll}/>
                 </MapWrapper>
 
                 <FeedWrapper>
-                    <Feed scrollKey={scrollKey} />
+                    <Feed 
+                        user={props.user}
+                        rentals={getSavedRentals()}
+                        loading={props.loading}
+                        ids={getSavedIds()}
+                        scrollKey={scrollKey}
+                    />
                 </FeedWrapper>
 
             </Container>
@@ -92,6 +113,8 @@ const mapStateToProps = (state) => {
 		user: state.userState.user,
         loggingIn: state.userState.loggingIn,
         rentals: state.rentalState.rentals,
+        loading: state.rentalState.loading,
+        ids: state.rentalState.ids,
 	};
 };
 
@@ -100,4 +123,4 @@ const mapDispatchToProps = (dispatch) => ({
     getRentals: () => dispatch(getRentalsAPI()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Rentals);
+export default connect(mapStateToProps, mapDispatchToProps)(SavedProperties);
