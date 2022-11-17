@@ -143,7 +143,7 @@ function SideNav({signout, uid}){
                         <span> Messages</span>
                     </Button>
                 </a>
-                <a href="/feed">
+                <a href="/saved">
                     <Button>
                         <img src="/images/bookmark-heart-fill.svg" alt="" />
                         <span> Saved Properties</span>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { getRentalsAPI, updateRentalsAPI, saveProperty } from "../../action";
-import styled from "styled-components";
+import { saveProperty } from "../../action"; // Like handler in the future
+import styled, { keyframes } from "styled-components";
 import RentalPostalModal from "./RentalPostalModal";
 import ImageDisplay from "../ImageDisplay";
+
+const bFilled   = "/images/bookmark-filled.svg";
+const bUnfilled = "/images/bookmark-unfilled.svg";
 
 const Container = styled.div`
 	flex-direction: column;
@@ -215,6 +217,10 @@ const Body = styled.div`
 	}
 `;
 
+const Jack = styled.button`
+	
+`;
+
 const monthLookup = ["Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "];
 
 function displayTime(date) {
@@ -241,6 +247,12 @@ function displayTime(date) {
 
 function Feed(props) {
 	const [showModal, setShowModal] = useState("close");
+	const [bookmarkMap, setBookmarkMap] = useState([]);
+
+	const user = props.user;
+	const userInfo = user ? user.userInfo : null;
+	const savedProperties = userInfo ? userInfo.savedProperties : null
+	let photoUrl = user ? user.photoURL : "/images/photo.svg";
 
 	useEffect(()=>{
 		const element = document.getElementById(props.scrollKey);
@@ -266,11 +278,20 @@ function Feed(props) {
 				break;
 		}
 	};
-	if(props.rentals) console.log(props.rentals);
-	const user = props.user;
-	const userInfo = user ? user.userInfo : null;
-	const savedProperties = userInfo ? userInfo.savedProperties : null
-	let photoUrl = user ? user.photoURL : "/images/photo.svg";
+
+	const bookmarkOnClickHandler = (id, key) => {
+		bookmarkMap[key] === bFilled ? saveProperty(id, "False") : saveProperty(id, "True"); 
+		const newimage = bookmarkMap[key] === bUnfilled ? bFilled : bUnfilled;
+		const nextMap = bookmarkMap.map((img, index) => {
+			if (index === key) {
+				return newimage;
+			} else {
+				return img;
+			}
+		});
+		setBookmarkMap(nextMap);
+	};
+
 	return (
         <Container>
             <CreateRental>
@@ -281,7 +302,7 @@ function Feed(props) {
 							<span> List a property</span>
 						</button>
 					</div>
-				}				
+				}
 		 	</CreateRental>
 			<RentalPostalModal showModal={showModal} clickHandler={clickHandler}/>
             <Content>
@@ -296,16 +317,13 @@ function Feed(props) {
 										<h3>{rental.title}</h3>
 										<span>{rental.address}</span>
 										<span>{displayTime(rental.date.toDate())}</span>
-										{/* rental post + picture */}
 									</div>
 								</a>
-								
-								<button onClick={()=>saveProperty(props.ids[key])}>
-									{savedProperties && savedProperties.includes(props.ids[key]) ?
-											<img src="/images/bookmark-fill.svg" style={{background:'#8928af'}} alt="" />
-										:
-											<img src="/images/bookmark-fill.svg" alt="" />
-									}
+								<button
+									onLoad={savedProperties === null || bookmarkMap[key] ? console.log("Need to wait for DB") : setBookmarkMap(bookmarkMap[key] = (savedProperties && savedProperties.includes(props.ids[key])) ? bFilled : bUnfilled )}
+									onClick={() => bookmarkOnClickHandler(props.ids[key], key)}
+								>
+									{bookmarkMap[key] && <img src={bookmarkMap[key]} width="85%" height="85%" alt="" />}
 								</button>
                             </Header>
 							<Description>{rental.description}</Description>
@@ -354,18 +372,4 @@ function Feed(props) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		user: state.userState.user,
-		loading: state.rentalState.loading,
-		rentals: state.rentalState.rentals,
-		ids: state.rentalState.ids,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-	getRentals: () => dispatch(getRentalsAPI()),
-	likeHandler: (payload) => dispatch(updateRentalsAPI(payload)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Feed);
+export default Feed;
