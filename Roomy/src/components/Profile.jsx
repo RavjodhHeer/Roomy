@@ -254,7 +254,7 @@ function Profile(props) {
 						<CardBackground />
 						<a>
 							<Photo photoUrl={photoUrl} />
-							<Link>{otherUser ? otherUser.displayName : "N/A"}</Link>
+							<Link data-testid="name">{otherUser ? otherUser.displayName : "N/A"}</Link>
 						</a>
 						<h3>Status: {userType}</h3>
 						{ otherUser && user && otherUser.uid == user.uid ?

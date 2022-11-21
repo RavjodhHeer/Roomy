@@ -4,7 +4,6 @@ import * as React from 'react';
 import Store from "../store";
 import { Provider } from "react-redux";
 import '@testing-library/jest-dom';
-import { signInWithEmail } from "../action";
 
 test("Sidebar profile button takes you to /feed when not signed in", () => {    
     render(
