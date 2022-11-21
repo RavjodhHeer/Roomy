@@ -90,7 +90,11 @@ export function signInAPI() {
 						uid: userAuth.user.uid,
 						photoURL: userAuth.user.photoURL,
 						experiences: [],
-						preferences: {},
+						preferences: {
+							roomWith: "",
+							pets: "",
+							smoking: "",
+						},
 						phoneNumber: "",
 						gender: ""
 					}
@@ -136,7 +140,11 @@ export function signInWithEmail(email, password) {
 							uid: userAuth.user.uid,
 							photoURL: userAuth.user.photoURL,
 							experiences: [],
-							preferences: {},
+							preferences: {
+								roomWith: "",
+								pets: "",
+								smoking: "",
+							},
 							phoneNumber: "",
 							gender: ""
 						}
@@ -329,7 +337,11 @@ export function setUserInfo(uid, userType, displayName, photoURL){
 		uid: uid,
 		photoURL: photoURL,
 		experiences: [],
-		preferences: {},
+		preferences: {
+			roomWith: "",
+			pets: "",
+			smoking: "",
+		},
 		phoneNumber: "",
 		gender: ""
 	});
