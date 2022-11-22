@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { signOutAPI } from "../action";
+import { signOutAPI } from "../../action";
 import styled from "styled-components";
 
 /* This defines the actual bar going down the screen */

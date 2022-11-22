@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { getUserAuth, getRentalsAPI } from "../action";
 import { Redirect } from "react-router";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
+import Header from "./Misc/Header";
+import Sidebar from "./Misc/Sidebar";
 import Feed from "./Rentals/Feed";
 import Map from "./Rentals/Map";
 import { RemoveScrollBar } from 'react-remove-scroll-bar';
@@ -100,6 +100,7 @@ function SavedProperties (props) {
                         loading={props.loading}
                         ids={getSavedIds()}
                         scrollKey={scrollKey}
+                        allowposting={false}
                     />
                 </FeedWrapper>
 

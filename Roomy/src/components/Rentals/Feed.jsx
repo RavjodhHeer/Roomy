@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { saveProperty } from "../../action"; // Like handler in the future
 import styled, { keyframes } from "styled-components";
 import RentalPostalModal from "./RentalPostalModal";
-import ImageDisplay from "../ImageDisplay";
-
-const bFilled   = "/images/bookmark-filled.svg";
-const bUnfilled = "/images/bookmark-unfilled.svg";
+import ImageDisplay from "../Misc/ImageDisplay";
 
 const Container = styled.div`
 	flex-direction: column;
@@ -217,10 +214,6 @@ const Body = styled.div`
 	}
 `;
 
-const Jack = styled.button`
-	
-`;
-
 const monthLookup = ["Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "];
 
 function displayTime(date) {
@@ -280,8 +273,8 @@ function Feed(props) {
 	};
 
 	const bookmarkOnClickHandler = (id, key) => {
-		bookmarkMap[key] === bFilled ? saveProperty(id, "False") : saveProperty(id, "True"); 
-		const newimage = bookmarkMap[key] === bUnfilled ? bFilled : bUnfilled;
+		bookmarkMap[key] === "/images/bookmark-filled.svg" ? saveProperty(id, "False") : saveProperty(id, "True"); 
+		const newimage = bookmarkMap[key] === "/images/bookmark-unfilled.svg" ? "/images/bookmark-filled.svg" : "/images/bookmark-unfilled.svg";
 		const nextMap = bookmarkMap.map((img, index) => {
 			if (index === key) {
 				return newimage;
@@ -295,7 +288,7 @@ function Feed(props) {
 	return (
         <Container>
             <CreateRental>
-				{ userInfo && user.userInfo.status === "Landlord" &&
+				{ userInfo && props.allowposting && user.userInfo.status === "Landlord" &&
 		 			<div>
 				 		{photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
 						<button onClick={()=>setShowModal("open")}>
@@ -320,7 +313,7 @@ function Feed(props) {
 									</div>
 								</a>
 								<button
-									onLoad={savedProperties === null || bookmarkMap[key] ? console.log("Need to wait for DB") : setBookmarkMap(bookmarkMap[key] = (savedProperties && savedProperties.includes(props.ids[key])) ? bFilled : bUnfilled )}
+									onLoad={savedProperties === null || bookmarkMap[key] ? console.log("Need to wait for DB") : setBookmarkMap(bookmarkMap[key] = (savedProperties && savedProperties.includes(props.ids[key])) ? "/images/bookmark-filled.svg" : "/images/bookmark-unfilled.svg" )}
 									onClick={() => bookmarkOnClickHandler(props.ids[key], key)}
 								>
 									{bookmarkMap[key] && <img src={bookmarkMap[key]} width="85%" height="85%" alt="" />}

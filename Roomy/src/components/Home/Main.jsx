@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import ReactPlayer from "react-player";
 import styled from "styled-components";
-import { getArticlesAPI, updateArticleAPI } from "../action";
-import PostalModal from "./PostalModal";
+import { getArticlesAPI, updateArticleAPI } from "../../action";
+import PostalModal from "./HomePostalModal";
 
 const Container = styled.div`
 	grid-area: main;

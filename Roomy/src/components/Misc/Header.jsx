@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { signOutAPI } from "../action";
+import { signOutAPI } from "../../action";
 
 const Container = styled.div`
 	background-color: #fff;

@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import db, { auth } from "../firebase";
 import { getOtherUser, postExperience, updateProfileData } from "../action";
-import Sidebar from "./Sidebar"
-import Header from "./Header"
+import Sidebar from "./Misc/Sidebar"
+import Header from "./Misc/Header"
 import { useParams, Redirect } from 'react-router-dom';
 
 const Container = styled.div`
