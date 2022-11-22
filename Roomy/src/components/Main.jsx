@@ -355,12 +355,8 @@ function Main(props) {
 									<span>Comment</span>
 								</button>
 								<button>
-									<img src="/images/share-icon.svg" alt="" />
-									<span>Share</span>
-								</button>
-								<button>
 									<img src="/images/send-icon.svg" alt="" />
-									<span>Send</span>
+									<span>Share</span>
 								</button>
 							</SocialActions>
 						</Article>

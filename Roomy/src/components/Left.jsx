@@ -222,39 +222,7 @@ function Left(props) {
 						</AddPhotoText>
 					</a>
 				</UserInfo>
-				<Widget>
-					<a>
-						<div>
-							<span>Rentals</span>
-							<span>Manage Rentals or Applications</span>
-						</div>
-						<img src="/images/widget-icon.svg" alt="" />
-					</a>
-				</Widget>
-				<Item>
-					<span>
-						<img src="/images/item-icon.svg" alt="" />
-						Saved Properties
-					</span>
-				</Item>
 			</ArtCard>
-			<CommunityCard>
-				<a>
-					<span>Roommates</span>
-				</a>
-				<a>
-					<span>
-						Social
-						<img src="/images/plus-icon.svg" alt="" />
-					</span>
-				</a>
-				<a>
-					<span>Find Rentals</span>
-				</a>
-				<a>
-					<span>Discover More</span>
-				</a>
-			</CommunityCard>
 		</Container>
 	);
 }
