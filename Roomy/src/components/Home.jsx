@@ -2,9 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import styled from "styled-components";
-import Left from "./Left";
-import Main from "./Main";
-import Right from "./Left";
+import Left from "./Home/Left";
+import Main from "./Home/Main";
 
 const Container = styled.div`
 	max-width: 100%;

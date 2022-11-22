@@ -4,7 +4,7 @@ import ReactPlayer from "react-player";
 import { connect } from "react-redux";
 import Firebase from "firebase";
 import styled from "styled-components";
-import { postArticleAPI } from "../action";
+import { postArticleAPI } from "../../action";
 
 const Container = styled.div`
 	position: fixed;

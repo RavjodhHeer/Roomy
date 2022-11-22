@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import db, { auth, provider, storage } from "../firebase";
+import db, { auth, provider, storage } from "../../firebase";
 
 const Container = styled.div`
 	grid-area: right;
