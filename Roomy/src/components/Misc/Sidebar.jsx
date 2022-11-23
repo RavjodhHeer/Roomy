@@ -34,37 +34,6 @@ const StyledSideNav = styled.div`
   padding-top: 10px;
 `;
 
-const Logo = styled.span`
-	margin-right: 8px;
-	font-size: 0;
-`;
-
-const NavIcon = styled.div`
-`;
-
-const Title = styled.div`
-	align-items: center;
-	justify-content: space-evenly;
-	font-size: 34px;
-	width: 100%;
-	color: rgba(0, 0, 0, 0.6);
-`;
-
-const StyledNavItem = styled.div`
-  height: 70px;
-  width: 75px; /* width must be same size as NavBar to center */
-  text-align: center; /* Aligns <a> inside of NavIcon div */
-  margin-bottom: 0;   /* Puts space between NavItems */
-  a {
-    font-size: 2.7em;
-    color: ${(props) => props.active ? "purple" : "#8f2bb8"};
-    :hover {
-      opacity: 0.7;
-      text-decoration: none; /* Gets rid of underlining of icons */
-    }  
-  }
-`;
-
 const Button = styled.button`
   display: inline-block;
   outline: 0;

@@ -71,14 +71,6 @@ const Link = styled.div`
 	font-weight: 600;
 `;
 
-const AddPhotoText = styled.div`
-	color: #8f2bb8;
-	margin-top: 4px;
-	font-size: 12px;
-	line-height: 1.33;
-	font-weight: 400;
-`;
-
 const CommunityCard = styled(ArtCard)`
 	padding: 8px 0 0;
 	text-align: left;
@@ -99,27 +91,6 @@ const CommunityCard = styled(ArtCard)`
 			padding: 12px;
 		}
 	}
-`;
-
-const Button = styled.button`
-  display: inline-block;
-  outline: 0;
-  text-align: left;
-  align-items: bottom;
-  background-color: white;
-  border-color: #fff;
-  border: 1px solid transparent;
-  color: black;
-  font-weight: 400;
-  border-radius: 30px;
-  font-size: 14px;
-  padding: 5px 10px;
-  margin: 10px 0px;
-  cursor: pointer;
-  text-align: center;
-  &:hover {
-    color: #A943D3;
-  }
 `;
 
 const LogoButton = styled.button`

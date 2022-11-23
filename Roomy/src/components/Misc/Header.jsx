@@ -83,20 +83,6 @@ const Photo = styled.div`
     }
 `;
 
-const Text = styled.div`
-	display: inline-block;
-	outline: 0;
-	text-align: center;
-	align-items: center;
-	color: black;
-	font-weight: 400;
-	font-size: 20px;
-	padding: 10px 24px;
-	margin: 10px 0px;
-	cursor: pointer;
-	text-align: center;
-`;
-
 function Header(props) {
 	return (
 		<Container>

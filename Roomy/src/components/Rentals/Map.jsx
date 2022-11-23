@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { GoogleMap, LoadScript, Marker, InfoWindow } from "@react-google-maps/api";
 
 // https://react-google-maps-api-docs.netlify.app
-
-const google = window.google;
 
 const containerStyle = {
     width: '100%',

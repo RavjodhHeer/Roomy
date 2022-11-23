@@ -59,9 +59,7 @@ function SavedProperties (props) {
     function handleClickScroll(key){
         setScrollKey(key);
     }
-
-
-                            // props.rentals.filter((rental, key) => (savedProperties && savedProperties.includes(props.ids[key])))}
+    // props.rentals.filter((rental, key) => (savedProperties && savedProperties.includes(props.ids[key])))}
     
     const savedProperties = props.user ? props.user.userInfo.savedProperties : null;
 
