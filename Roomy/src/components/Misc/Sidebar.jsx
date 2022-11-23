@@ -1,20 +1,20 @@
 import React from 'react';
-import { connect } from "react-redux";
-import { signOutAPI } from "../../action";
-import styled from "styled-components";
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import { signOutAPI } from '../../action';
 
 /* This defines the actual bar going down the screen */
 const Container = styled.div`
     background-color: #fff;
-	box-shadow: -5px 0px 5px #999;
-	border-left: 1px solid rgba(0, 0, 0, 0.08);
-	padding: 0 0px;
-	position: fixed;
+    box-shadow: -5px 0px 5px #999;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0 0px;
+    position: fixed;
     width: 100%;
     top: 60px;
-	top: 2;
-	/* width: 100vw; */
-	z-index: 80;
+    top: 2;
+    /* width: 100vw; */
+    z-index: 80;
 `;
 const StyledSideNav = styled.div`
   display: flex;
@@ -76,9 +76,7 @@ const LogoButton = styled.button`
     }
 `;
 
-
-
-function SideNav({signout, uid}){
+function SideNav({ signout, uid }) {
     return (
         <Container>
             <StyledSideNav>
@@ -118,7 +116,7 @@ function SideNav({signout, uid}){
                         <span> Saved Properties</span>
                     </Button>
                 </a>
-                <a href={uid ? "/profile/"+uid : "/feed"} data-testid="profile">
+                <a href={uid ? `/profile/${uid}` : '/feed'} data-testid="profile">
                     <Button>
                         <img src="/images/person-circle.svg" alt="" />
                         <span> Profile</span>
@@ -126,29 +124,27 @@ function SideNav({signout, uid}){
                 </a>
                 <LogoButton onClick={signout}>
                     <img src="/images/box-arrow-left.svg" alt="" />
-					<span> Sign Out</span>
-				</LogoButton>
+                    <span> Sign Out</span>
+                </LogoButton>
             </StyledSideNav>
-          </Container>
+        </Container>
     );
 }
 
 function Sidebar(props) {
     return (
         <SideNav signout={props.signOut} uid={props.user ? props.user.uid : null}>
-            <StyledSideNav></StyledSideNav>
+            <StyledSideNav />
         </SideNav>
-    )
+    );
 }
 
-const mapStateToProps = (state) => {
-	return {
-		user: state.userState.user,
-	};
-};
+const mapStateToProps = (state) => ({
+    user: state.userState.user,
+});
 
 const mapDispatchToProps = (dispatch) => ({
-	signOut: () => dispatch(signOutAPI()),
+    signOut: () => dispatch(signOutAPI()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

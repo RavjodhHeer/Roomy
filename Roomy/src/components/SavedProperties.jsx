@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
-import { getUserAuth, getRentalsAPI } from "../action";
-import { Redirect } from "react-router";
-import Header from "./Misc/Header";
-import Sidebar from "./Misc/Sidebar";
-import Feed from "./Rentals/Feed";
-import Map from "./Rentals/Map";
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import { Redirect } from 'react-router';
 import { RemoveScrollBar } from 'react-remove-scroll-bar';
+import { getUserAuth, getRentalsAPI } from '../action';
+import Header from './Misc/Header';
+import Sidebar from './Misc/Sidebar';
+import Feed from './Rentals/Feed';
+import Map from './Rentals/Map';
 
 const Container = styled.div`
     height: 100vh;
@@ -41,32 +41,32 @@ const FeedWrapper = styled.div`
     overflow-x: hidden; // Somehow enables vertical scrolling??? idk but its lit
 `;
 
-function SavedProperties (props) {
-    let [scrollKey, setScrollKey] = useState(0);
+function SavedProperties(props) {
+    const [scrollKey, setScrollKey] = useState(0);
 
-    useEffect(()=>{
+    useEffect(() => {
         props.getRentals();
-    },[]);
+    }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         // (Need to come back) temporary solution to profile pics already being
         // loaded in but for some reason needing a feed value to change to render
         setTimeout(() => {
-            setScrollKey("abc");
-          }, 2000);
-    },[props.rentals]);
+            setScrollKey('abc');
+        }, 2000);
+    }, [props.rentals]);
 
-    function handleClickScroll(key){
+    function handleClickScroll(key) {
         setScrollKey(key);
     }
     // props.rentals.filter((rental, key) => (savedProperties && savedProperties.includes(props.ids[key])))}
-    
+
     const savedProperties = props.user ? props.user.userInfo.savedProperties : null;
 
     function getSavedIds() {
         return savedProperties;
     }
-    
+
     function getSavedRentals() {
         while (props.rentals && savedProperties) {
             return props.rentals.filter((rental, key) => (savedProperties && savedProperties.includes(props.ids[key])));
@@ -76,23 +76,23 @@ function SavedProperties (props) {
     return (
         <div className="Rentals">
             {(!props.user && !props.loggingIn) && <Redirect to="/" />}
-            <RemoveScrollBar/>
+            <RemoveScrollBar />
             <Container>
 
                 <HeaderWrapper>
-                    <Header/>
+                    <Header />
                 </HeaderWrapper>
 
                 <SidebarWrapper>
-                    <Sidebar/>
+                    <Sidebar />
                 </SidebarWrapper>
 
                 <MapWrapper>
-                    <Map rentals={getSavedRentals()} handleClickScroll={handleClickScroll}/>
+                    <Map rentals={getSavedRentals()} handleClickScroll={handleClickScroll} />
                 </MapWrapper>
 
                 <FeedWrapper>
-                    <Feed 
+                    <Feed
                         user={props.user}
                         rentals={getSavedRentals()}
                         loading={props.loading}
@@ -107,18 +107,16 @@ function SavedProperties (props) {
     );
 }
 
-const mapStateToProps = (state) => {
-	return {
-		user: state.userState.user,
-        loggingIn: state.userState.loggingIn,
-        rentals: state.rentalState.rentals,
-        loading: state.rentalState.loading,
-        ids: state.rentalState.ids,
-	};
-};
+const mapStateToProps = (state) => ({
+    user: state.userState.user,
+    loggingIn: state.userState.loggingIn,
+    rentals: state.rentalState.rentals,
+    loading: state.rentalState.loading,
+    ids: state.rentalState.ids,
+});
 
 const mapDispatchToProps = (dispatch) => ({
-	getUserAuth: () => dispatch(getUserAuth()),
+    getUserAuth: () => dispatch(getUserAuth()),
     getRentals: () => dispatch(getRentalsAPI()),
 });
 
