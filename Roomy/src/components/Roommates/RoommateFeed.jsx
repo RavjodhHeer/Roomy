@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getRoommatesAPI, updateRoommatesAPI } from "../../action";
+import { displayTime } from "../../action/commonFunctions";
 import styled from "styled-components";
 import RoommatePostalModal from "./RoommatePostalModal";
 
@@ -205,7 +206,7 @@ const Body = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: row;
-	flex-basis: calc(100% / 3)
+	flex-basis: calc(100% / 3);
 	margin: 8px 16px 8px 8px;
 	border-color: rgba(0, 0, 0, 0.2);
 	img {
@@ -215,31 +216,6 @@ const Body = styled.div`
 		height: 100%;
 	}
 `;
-
-
-const monthLookup = ["Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "];
-
-function displayTime(date) {
-	const secondsSince = Math.floor((Date.now() - date.valueOf())/1000)
-	if (secondsSince < 60) {
-		return secondsSince + "s"
-	}
-	else if (secondsSince < 3600) {
-		return Math.floor(secondsSince/60) + "m"
-	}
-	else if (secondsSince < 86400) {
-		return Math.floor(secondsSince/3600) + "h"
-	}
-	else if (secondsSince < 2628000) {
-		return Math.floor(secondsSince/86400) + "d"
-	}
-	else if (new Date().getFullYear() === date.getFullYear()) {
-		return monthLookup[date.getMonth()] + date.getDate()
-	}
-	else {
-		return monthLookup[date.getMonth()] + date.getDate() + ", " + date.getFullYear()
-	}
-}
 
 function RoommateFeed(props) {
 	const [showModal, setShowModal] = useState("close");

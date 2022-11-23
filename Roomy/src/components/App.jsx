@@ -1,5 +1,5 @@
-import React, { Component }  from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./Login";
 import Header from "./Misc/Header";
 import Sidebar from "./Misc/Sidebar";

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`

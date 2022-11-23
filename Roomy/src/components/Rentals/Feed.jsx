@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { saveProperty } from "../../action"; // Like handler in the future
-import styled, { keyframes } from "styled-components";
+import { displayTime } from "../../action/commonFunctions";
+import styled from "styled-components";
 import RentalPostalModal from "./RentalPostalModal";
 import ImageDisplay from "../Misc/ImageDisplay";
 
@@ -213,30 +214,6 @@ const Body = styled.div`
 		height: 100%;
 	}
 `;
-
-const monthLookup = ["Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "];
-
-function displayTime(date) {
-	const secondsSince = Math.floor((Date.now() - date.valueOf())/1000)
-	if (secondsSince < 60) {
-		return secondsSince + "s"
-	}
-	else if (secondsSince < 3600) {
-		return Math.floor(secondsSince/60) + "m"
-	}
-	else if (secondsSince < 86400) {
-		return Math.floor(secondsSince/3600) + "h"
-	}
-	else if (secondsSince < 2628000) {
-		return Math.floor(secondsSince/86400) + "d"
-	}
-	else if (new Date().getFullYear() === date.getFullYear()) {
-		return monthLookup[date.getMonth()] + date.getDate()
-	}
-	else {
-		return monthLookup[date.getMonth()] + date.getDate() + ", " + date.getFullYear()
-	}
-}
 
 function Feed(props) {
 	const [showModal, setShowModal] = useState("close");

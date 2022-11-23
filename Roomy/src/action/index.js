@@ -363,25 +363,6 @@ async function uploadImage(img){
 	});
 }
 
-/*
-async function uploadImageRoommates(img){
-	return new Promise(function(resolve, reject){
-		const upload = storage.ref(`roommates_images/${img.name}`).put(img);
-		upload.on(
-			"state_changed",
-			(snapshot) => {
-				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-			},
-			(err) => console.log(err),
-			async () => {
-				const downloadURL = await upload.snapshot.ref.getDownloadURL();
-				resolve(downloadURL);
-			}
-		);
-	});
-}
-*/
-
 export function postRental(payload) {
 	let photos = [];
 	for (const img of payload.photos ){

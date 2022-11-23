@@ -1,4 +1,4 @@
-import React, { Component }  from 'react';
+import React from 'react';
 import { useState } from "react";
 import ReactPlayer from "react-player";
 import { connect } from "react-redux";
@@ -118,22 +118,6 @@ const AssetButton = styled.button`
 	background: transparent;
 	&:hover {
 		background: rgba(0, 0, 0, 0.08);
-	}
-`;
-
-const ShareComment = styled.div`
-	padding-left: 8px;
-	margin-right: auto;
-	border-left: 1px solid rgba(0, 0, 0, 0.08);
-	${AssetButton} {
-		border-radius: 50px;
-		padding: 5px 10px;
-		span {
-			font-size: 16px;
-			font-weight: 600;
-			color: rgba(0, 0, 0, 0.6);
-			padding: 0 5px;
-		}
 	}
 `;
 
