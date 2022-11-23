@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import db, { auth } from "../firebase";
 import { getOtherUser, postExperience, updateProfileData } from "../action";
+import { formatPhoneNumber } from "../action/commonFunctions";
 import Sidebar from "./Misc/Sidebar"
 import Header from "./Misc/Header"
 import { useParams, Redirect } from 'react-router-dom';
@@ -293,7 +294,7 @@ function Profile(props) {
 										</a>
 										<a>
 											<h1>Phone Number:</h1>
-											<span>{otherUser && otherUser.phoneNumber && otherUser.phoneNumber.length ? otherUser.phoneNumber : "This user has no phone number linked."}</span>
+											<span>{otherUser && otherUser.phoneNumber && otherUser.phoneNumber.length ? formatPhoneNumber(otherUser.phoneNumber) : "This user has no phone number linked."}</span>
 										</a>
 										<a>
 											<h1>Gender:</h1>
