@@ -1,8 +1,7 @@
 ![Roomy](./Roomy/public/images/roomylogofull.svg)
 
 # Where LinkedIn meets Zillow
-If you're in the housing market, whether as a future tenant or a future landlord,  
-you can put a face and story to your rental applications.
+If you're in the housing market, whether as a future tenant or a future landlord, you can put a face and story to your rental applications.
 
 
 ## Current Features
