@@ -22,10 +22,10 @@ const StyledSideNav = styled.div`
   align-items: center;
   margin: 0 auto;
   height: 100%;
+  width: 32vw;     /* Set the width of the sidebar */
   max-width: 235px;
   position: fixed;     /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
   height: 100%;
-  width: 235px;     /* Set the width of the sidebar */
   z-index: 100;      /* Stay on top of everything */
   top: 1;      /* Stay at the top */
   background-color: #fff; /* White */

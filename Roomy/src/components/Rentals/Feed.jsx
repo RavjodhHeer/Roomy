@@ -130,8 +130,8 @@ const Header = styled.div`
     }
     button {
         position: absolute;
-        top: 0;
-        right: 12px;
+        top: -4px;
+        right: 2px;
         border: none;
         outline: none;
         background: transparent;
