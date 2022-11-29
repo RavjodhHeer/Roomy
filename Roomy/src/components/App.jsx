@@ -10,6 +10,7 @@ import Rentals from './Rentals';
 import Roommates from './Roommates';
 import SavedProperties from './SavedProperties';
 import { getUserAuth } from '../action';
+import Post from './Home/Post'
 
 function App(props) {
     useEffect(() => {
@@ -30,6 +31,7 @@ function App(props) {
                             <Home />
                         </span>
                     </Route>
+                    <Route path="/post/:id" component={Post} />
                     <Route path="/profile/:id" component={Profile} />
                     <Route path="/rentals" component={Rentals} />
                     <Route path="/roommates" component={Roommates} />

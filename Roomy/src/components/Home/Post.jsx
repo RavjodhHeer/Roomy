@@ -5,17 +5,15 @@ import styled from 'styled-components';
 import { getArticlesAPI, updateArticleAPI } from '../../action';
 import { displayTime } from '../../action/commonFunctions';
 import PostalModal from './HomePostalModal';
+import { useParams, Link } from 'react-router-dom';
+import Sidebar from '../Misc/Sidebar';
+import Header from '../Misc/Header';
 
 const Container = styled.div`
     grid-area: main;
 `;
 
-const Open = styled.a`
-
-`
-
 const CommonBox = styled.div`
-    top: 50px;
     text-align: center;
     overflow: hidden;
     margin-bottom: 8px;
@@ -27,66 +25,39 @@ const CommonBox = styled.div`
 `;
 
 const ShareBox = styled(CommonBox)`
+    top: 65px;
+    left: 245px;
     display: flex;
     flex-direction: column;
     border: none;
     margin: 0 0 8px;
     color: #958b7b;
-    div {
-        button {
-            color: #65676b;
-            font-size: 17px;
-            border: none;
-            line-height: 1.5;
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.1);
-            font-weight: 300;
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.15);
-            }
-        }
-        &:first-child {
-            display: flex;
-            align-items: center;
-            padding: 8px 16px;
-            img {
-                width: 48px;
-                border-radius: 50%;
-                margin-right: 8px;
-            }
-            button {
-                margin: 4px 0;
-                flex-grow: 1;
-                padding-left: 16px;
-                border: none;
-                border-radius: 35px;
-                text-align: left;
-            }
-        }
-        &:nth-child(2) {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            padding-bottom: 4px;
-            button {
-                img {
-                    margin: 0 4px 0 -2px;
-                }
-            }
+    padding: 10px;
+    width: calc(100vw - 285px);
+    a {
+        span {
+            color: #A943D3;
         }
     }
 `;
 
 const Article = styled(CommonBox)`
+    top: 65px;
+    left: 245px;
     padding: 0;
     margin: 0 0 8px;
     overflow: visible;
+    width: calc(100vw - 265px);
 `;
 
-const Links = styled.a`
-    &.body {
+const SharedActor = styled.div`
+    padding-right: 40px;
+    flex-wrap: nowrap;
+    padding: 12px 16px 0;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    a {
         margin-right: 12px;
         flex-grow: 1;
         overflow: hidden;
@@ -117,15 +88,6 @@ const Links = styled.a`
             }
         }
     }
-`
-
-const SharedActor = styled.div`
-    padding-right: 40px;
-    flex-wrap: nowrap;
-    padding: 12px 16px 0;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
     button {
         position: absolute;
         top: 0;
@@ -224,11 +186,12 @@ const Content = styled.div`
     }
 `;
 
-function Main(props) {
+function Post(props) {
+    const { id } = useParams();
     const [showModal, setShowModal] = useState('close');
 
     useEffect(() => {
-        props.getArticles();
+        props.getArticles(id);
     }, []);
 
     const clickHandler = (event) => {
@@ -281,33 +244,30 @@ function Main(props) {
     const email = user ? user.email : null;
     return (
         <Container>
+            <Header />
+            <Sidebar />
             <ShareBox>
-                <div>
-                    {photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
-                    <button onClick={clickHandler} disabled={!!props.loading}>
-                        What's on your mind?
-                    </button>
-                </div>
+                <a href={`/feed`} style={{ textDecoration: 'none' }}>
+                    <span>Go Back</span>
+                </a>
             </ShareBox>
             <Content>
                 {props.loading && <img src="/images/spin-loader.gif" alt="" />}
-                {props.articles.length > 0
+                {props.articles && props.articles.length > 0
                     && props.articles.map((article, key) => (
                         <Article key={key}>
                             <SharedActor>
-                                <Links className="body" href={article.actor.uid && `/profile/${article.actor.uid}`} style={{ textDecoration: 'none' }}>
+                                <a href={article.actor.uid && `/profile/${article.actor.uid}`} style={{ textDecoration: 'none' }}>
                                     {article.actor.image ? <img src={article.actor.image} alt="" /> : <img src="/images/user.svg" alt="" />}
                                     <div>
                                         <span>{article.actor.title}</span>
                                         <span>{article.actor.description}</span>
                                         <span>{displayTime(article.actor.date.toDate())}</span>
                                     </div>
-                                </Links>
-                                <Links className="open" href={`/post/${props.ids[key]}`} style={{ textDecoration: 'none' }}>
-                                    <button>
-                                        <img src="/images/ellipses.svg" alt="" />
-                                    </button>
-                                </Links>
+                                </a>
+                                <button>
+                                    <img src="/images/ellipses.svg" alt="" />
+                                </button>
                             </SharedActor>
                             <Description>{article.description}</Description>
                             <SharedImage>
@@ -344,7 +304,7 @@ function Main(props) {
                                     <img src="/images/comment-icon.svg" alt="" />
                                     <span>Comment</span>
                                 </button>
-                                <button onClick={() => {navigator.clipboard.writeText(`localhost:3000/post/${props.ids[key]}`)}}>
+                                <button onClick={() => {navigator.clipboard.writeText(`localhost:3000/post/${props.ids}`)}}>
                                     <img src="/images/send-icon.svg" alt="" />
                                     <span>Share</span>
                                 </button>
@@ -352,7 +312,6 @@ function Main(props) {
                         </Article>
                     ))}
             </Content>
-            <PostalModal showModal={showModal} clickHandler={clickHandler} />
         </Container>
     );
 }
@@ -365,8 +324,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    getArticles: () => dispatch(getArticlesAPI()),
+    getArticles: (id) => dispatch(getArticlesAPI(id)),
     likeHandler: (payload) => dispatch(updateArticleAPI(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Post);

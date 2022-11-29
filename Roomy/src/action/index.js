@@ -243,18 +243,31 @@ export function postArticleAPI(payload) {
     };
 }
 
-export function getArticlesAPI() {
+export function getArticlesAPI(pid = null) {
     return (dispatch) => {
         dispatch(setLoading(true));
         let payload;
         let id;
-        db.collection('articles')
-            .orderBy('actor.date', 'desc')
-            .onSnapshot((snapshot) => {
-                payload = snapshot.docs.map((doc) => doc.data());
-                id = snapshot.docs.map((doc) => doc.id);
-                dispatch(getArticles(payload, id));
-            });
+        if (pid === null) {
+            db.collection('articles')
+                .orderBy('actor.date', 'desc')
+                .onSnapshot((snapshot) => {
+                    payload = snapshot.docs.map((doc) => doc.data());
+                    id = snapshot.docs.map((doc) => doc.id);
+                    dispatch(getArticles(payload, id));
+                });
+        } else {
+            db.collection('articles').doc(pid)
+                .onSnapshot((snapshot) => {
+                    if (snapshot.exists) {
+                        payload = snapshot.data();
+                        id = snapshot.id;
+                        dispatch(getArticles([payload], id));
+                    } else {
+                        dispatch(getArticles(null, null));
+                    }
+                })
+        }
         dispatch(setLoading(false));
     };
 }
