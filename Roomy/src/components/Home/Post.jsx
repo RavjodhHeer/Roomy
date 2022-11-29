@@ -304,7 +304,7 @@ function Post(props) {
                                     <img src="/images/comment-icon.svg" alt="" />
                                     <span>Comment</span>
                                 </button>
-                                <button onClick={() => {navigator.clipboard.writeText(`localhost:3000/post/${props.ids}`)}}>
+                                <button onClick={() => {navigator.clipboard.writeText(`${window.location.origin}/post/${props.ids}`)}}>
                                     <img src="/images/send-icon.svg" alt="" />
                                     <span>Share</span>
                                 </button>
