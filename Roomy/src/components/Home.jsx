@@ -4,8 +4,6 @@ import { Redirect } from 'react-router';
 import styled from 'styled-components';
 import Left from './Home/Left';
 import Main from './Home/Main';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Post from './Home/Post';
 
 const Container = styled.div`
     max-width: 100%;
@@ -32,17 +30,15 @@ const Layout = styled.div`
 
 function Home(props) {
     return (
-        <Router>
-            <Container>
-                {(!props.user && !props.loggingIn) && <Redirect to="/" />}
-                <Content>
-                    <Layout>
-                        <Main />
-                        <Left />
-                    </Layout>
-                </Content>
-            </Container>
-        </Router>
+        <Container>
+            {(!props.user && !props.loggingIn) && <Redirect to="/" />}
+            <Content>
+                <Layout>
+                    <Main />
+                    <Left />
+                </Layout>
+            </Content>
+        </Container>
     );
 }
 
