@@ -307,7 +307,7 @@ function Login(props) {
                 <PreHero>
                     <h1>Connecting people</h1>
                     <h1>to places</h1>
-                    <img src="/images/Home2.png" class="canvas" alt="" />
+                    <img src="/images/home2.png" class="canvas" alt="" />
                 </PreHero>
                 <Form>
                     <PreSignIn onClick={() => setPastHero(true)}>
