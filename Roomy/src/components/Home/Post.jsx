@@ -4,8 +4,7 @@ import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 import { getArticlesAPI, updateArticleAPI } from '../../action';
 import { displayTime } from '../../action/commonFunctions';
-import PostalModal from './HomePostalModal';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Redirect} from 'react-router-dom';
 import Sidebar from '../Misc/Sidebar';
 import Header from '../Misc/Header';
 
@@ -194,24 +193,6 @@ function Post(props) {
         props.getArticles(id);
     }, []);
 
-    const clickHandler = (event) => {
-        event.preventDefault();
-        if (event.target !== event.currentTarget) {
-            return;
-        }
-        switch (showModal) {
-        case 'open':
-            setShowModal('close');
-            break;
-        case 'close':
-            setShowModal('open');
-            break;
-        default:
-            setShowModal('close');
-            break;
-        }
-    };
-
     function likeHandler(event, postIndex, id) {
         event.preventDefault();
         let currentLikes = props.articles[postIndex].likes.count;
@@ -244,8 +225,9 @@ function Post(props) {
     const email = user ? user.email : null;
     return (
         <Container>
-            <Header />
+            {(!props.user && !props.loggingIn) && <Redirect to="/" />}
             <Sidebar />
+            <Header />
             <ShareBox>
                 <a href={`/feed`} style={{ textDecoration: 'none' }}>
                     <span>Go Back</span>
@@ -304,7 +286,7 @@ function Post(props) {
                                     <img src="/images/comment-icon.svg" alt="" />
                                     <span>Comment</span>
                                 </button>
-                                <button onClick={() => {navigator.clipboard.writeText(`${window.location.origin}/post/${props.ids}`)}}>
+                                <button onClick={() => {navigator.clipboard.writeText(`${window.location.origin}/post/${props.ids[key]}`)}}>
                                     <img src="/images/send-icon.svg" alt="" />
                                     <span>Share</span>
                                 </button>
@@ -318,7 +300,7 @@ function Post(props) {
 
 const mapStateToProps = (state) => ({
     user: state.userState.user,
-    loading: state.articleState.loading,
+    loggingIn: state.userState.loggingIn,
     articles: state.articleState.articles,
     ids: state.articleState.ids,
 });

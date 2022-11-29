@@ -256,19 +256,19 @@ export function getArticlesAPI(pid = null) {
                     id = snapshot.docs.map((doc) => doc.id);
                     dispatch(getArticles(payload, id));
                 });
+            dispatch(setLoading(false));
         } else {
             db.collection('articles').doc(pid)
                 .onSnapshot((snapshot) => {
                     if (snapshot.exists) {
                         payload = snapshot.data();
                         id = snapshot.id;
-                        dispatch(getArticles([payload], id));
+                        dispatch(getArticles([payload], [id]));
                     } else {
                         dispatch(getArticles(null, null));
                     }
                 })
         }
-        dispatch(setLoading(false));
     };
 }
 
