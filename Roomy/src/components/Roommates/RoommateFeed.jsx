@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { getRoommatesAPI, updateRoommatesAPI } from '../../action';
 import { displayTime } from '../../action/commonFunctions';
 import RoommatePostalModal from './RoommatePostalModal';
+import ImageDisplay from '../Misc/ImageDisplay';
 
 const Container = styled.div`
     grid-area: main;
@@ -279,9 +280,9 @@ function RoommateFeed(props) {
                         </Header>
                         <Description>{roommate.description}</Description>
                         <Body>
-                            {roommate.photos && roommate.photos.map((x) => (
-                                <img src={x} style={{ width: '40%' }} />
-                            ))}
+                            {roommate.photos && roommate.photos.length >= 1
+                                     ? <ImageDisplay images={roommate.photos} />
+                                     : <ImageDisplay images={['/images/no-image-available.png']} />}
                         </Body>
                         <RoommateDetails>
                             <span>Rent: $</span>
