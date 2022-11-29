@@ -312,10 +312,18 @@ export function getRoommatesAPI() {
         let id;
         db.collection('roommates')
             .orderBy('date', 'desc') // order by date in descreasing order
-            .onSnapshot((snapshot) => {
+            .onSnapshot(async (snapshot) => {
                 payload = snapshot.docs.map((doc) => doc.data());
                 id = snapshot.docs.map((doc) => doc.id);
-                dispatch(getRoommates(payload, id));
+                const pay = payload.map((post) => {
+                    getProfilePic(post.poster).then((url) => {
+                        post.profilePic = url;
+                    });
+                    return post;
+                });
+                Promise.all(pay).then((results) => {
+                    dispatch(getRoommates(pay, id));
+                });
             });
         dispatch(setLoading(false));
     };

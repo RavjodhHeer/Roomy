@@ -7,19 +7,23 @@ const Container = styled.div`
 
 const ButtonWrapper = styled.div`
     position: absolute;
-     width: 95%;
+     width: 100%;
      display: flex;
      justify-content: space-between;
      top: 50%;
      left: 50%;
      transform: translate(-50%, -50%);
      button {
-         width: 50px;
-         height: 50px;
-         border-radius: 50%;
-         border: 1px solid black;
-         background-color: white;
-         box-shadow: 1px 1px 5px black;
+         width: 45px;
+         height: 45px;
+         font-size: 15px;
+         border: none;
+         border-radius: 50px;
+         background-color: rgba(0, 0, 0, 0.15);
+         &:hover {
+            color: white;
+            background-color: rgba(49, 49, 49, 0.7);
+        }
      }
 `;
 
@@ -63,6 +67,7 @@ function ImageDisplay({ images }) {
                 {current + 1}
                 {' '}
                 of
+                {' '} 
                 {length}
             </Indicator>
             <img src={images[current]} alt="" style={{ width: '100%', height: 'auto' }} />

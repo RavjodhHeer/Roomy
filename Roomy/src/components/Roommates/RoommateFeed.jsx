@@ -262,8 +262,8 @@ function RoommateFeed(props) {
                 {props.roommates && props.roommates.length > 0 && props.roommates.map((roommate, key) => (
                     <Roommate key={key}>
                         <Header>
-                            <a>
-                                {photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
+                            <a href={roommate.poster && `/profile/${roommate.poster}`} style={{ textDecoration: 'none' }}>
+                                    {roommate.profilePic ? <img src={roommate.profilePic} alt="" /> : <img src="/images/user.svg" alt="" />}
                                 <div>
                                     <h3>{roommate.title}</h3>
                                     <span>{roommate.address}</span>
