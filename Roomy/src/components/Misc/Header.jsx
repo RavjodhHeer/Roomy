@@ -94,14 +94,6 @@ function Header(props) {
                         </Photo>
                     </a>
                 </Logo>
-                <Search>
-                    <div>
-                        <input type="text" placeholder="Search" />
-                    </div>
-                    <SearchIcon>
-                        <img src="/images/search-icon.svg" alt="" />
-                    </SearchIcon>
-                </Search>
             </Content>
         </Container>
     );
