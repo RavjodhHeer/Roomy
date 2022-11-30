@@ -249,20 +249,22 @@ function Login(props) {
                 <a href="/">
                     <img src="/images/login-logo.svg" alt="" />
                 </a>
-                {joinType ?
-                    <div>
-                        <Join onClick={() => setJoinType(false) }>Register</Join>
-                        <SignIn>Sign In</SignIn>
-                    </div>
-                :
-                    <div>
-                        <SignIn>Register</SignIn>
-                        <Join onClick={() => setJoinType(true) }>Sign In</Join>
-                    </div>
-                }
             </Nav>
-            { pastHero ? 
-            <Section>
+            { pastHero ?
+            <Section> 
+                <Nav>
+                    {joinType ?
+                        <div>
+                            <Join onClick={() => setJoinType(false) }>Register</Join>
+                            <SignIn>Sign In</SignIn>
+                        </div>
+                    :
+                        <div>
+                            <SignIn>Register</SignIn>
+                            <Join onClick={() => setJoinType(true) }>Sign In</Join>
+                        </div>
+                    }
+                </Nav>
                 <Hero>
                     <h1>{joinType ? "Sign In" : "Setup Profile"}</h1>
                 </Hero>
