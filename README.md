@@ -15,7 +15,7 @@ If you're in the housing market, whether as a future tenant or a future landlord
 - Clone the repo, and open your terminal wherever you cloned to.
 - Run the following commands in your terminal:
   - ```properties
-    cd ./Roomy
+    cd ./Roomy/roomy
     npm i
     npm run start
     ```
