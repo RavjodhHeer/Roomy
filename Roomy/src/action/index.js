@@ -97,6 +97,7 @@ export function signInAPI() {
                             },
                             phoneNumber: '',
                             gender: '',
+                            bio: '',
                         };
                         dispatch(setUser(userAuth.user));
                     }
@@ -147,6 +148,7 @@ export function signInWithEmail(email, password) {
                             },
                             phoneNumber: '',
                             gender: '',
+                            bio: '',
                         };
                         dispatch(setUser(userAuth.user));
                     }
@@ -363,6 +365,7 @@ export function setUserInfo(uid, userType, displayName, photoURL) {
         },
         phoneNumber: '',
         gender: '',
+        bio: '',
     });
 }
 
