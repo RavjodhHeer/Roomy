@@ -229,7 +229,7 @@ function Post(props) {
             <Sidebar />
             <Header />
             <ShareBox>
-                <a href={`/feed`} style={{ textDecoration: 'none' }}>
+                <a href={'/feed'} style={{ textDecoration: 'none' }}>
                     <span>Go Back</span>
                 </a>
             </ShareBox>
@@ -286,7 +286,7 @@ function Post(props) {
                                     <img src="/images/comment-icon.svg" alt="" />
                                     <span>Comment</span>
                                 </button>
-                                <button onClick={() => {navigator.clipboard.writeText(`${window.location.origin}/post/${props.ids[key]}`)}}>
+                                <button onClick={() => {navigator.clipboard.writeText(`${window.location.origin}/post/${props.ids[key]}`);}}>
                                     <img src="/images/send-icon.svg" alt="" />
                                     <span>Share</span>
                                 </button>

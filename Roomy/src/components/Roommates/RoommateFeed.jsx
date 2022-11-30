@@ -265,7 +265,7 @@ function RoommateFeed(props) {
                     <Roommate key={key}>
                         <Header>
                             <a href={roommate.poster && `/profile/${roommate.poster}`} style={{ textDecoration: 'none' }}>
-                                    {roommate.profilePic ? <img src={roommate.profilePic} alt="" /> : <img src="/images/user.svg" alt="" />}
+                                {roommate.profilePic ? <img src={roommate.profilePic} alt="" /> : <img src="/images/user.svg" alt="" />}
                                 <div>
                                     <h3>{roommate.title}</h3>
                                     <span>{roommate.address}</span>
@@ -282,8 +282,8 @@ function RoommateFeed(props) {
                         <Description>{roommate.description}</Description>
                         <Body>
                             {roommate.photos && roommate.photos.length >= 1
-                                     ? <ImageDisplay images={roommate.photos} />
-                                     : <ImageDisplay images={['/images/no-image-available.png']} />}
+                                ? <ImageDisplay images={roommate.photos} />
+                                : <ImageDisplay images={['/images/no-image-available.png']} />}
                         </Body>
                         <RoommateDetails>
                             <span>Rent: $</span>

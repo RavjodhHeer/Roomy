@@ -275,7 +275,7 @@ function Profile(props) {
                                             </a>
                                             <a>
                                                 <h1>Gender:</h1>
-                                                <span>{otherUser && otherUser.gender && otherUser.gender.length ? otherUser.gender : "This user doesn't have their gender set."}</span>
+                                                <span>{otherUser && otherUser.gender && otherUser.gender.length ? otherUser.gender : 'This user doesn\'t have their gender set.'}</span>
                                             </a>
                                         </>
                                     )
@@ -328,7 +328,7 @@ function Profile(props) {
                                             </a>
                                             <a>
                                                 <h1>Do they want to live with a smoker:</h1>
-                                                <span>{otherUser && otherUser.preferences && otherUser.preferences.smoking ? otherUser.preferences.smoking : "Doesn't matter"}</span>
+                                                <span>{otherUser && otherUser.preferences && otherUser.preferences.smoking ? otherUser.preferences.smoking : 'Doesn\'t matter'}</span>
                                             </a>
                                         </>
                                     )

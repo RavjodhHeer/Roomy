@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const Open = styled.a`
 
-`
+`;
 
 const CommonBox = styled.div`
     top: 50px;
@@ -117,7 +117,7 @@ const Links = styled.a`
             }
         }
     }
-`
+`;
 
 const SharedActor = styled.div`
     padding-right: 40px;
@@ -344,7 +344,7 @@ function Main(props) {
                                     <img src="/images/comment-icon.svg" alt="" />
                                     <span>Comment</span>
                                 </button>
-                                <button onClick={() => {navigator.clipboard.writeText(`${window.location.origin}/post/${props.ids[key]}`)}}>
+                                <button onClick={() => {navigator.clipboard.writeText(`${window.location.origin}/post/${props.ids[key]}`);}}>
                                     <img src="/images/send-icon.svg" alt="" />
                                     <span>Share</span>
                                 </button>

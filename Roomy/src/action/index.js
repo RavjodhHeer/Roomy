@@ -267,7 +267,7 @@ export function getArticlesAPI(pid = null) {
                     } else {
                         dispatch(getArticles(null, null));
                     }
-                })
+                });
         }
     };
 }
