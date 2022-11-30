@@ -224,7 +224,7 @@ function Profile(props) {
                     <UserInfo>
                         <CardBackground />
                         <a>
-                            <Photo photoUrl={photoUrl} />
+                            <Photo photoUrl={photoUrl ? photoUrl : '/images/user.svg'} />
                             <Link data-testid="name">{otherUser ? otherUser.displayName : 'N/A'}</Link>
                         </a>
                         <h3>
