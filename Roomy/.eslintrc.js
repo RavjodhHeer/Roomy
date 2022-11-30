@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 module.exports = {
     'env': {
         'browser': true,
@@ -39,7 +40,7 @@ module.exports = {
             'error',
             'always'
         ],
-        "react/prop-types": 0,
+        'react/prop-types': 0,
         'no-unused-vars': 0
     }
 };
