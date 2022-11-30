@@ -85,7 +85,7 @@ function Left(props) {
                 <UserInfo>
                     <CardBackground />
                     <a>
-                        <Photo photoUrl={photoUrl} />
+                        <Photo photoUrl={photoUrl ? photoUrl : '/images/user.svg'} />
                         <Link>
                             Welcome,
                             {user ? user.displayName : 'there'}
