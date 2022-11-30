@@ -20,6 +20,12 @@ If you're in the housing market, whether as a future tenant or a future landlord
     npm run start
     ```
 - Development site should be hosted on http://localhost:3000/
+## Troubleshooting
+- If npm run start does not work then please try:
+  - ```properties
+    export NODE_OPTIONS=--openssl-legacy-provider
+- If having errors with eslint then please try:
+  - Deleting .eslintrc.js file in the root directory and trying again
 ## Unit Testing
 - Clone the repo, and open your terminal wherever you cloned to.
 - Run the following commands in your terminal:
