@@ -10,7 +10,7 @@ import Rentals from './Rentals';
 import Roommates from './Roommates';
 import SavedProperties from './SavedProperties';
 import { getUserAuth } from '../action';
-import Post from './Home/Post'
+import Post from './Home/Post';
 
 function App(props) {
     useEffect(() => {
