@@ -34,3 +34,4 @@ If you're in the housing market, whether as a future tenant or a future landlord
     npm i
     npm run test
     ```
+  - If you're on a mac device, tests may not work without typing `npm install fsevents`
