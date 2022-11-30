@@ -130,9 +130,10 @@ const PreHero = styled.div`
     h1 {
         padding-bottom: 0;
         width: 55%;
-        font-size: 56px;
+        font-family: 'Gothic A1', sans-serif;
+        font-size: 60px;
+        font-weight: 100;
         color: #8f2bb8;
-        font-weight: 200;
         line-height: 70px;
         @media (max-width: 768px) {
             text-align: center;
@@ -143,7 +144,7 @@ const PreHero = styled.div`
     }
     img {
         width: 880px;
-        height: 380px;
+        height: 400px;
         position: absolute;
         bottom: 260px;
         right: -150px;
