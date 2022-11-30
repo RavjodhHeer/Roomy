@@ -233,13 +233,13 @@ const CenteredDiv = styled.div`
 `;
 
 function Login(props) {
-    const [email, setEmail]       = useState("");
-    const [password, setPassword] = useState("");
-    const [photoURL, setPhotoURL] = useState("");
-    const [userName, setUserName] = useState("");
-    const [fullName, setFullName] = useState("");
+    const [email, setEmail]       = useState('');
+    const [password, setPassword] = useState('');
+    const [photoURL, setPhotoURL] = useState('');
+    const [userName, setUserName] = useState('');
+    const [fullName, setFullName] = useState('');
     const [joinType, setJoinType] = useState(true); // True = Sign In ; False = Register
-    const [userType, setUserType] = useState("Renter"); // Renter or Landlord
+    const [userType, setUserType] = useState('Renter'); // Renter or Landlord
     const [pastHero, setPastHero] = useState(false); // Splash page before signin / register
 
     return (
@@ -251,73 +251,73 @@ function Login(props) {
                 </a>
             </Nav>
             { pastHero ?
-            <Section> 
-                <Nav>
-                    {joinType ?
-                        <div>
-                            <Join onClick={() => setJoinType(false) }>Register</Join>
-                            <SignIn>Sign In</SignIn>
-                        </div>
-                    :
-                        <div>
-                            <SignIn>Register</SignIn>
-                            <Join onClick={() => setJoinType(true) }>Sign In</Join>
-                        </div>
-                    }
-                </Nav>
-                <Hero>
-                    <h1>{joinType ? "Sign In" : "Setup Profile"}</h1>
-                </Hero>
-                { !joinType ? // Register
-                    <Form>
-                        <CenteredDiv><h1>What type of Roomie are you?</h1></CenteredDiv>
-                        {userType === "Renter" ?
-                            <CenteredDiv>
-                                <SignIn>Renter</SignIn>
-                                <Join onClick={()=>setUserType("Landlord")}>Landlord</Join>
-                            </CenteredDiv>
-                        :
-                            <CenteredDiv>
-                                <Join onClick={()=>setUserType("Renter")}>Renter</Join>
-                                <SignIn>Landlord</SignIn>
-                            </CenteredDiv>
+                <Section> 
+                    <Nav>
+                        {joinType ?
+                            <div>
+                                <Join onClick={() => setJoinType(false) }>Register</Join>
+                                <SignIn>Sign In</SignIn>
+                            </div>
+                            :
+                            <div>
+                                <SignIn>Register</SignIn>
+                                <Join onClick={() => setJoinType(true) }>Sign In</Join>
+                            </div>
                         }
-                        <Google><input type="text" size="40" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Full Name" /></Google>
-                        <Google><input type="text" size="40" value={photoURL} onChange={e => setPhotoURL(e.target.value)} placeholder="Profile Pic URL" /></Google>
-                        <Google><input type="text" size="40" value={userName} onChange={e => setUserName(e.target.value)} placeholder="User Name" /></Google>
-                        <Google><input type="email" size="40" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" /></Google>
-                        <Google><input type="password" size="40" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" /></Google>
-                        <CenteredDiv>
-                            <SignIn onClick={()=>{props.registerEmail(email, password, photoURL, userName, fullName, userType)}}>Register</SignIn>
-                        </CenteredDiv>
-                    </Form>
-                :            // Sign In
-                    <Form>
-                        <Google><input type="email" size="40" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" /></Google>
-                        <Google><input type="password" size="40" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" /></Google>
-                        <CenteredDiv>
-                            <SignIn onClick={()=>{props.signinWithEmail(email, password)}}>Sign In</SignIn>
-                        </CenteredDiv>
-                        <Google onClick={() => props.signIn()}>
-                            <img src="/images/google.svg" alt="" />
+                    </Nav>
+                    <Hero>
+                        <h1>{joinType ? 'Sign In' : 'Setup Profile'}</h1>
+                    </Hero>
+                    { !joinType ? // Register
+                        <Form>
+                            <CenteredDiv><h1>What type of Roomie are you?</h1></CenteredDiv>
+                            {userType === 'Renter' ?
+                                <CenteredDiv>
+                                    <SignIn>Renter</SignIn>
+                                    <Join onClick={()=>setUserType('Landlord')}>Landlord</Join>
+                                </CenteredDiv>
+                                :
+                                <CenteredDiv>
+                                    <Join onClick={()=>setUserType('Renter')}>Renter</Join>
+                                    <SignIn>Landlord</SignIn>
+                                </CenteredDiv>
+                            }
+                            <Google><input type="text" size="40" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Full Name" /></Google>
+                            <Google><input type="text" size="40" value={photoURL} onChange={e => setPhotoURL(e.target.value)} placeholder="Profile Pic URL" /></Google>
+                            <Google><input type="text" size="40" value={userName} onChange={e => setUserName(e.target.value)} placeholder="User Name" /></Google>
+                            <Google><input type="email" size="40" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" /></Google>
+                            <Google><input type="password" size="40" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" /></Google>
+                            <CenteredDiv>
+                                <SignIn onClick={()=>{props.registerEmail(email, password, photoURL, userName, fullName, userType);}}>Register</SignIn>
+                            </CenteredDiv>
+                        </Form>
+                        :            // Sign In
+                        <Form>
+                            <Google><input type="email" size="40" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" /></Google>
+                            <Google><input type="password" size="40" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" /></Google>
+                            <CenteredDiv>
+                                <SignIn onClick={()=>{props.signinWithEmail(email, password);}}>Sign In</SignIn>
+                            </CenteredDiv>
+                            <Google onClick={() => props.signIn()}>
+                                <img src="/images/google.svg" alt="" />
                             Sign in with Google
-                        </Google>
-                    </Form>
-                }
-            </Section>
-            : 
-            <PreSection>
-                <PreHero>
-                    <h1>Connecting people</h1>
-                    <h1>to places</h1>
-                    <img src="/images/home2.png" class="canvas" alt="" />
-                </PreHero>
-                <Form>
-                    <PreSignIn onClick={() => setPastHero(true)}>
+                            </Google>
+                        </Form>
+                    }
+                </Section>
+                : 
+                <PreSection>
+                    <PreHero>
+                        <h1>Connecting people</h1>
+                        <h1>to places</h1>
+                        <img src="/images/home2.png" className="canvas" alt="" />
+                    </PreHero>
+                    <Form>
+                        <PreSignIn onClick={() => setPastHero(true)}>
                         Sign In
-                    </PreSignIn>
-                </Form>
-            </PreSection>}
+                        </PreSignIn>
+                    </Form>
+                </PreSection>}
         </Container>
     );
 }
