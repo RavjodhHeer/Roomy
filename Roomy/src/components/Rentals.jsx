@@ -48,14 +48,6 @@ function Rentals(props) {
         props.getRentals();
     }, []);
 
-    useEffect(() => {
-        // (Need to come back) temporary solution to profile pics already being
-        // loaded in but for some reason needing a feed value to change to render
-        setTimeout(() => {
-            setScrollKey('abc');
-        }, 2000);
-    }, [props.rentals]);
-
     function handleClickScroll(key) {
         setScrollKey(key);
     }

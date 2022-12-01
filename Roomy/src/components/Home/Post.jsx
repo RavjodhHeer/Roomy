@@ -244,7 +244,7 @@ function Post(props) {
                                     <div>
                                         <span>{article.actor.title}</span>
                                         <span>{article.actor.description}</span>
-                                        <span>{displayTime(article.actor.date.toDate())}</span>
+                                        <span>{displayTime(article.actor.date)}</span>
                                     </div>
                                 </a>
                                 <button>

@@ -300,7 +300,7 @@ function Main(props) {
                                     <div>
                                         <span>{article.actor.title}</span>
                                         <span>{article.actor.description}</span>
-                                        <span>{displayTime(article.actor.date.toDate())}</span>
+                                        <span>{displayTime(article.actor.date)}</span>
                                     </div>
                                 </Links>
                                 <Links className="open" href={`/post/${props.ids[key]}`} style={{ textDecoration: 'none' }}>
