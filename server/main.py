@@ -87,7 +87,7 @@ def get_single_article():
 def post_article():
     try:
         article = request.json
-        article['actor']['date'] = datetime.datetime.now()
+        article['actor']['date'] = datetime.datetime.utcnow()
         db.collection(u'articles').add(article)
         return jsonify({"success": True}), 200
     except Exception as e:
@@ -97,7 +97,7 @@ def post_article():
 def post_rental():
     try:
         rental = request.json
-        rental['date'] = datetime.datetime.now()
+        rental['date'] = datetime.datetime.utcnow()
         db.collection(u'rentals').add(rental)
         return jsonify({"success": True}), 200
     except Exception as e:
@@ -107,7 +107,7 @@ def post_rental():
 def post_roommate():
     try:
         roommate = request.json
-        roommate['date'] = datetime.datetime.now()
+        roommate['date'] = datetime.datetime.utcnow()
         db.collection(u'roommates').add(roommate)
         return jsonify({"success": True}), 200
     except Exception as e:
