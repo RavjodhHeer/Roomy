@@ -101,13 +101,13 @@ function SideNav({ signout, uid }) {
                 <a href="/feed">
                     <Button>
                         <img src="/images/clipboard2-check-fill.svg" alt="" />
-                        <span> Applications</span>
+                        <span style={{textDecoration: 'line-through'}}> Applications</span>
                     </Button>
                 </a>
                 <a href="/feed">
                     <Button>
                         <img src="/images/chat-right-dots-fill.svg" alt="" />
-                        <span> Messages</span>
+                        <span style={{textDecoration: 'line-through'}}> Messages</span>
                     </Button>
                 </a>
                 <a href="/saved">

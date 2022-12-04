@@ -244,7 +244,7 @@ function Post(props) {
                                     <div>
                                         <span>{article.actor.title}</span>
                                         <span>{article.actor.description}</span>
-                                        <span>{displayTime(article.actor.date.toDate())}</span>
+                                        <span>{displayTime(article.actor.date)}</span>
                                     </div>
                                 </a>
                                 <button>
@@ -261,7 +261,6 @@ function Post(props) {
                                         <li>
                                             <button>
                                                 <img src="https://static-exp1.licdn.com/sc/h/d310t2g24pvdy4pt1jkedo4yb" alt="" />
-                                                {/* <img src="https://static-exp1.licdn.com/sc/h/7fx9nkd7mx8avdpqm5hqcbi97" alt="" /> */}
                                                 <span>{props.articles[key].likes.count}</span>
                                             </button>
                                         </li>
@@ -307,7 +306,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     getArticles: (id) => dispatch(getArticlesAPI(id)),
-    likeHandler: (payload) => dispatch(updateArticleAPI(payload)),
+    likeHandler: (payload) => dispatch(updateArticleAPI(payload, true)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

@@ -286,7 +286,7 @@ function Feed(props) {
                                      <div>
                                          <h3>{rental.title}</h3>
                                          <span>{rental.address}</span>
-                                         <span>{displayTime(rental.date.toDate())}</span>
+                                         <span>{displayTime(rental.date)}</span>
                                      </div>
                                  </a>
                                  <button

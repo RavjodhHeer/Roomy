@@ -269,7 +269,7 @@ function RoommateFeed(props) {
                                 <div>
                                     <h3>{roommate.title}</h3>
                                     <span>{roommate.address}</span>
-                                    <span>{displayTime(roommate.date.toDate())}</span>
+                                    <span>{displayTime(roommate.date)}</span>
                                     {/* roommate post + picture */}
                                 </div>
                             </a>

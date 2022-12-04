@@ -2,6 +2,8 @@ import db, { auth, provider, storage, firebase } from '../firebase';
 import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES, GET_RENTALS, GET_ROOMMATES, SET_OTHER_USER } from './actionType';
 import 'firebase/firestore';
 
+const serverURL = 'https://server-5te64e4pdq-uw.a.run.app';
+
 export function setUser(payload) {
     return {
         type: SET_USER,
@@ -169,7 +171,7 @@ export function signOutAPI() {
 }
 
 export function postArticleAPI(payload) {
-    return (dispatch) => {
+    return async (dispatch) => {
         if (payload.image !== '') {
             dispatch(setLoading(true));
             const upload = storage.ref(`images/${payload.image.name}`).put(payload.image);
@@ -181,135 +183,190 @@ export function postArticleAPI(payload) {
                 (err) => alert(err),
                 async () => {
                     const downloadURL = await upload.snapshot.ref.getDownloadURL();
-                    db.collection('articles').add({
-                        actor: {
-                            description: payload.user.email,
-                            title: payload.user.displayName,
-                            date: payload.timestamp,
-                            image: payload.user.photoURL,
-                            uid: auth.currentUser.uid,
+                    const response = await fetch(`${serverURL}/post_article`, {
+                        mode: 'cors',
+                        method: "POST",
+                        headers : { 
+                            'Content-Type': 'application/json',
                         },
-                        video: payload.video,
-                        sharedImg: downloadURL,
-                        likes: {
-                            count: 0,
-                            whoLiked: [],
-                        },
-                        comments: 0,
-                        description: payload.description,
-                    });
+                        body: JSON.stringify({
+                            actor: {
+                                description: payload.user.email,
+                                title: payload.user.displayName,
+                                date: payload.timestamp,
+                                image: payload.user.photoURL,
+                                uid: auth.currentUser.uid,
+                            },
+                            video: payload.video,
+                            sharedImg: downloadURL,
+                            likes: {
+                                count: 0,
+                                whoLiked: [],
+                            },
+                            comments: 0,
+                            description: payload.description,
+                        })}
+                    );
+                    try{
+                        const results = await response.json();
+                    } catch (error) {
+                        console.log(error);
+                        alert("Problem creating the post");
+                    }
                     dispatch(setLoading(false));
                 },
             );
         } else if (payload.video) {
             dispatch(setLoading(true));
-            db.collection('articles').add({
-                actor: {
-                    description: payload.user.email,
-                    title: payload.user.displayName,
-                    date: payload.timestamp,
-                    image: payload.user.photoURL,
-                    uid: auth.currentUser.uid,
+            const response = await fetch(`${serverURL}/post_article`, {
+                mode: 'cors',
+                method: "POST",
+                headers : { 
+                    'Content-Type': 'application/json',
                 },
-                video: payload.video,
-                sharedImg: '',
-                likes: {
-                    count: 0,
-                    whoLiked: [],
-                },
-                comments: 0,
-                description: payload.description,
-            });
+                body: JSON.stringify({
+                    actor: {
+                        description: payload.user.email,
+                        title: payload.user.displayName,
+                        date: payload.timestamp,
+                        image: payload.user.photoURL,
+                        uid: auth.currentUser.uid,
+                    },
+                    video: payload.video,
+                    sharedImg: '',
+                    likes: {
+                        count: 0,
+                        whoLiked: [],
+                    },
+                    comments: 0,
+                    description: payload.description,
+                })}
+            );
+            try{
+                const results = await response.json();
+            } catch (error) {
+                console.log(error);
+                alert("Problem creating the post");
+            }
             dispatch(setLoading(false));
         } else if (payload.image === '' && payload.video === '') {
             dispatch(setLoading(true));
-            db.collection('articles').add({
-                actor: {
-                    description: payload.user.email,
-                    title: payload.user.displayName,
-                    date: payload.timestamp,
-                    image: payload.user.photoURL,
-                    uid: auth.currentUser.uid,
+            const response = await fetch(`${serverURL}/post_article`, {
+                mode: 'cors', // no-cors, *cors, same-origin
+                method: "POST",
+                headers : { 
+                    'Content-Type': 'application/json',
                 },
-                video: '',
-                sharedImg: '',
-                likes: {
-                    count: 0,
-                    whoLiked: [],
-                },
-                comments: 0,
-                description: payload.description,
-            });
+                body: JSON.stringify({
+                    actor: {
+                        description: payload.user.email,
+                        title: payload.user.displayName,
+                        date: payload.timestamp,
+                        image: payload.user.photoURL,
+                        uid: auth.currentUser.uid,
+                    },
+                    video: '',
+                    sharedImg: '',
+                    likes: {
+                        count: 0,
+                        whoLiked: [],
+                    },
+                    comments: 0,
+                    description: payload.description,
+                })}
+            );
+            try{
+                const results = await response.json();
+            } catch (error) {
+                console.log(error);
+                alert("Problem creating the post");
+            }
             dispatch(setLoading(false));
         }
+        dispatch(getArticlesAPI());
     };
 }
 
 export function getArticlesAPI(pid = null) {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(setLoading(true));
-        let payload;
-        let id;
-        if (pid === null) {
-            db.collection('articles')
-                .orderBy('actor.date', 'desc')
-                .onSnapshot((snapshot) => {
-                    payload = snapshot.docs.map((doc) => doc.data());
-                    id = snapshot.docs.map((doc) => doc.id);
-                    dispatch(getArticles(payload, id));
+        if (pid === null) { // Post on home page
+            const response = await fetch(`${serverURL}/get_articles`);
+            try{
+                const results = await response.json();
+                const posts = results.posts;
+                posts.map((post)=>{
+                    post.actor.date = new Date(post.actor.date);
                 });
+                const ids = results.ids;
+                dispatch(getArticles(posts, ids));
+            } catch (error) {
+                console.log(error);
+                alert("Problem loading posts");
+            }
             dispatch(setLoading(false));
-        } else {
-            db.collection('articles').doc(pid)
-                .onSnapshot((snapshot) => {
-                    if (snapshot.exists) {
-                        payload = snapshot.data();
-                        id = snapshot.id;
-                        dispatch(getArticles([payload], [id]));
-                    } else {
-                        dispatch(getArticles(null, null));
-                    }
-                });
+        } else { // Post on its own page
+            const data = new FormData();
+            data.append("pid", pid);
+            const response = await fetch(`${serverURL}/get_single_article`, {
+                mode: 'cors', // no-cors, *cors, same-origin
+                method: "POST",
+                body: data
+            });
+            try{
+                const results = await response.json();
+                const posts = results.posts;
+                posts.actor.date = new Date(posts.actor.date);
+                const ids = results.ids;
+                dispatch(getArticles([posts], [ids]));
+            } catch (error) {
+                console.log(error);
+                alert("Problem loading posts");
+            }
+            dispatch(setLoading(false));
         }
     };
 }
 
-export function updateArticleAPI(payload) {
-    return (dispatch) => {
-        db.collection('articles').doc(payload.id).update(payload.update);
+export function updateArticleAPI(payload, onSinglePostPage) {
+    return async (dispatch) => {
+        const response = await fetch(`${serverURL}/update_article`, {
+            mode: 'cors',
+            method: "POST",
+            headers : { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                pid: payload.id,
+                update: payload.update,
+            })}
+        );
+        try{
+            const results = await response.json();
+            dispatch(getArticlesAPI(onSinglePostPage ? payload.id : null));
+        } catch (error) {
+            console.log(error);
+            alert("Problem updating the post");
+        }
     };
 }
 
-async function getProfilePic(uid) {
-    return new Promise((resolve, reject) => {
-        const docRef = db.collection('profiles').doc(uid);
-        docRef.get().then((docIncoming) => {
-            const { photoURL } = docIncoming.data();
-            resolve(photoURL);
-        });
-    });
-}
-
 export function getRentalsAPI() {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(setLoading(true));
-        let payload;
-        let id;
-        db.collection('rentals')
-            .orderBy('date', 'desc') // order by date in descreasing order
-            .onSnapshot(async (snapshot) => {
-                payload = snapshot.docs.map((doc) => doc.data());
-                id = snapshot.docs.map((doc) => doc.id);
-                const pay = payload.map((post) => {
-                    getProfilePic(post.poster).then((url) => {
-                        post.profilePic = url;
-                    });
-                    return post;
-                });
-                Promise.all(pay).then((results) => {
-                    dispatch(getRentals(pay, id));
-                });
+        const response = await fetch(`${serverURL}/get_rentals`);
+        try{
+            const results = await response.json();
+            const rentals = results.rentals;
+            rentals.map((x)=>{
+                x.date = new Date(x.date)
             });
+            const ids = results.ids;
+            dispatch(getRentals(rentals, ids));
+
+        } catch (error) {
+            alert("Problem loading posts");
+        }
         dispatch(setLoading(false));
     };
 }
@@ -321,25 +378,21 @@ export function updateRentalsAPI(payload) {
 }
 
 export function getRoommatesAPI() {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(setLoading(true));
-        let payload;
-        let id;
-        db.collection('roommates')
-            .orderBy('date', 'desc') // order by date in descreasing order
-            .onSnapshot(async (snapshot) => {
-                payload = snapshot.docs.map((doc) => doc.data());
-                id = snapshot.docs.map((doc) => doc.id);
-                const pay = payload.map((post) => {
-                    getProfilePic(post.poster).then((url) => {
-                        post.profilePic = url;
-                    });
-                    return post;
-                });
-                Promise.all(pay).then((results) => {
-                    dispatch(getRoommates(pay, id));
-                });
+        const response = await fetch(`${serverURL}/get_roommates`);
+        try{
+            const results = await response.json();
+            const roommates = results.roommates;
+            roommates.map((x)=>{
+                x.date = new Date(x.date)
             });
+            const ids = results.ids;
+            dispatch(getRoommates(roommates, ids));
+
+        } catch (error) {
+            alert("Problem loading posts");
+        }
         dispatch(setLoading(false));
     };
 }
@@ -350,23 +403,37 @@ export function updateRoommatesAPI(payload) {
     };
 }
 
-export function setUserInfo(uid, userType, displayName, photoURL) {
-    db.collection('profiles').doc(uid).set({
-        looking: true,
-        displayName,
-        status: userType || 'Renter',
-        uid,
-        photoURL,
-        experiences: [],
-        preferences: {
-            roomWith: '',
-            pets: '',
-            smoking: '',
+export async function setUserInfo(uid, userType, displayName, photoURL) {
+
+    const response = await fetch(`${serverURL}/set_user_info`, {
+        mode: 'cors',
+        method: "POST",
+        headers : { 
+            'Content-Type': 'application/json',
         },
-        phoneNumber: '',
-        gender: '',
-        bio: '',
-    });
+        body: JSON.stringify({
+            looking: true,
+            displayName,
+            status: userType || 'Renter',
+            uid,
+            photoURL,
+            experiences: [],
+            preferences: {
+                roomWith: '',
+                pets: '',
+                smoking: '',
+            },
+            phoneNumber: '',
+            gender: '',
+            bio: '',
+        })}
+    );
+    try{
+        const results = await response.json();
+    } catch (error) {
+        console.log(error);
+        alert("Problem setting user info");
+    }
 }
 
 async function uploadImage(img) {
@@ -387,115 +454,188 @@ async function uploadImage(img) {
 }
 
 export function postRental(payload) {
-    let photos = [];
-    for (const img of payload.photos) {
-        photos.push(uploadImage(img));
-    }
-    let [lat, long] = [0, 0];
-    Promise.all(photos).then(async (urls) => {
-        photos = urls;
-        const { address } = payload;
-        const geoCodeToken = 'pk.eyJ1IjoibWF0dGhld2dhaW0iLCJhIjoiY2xhYXN6ZnNhMGEzYzNwcnoycjBlZmlnMSJ9.VMZ9zv6-BBkRG_kcYx9naQ';
-        await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${geoCodeToken}`)
+    return (dispatch) => {
+        let photos = [];
+        for (const img of payload.photos) {
+            photos.push(uploadImage(img));
+        }
+        let [lat, long] = [0, 0];
+        Promise.all(photos).then(async (urls) => {
+            photos = urls;
+            const { address } = payload;
+            const geoCodeToken = 'pk.eyJ1IjoibWF0dGhld2dhaW0iLCJhIjoiY2xhYXN6ZnNhMGEzYzNwcnoycjBlZmlnMSJ9.VMZ9zv6-BBkRG_kcYx9naQ';
+            await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${geoCodeToken}`)
             .then((resp) => resp.json())
             .then((data) => {
                 lat = data.features[0].center[1];
                 long = data.features[0].center[0];
             });
-        db.collection('rentals').add({
-            price: payload.price,
-            bedrooms: payload.bedrooms,
-            sharedBedroom: payload.sharedBedroom,
-            bathrooms: payload.bathrooms,
-            sharedBathroom: payload.sharedBathroom,
-            description: payload.description ? payload.description : 'Description Unavailable',
-            title: payload.title ? payload.title : 'Title Unavailable',
-            preferences: payload.preferences,
-            photos,
-            address: payload.address,
-            coords: {
-                latitude: lat,
-                longitude: long,
-            },
-            poster: payload.poster,
-            date: payload.date,
+            const response = await fetch(`${serverURL}/post_rental`, {
+                mode: 'cors',
+                method: "POST",
+                headers : { 
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    price: payload.price,
+                    bedrooms: payload.bedrooms,
+                    sharedBedroom: payload.sharedBedroom,
+                    bathrooms: payload.bathrooms,
+                    sharedBathroom: payload.sharedBathroom,
+                    description: payload.description ? payload.description : 'Description Unavailable',
+                    title: payload.title ? payload.title : 'Title Unavailable',
+                    preferences: payload.preferences,
+                    photos,
+                    address: payload.address,
+                    coords: {
+                        latitude: lat,
+                        longitude: long,
+                    },
+                    poster: payload.poster,
+                    date: payload.date,
+                })}
+            );
+            try{
+                const results = await response.json();
+                dispatch(getRentalsAPI());
+            } catch (error) {
+                console.log(error);
+                alert("Problem creating rental post");
+            }
         });
-    });
+    }
 }
 
 export function postRoommate(payload) {
-    let photos = [];
-    for (const img of payload.photos) {
-        photos.push(uploadImage(img));
-    }
-    Promise.all(photos).then((urls) => {
-        photos = urls;
-        db.collection('roommates').add({
-            price: payload.price,
-            bedrooms: payload.bedrooms,
-            sharedBedroom: payload.sharedBedroom,
-            bathrooms: payload.bathrooms,
-            sharedBathroom: payload.sharedBathroom,
-            description: payload.description ? payload.description : 'Description Unavailable',
-            title: payload.title ? payload.title : 'Title Unavailable',
-            preferences: payload.preferences,
-            photos,
-            address: payload.address,
-            coords: {
-                latitude: payload.coords.latitude,
-                longitude: payload.coords.longitude,
-            },
-            poster: payload.poster,
-            date: payload.date,
+    return (dispatch) => {
+        let photos = [];
+        for (const img of payload.photos) {
+            photos.push(uploadImage(img));
+        }
+        Promise.all(photos).then(async (urls) => {
+            photos = urls;
+
+            const response = await fetch(`${serverURL}/post_roommate`, {
+                mode: 'cors',
+                method: "POST",
+                headers : { 
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    price: payload.price,
+                    bedrooms: payload.bedrooms,
+                    sharedBedroom: payload.sharedBedroom,
+                    bathrooms: payload.bathrooms,
+                    sharedBathroom: payload.sharedBathroom,
+                    description: payload.description ? payload.description : 'Description Unavailable',
+                    title: payload.title ? payload.title : 'Title Unavailable',
+                    preferences: payload.preferences,
+                    photos,
+                    address: payload.address,
+                    coords: {
+                        latitude: payload.coords.latitude,
+                        longitude: payload.coords.longitude,
+                    },
+                    poster: payload.poster,
+                    date: payload.date,
+                })}
+            );
+            try{
+                const results = await response.json();
+                dispatch(getRoommatesAPI());
+            } catch (error) {
+                console.log(error);
+                alert("Problem posting roommate advertisement");
+            }
         });
-    });
+    }
 }
 
 export function getOtherUser(uid) {
-    return (dispatch) => {
-        const docRef = db.collection('profiles').doc(uid);
-        docRef.get().then((docIncoming) => {
-            if (docIncoming.exists) {
-                dispatch(setOtherUser(docIncoming.data()));
-            } else {
-                console.log('No such document!');
-            }
-        }).catch((error) => {
-            console.log('Error getting document:', error);
+    return async (dispatch) => {
+        const data = new FormData();
+        data.append("uid", uid);
+        const response = await fetch(`${serverURL}/get_other_user`, {
+            mode: 'cors', // no-cors, *cors, same-origin
+            method: "POST",
+            body: data
         });
+        try{
+            const user = await response.json();
+            dispatch(setOtherUser(user));
+        } catch (error) {
+            dispatch(setOtherUser(null));
+            alert("Problem getting user info");
+        }
     };
 }
 
-export function postExperience(target_uid, message, when) {
+export async function postExperience(target_uid, message, when) {
     const data = {
         experience: message,
         when,
         uid: auth.currentUser.uid,
         displayName: auth.currentUser.displayName,
     };
-    const profile = db.collection('profiles').doc(target_uid);
-    profile.update({
-        experiences: firebase.firestore.FieldValue.arrayUnion(data),
-    });
+    const response = await fetch(`${serverURL}/post_experience`, {
+        mode: 'cors',
+        method: "POST",
+        headers : { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            target_uid: target_uid,
+            exp: data
+        })}
+    );
+    try{
+        const results = await response.json();
+    } catch (error) {
+        console.log(error);
+        alert("Problem posting your experience");
+    }
 }
 
-export function updateProfileData(newProfileData) {
+export async function updateProfileData(newProfileData) {
     const { uid } = auth.currentUser;
-    const profile = db.collection('profiles').doc(uid);
-    profile.update(newProfileData);
+    const response = await fetch(`${serverURL}/update_profile_data`, {
+        mode: 'cors',
+        method: "POST",
+        headers : { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            uid: uid,
+            profile: newProfileData
+        })}
+    );
+    try{
+        const results = await response.json();
+    } catch (error) {
+        console.log(error);
+        alert("Problem updating profile data");
+    }
 }
 
 // Save : Boolean (True -> Add, False -> Remove)
-export function saveProperty(key, save) {
+export async function saveProperty(key, save) {
     const { uid } = auth.currentUser;
-    const propertyList = db.collection('profiles').doc(uid);
-    if (save === 'True') {
-        propertyList.update({
-            savedProperties: firebase.firestore.FieldValue.arrayUnion(key),
-        });
-    } else {
-        propertyList.update({
-            savedProperties: firebase.firestore.FieldValue.arrayRemove(key),
-        });
+    const response = await fetch(`${serverURL}/save_property`, {
+        mode: 'cors',
+        method: "POST",
+        headers : { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            uid: uid,
+            key: key,
+            save: save,
+        })}
+    );
+    try{
+        const results = await response.json();
+    } catch (error) {
+        console.log(error);
+        alert("Problem saving the rental");
     }
 }

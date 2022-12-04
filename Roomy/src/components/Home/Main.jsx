@@ -300,7 +300,7 @@ function Main(props) {
                                     <div>
                                         <span>{article.actor.title}</span>
                                         <span>{article.actor.description}</span>
-                                        <span>{displayTime(article.actor.date.toDate())}</span>
+                                        <span>{displayTime(article.actor.date)}</span>
                                     </div>
                                 </Links>
                                 <Links className="open" href={`/post/${props.ids[key]}`} style={{ textDecoration: 'none' }}>
@@ -319,16 +319,8 @@ function Main(props) {
                                         <li>
                                             <button>
                                                 <img src="https://static-exp1.licdn.com/sc/h/d310t2g24pvdy4pt1jkedo4yb" alt="" />
-                                                {/* <img src="https://static-exp1.licdn.com/sc/h/7fx9nkd7mx8avdpqm5hqcbi97" alt="" /> */}
                                                 <span>{props.articles[key].likes.count}</span>
                                             </button>
-                                        </li>
-                                        <li>
-                                            <a>
-                                                {article.comments}
-                                                {' '}
-                                                comments
-                                            </a>
                                         </li>
                                     </>
                                 )}

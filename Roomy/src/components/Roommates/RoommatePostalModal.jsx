@@ -318,7 +318,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     getUserAuth: () => dispatch(getUserAuth()),
-    postRoommate: (payload) => postRoommate(payload),
+    postRoommate: (payload) => dispatch(postRoommate(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoommatePostalModal);
