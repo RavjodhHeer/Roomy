@@ -283,6 +283,7 @@ export function postArticleAPI(payload) {
             }
             dispatch(setLoading(false));
         }
+        dispatch(getArticlesAPI());
     };
 }
 
