@@ -52,7 +52,7 @@ function Map(props) {
     };
 
     return (
-        <LoadScript googleMapsApiKey="AIzaSyBX1z5nvjcjzyxSMT-QCVS3ERu6Y3iNSb0">
+        <LoadScript googleMapsApiKey="AIzaSyBIsgIFA-qVOBrB5L-i812FPlRSCZtxlxM">
             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
                 {props.rentals && props.rentals.map((rental, key) => (
                     <Marker
