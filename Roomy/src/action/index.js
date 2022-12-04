@@ -2,6 +2,8 @@ import db, { auth, provider, storage, firebase } from '../firebase';
 import { SET_LOADING_STATUS, SET_USER, GET_ARTICLES, GET_RENTALS, GET_ROOMMATES, SET_OTHER_USER } from './actionType';
 import 'firebase/firestore';
 
+const serverURL = 'https://server-5te64e4pdq-uw.a.run.app';
+
 export function setUser(payload) {
     return {
         type: SET_USER,
@@ -181,7 +183,7 @@ export function postArticleAPI(payload) {
                 (err) => alert(err),
                 async () => {
                     const downloadURL = await upload.snapshot.ref.getDownloadURL();
-                    const response = await fetch('http://localhost:5000/post_article', {
+                    const response = await fetch(`${serverURL}/post_article`, {
                         mode: 'cors',
                         method: "POST",
                         headers : { 
@@ -216,7 +218,7 @@ export function postArticleAPI(payload) {
             );
         } else if (payload.video) {
             dispatch(setLoading(true));
-            const response = await fetch('http://localhost:5000/post_article', {
+            const response = await fetch(`${serverURL}/post_article`, {
                 mode: 'cors',
                 method: "POST",
                 headers : { 
@@ -249,7 +251,7 @@ export function postArticleAPI(payload) {
             dispatch(setLoading(false));
         } else if (payload.image === '' && payload.video === '') {
             dispatch(setLoading(true));
-            const response = await fetch('http://localhost:5000/post_article', {
+            const response = await fetch(`${serverURL}/post_article`, {
                 mode: 'cors', // no-cors, *cors, same-origin
                 method: "POST",
                 headers : { 
@@ -288,7 +290,7 @@ export function getArticlesAPI(pid = null) {
     return async (dispatch) => {
         dispatch(setLoading(true));
         if (pid === null) { // Post on home page
-            const response = await fetch('http://localhost:5000/get_articles');
+            const response = await fetch(`${serverURL}/get_articles`);
             try{
                 const results = await response.json();
                 const posts = results.posts;
@@ -305,7 +307,7 @@ export function getArticlesAPI(pid = null) {
         } else { // Post on its own page
             const data = new FormData();
             data.append("pid", pid);
-            const response = await fetch('http://localhost:5000/get_single_article', {
+            const response = await fetch(`${serverURL}/get_single_article`, {
                 mode: 'cors', // no-cors, *cors, same-origin
                 method: "POST",
                 body: data
@@ -327,7 +329,7 @@ export function getArticlesAPI(pid = null) {
 
 export function updateArticleAPI(payload, onSinglePostPage) {
     return async (dispatch) => {
-        const response = await fetch('http://localhost:5000/update_article', {
+        const response = await fetch(`${serverURL}/update_article`, {
             mode: 'cors',
             method: "POST",
             headers : { 
@@ -351,7 +353,7 @@ export function updateArticleAPI(payload, onSinglePostPage) {
 export function getRentalsAPI() {
     return async (dispatch) => {
         dispatch(setLoading(true));
-        const response = await fetch('http://localhost:5000/get_rentals');
+        const response = await fetch(`${serverURL}/get_rentals`);
         try{
             const results = await response.json();
             const rentals = results.rentals;
@@ -377,7 +379,7 @@ export function updateRentalsAPI(payload) {
 export function getRoommatesAPI() {
     return async (dispatch) => {
         dispatch(setLoading(true));
-        const response = await fetch('http://localhost:5000/get_roommates');
+        const response = await fetch(`${serverURL}/get_roommates`);
         try{
             const results = await response.json();
             const roommates = results.roommates;
@@ -402,7 +404,7 @@ export function updateRoommatesAPI(payload) {
 
 export async function setUserInfo(uid, userType, displayName, photoURL) {
 
-    const response = await fetch('http://localhost:5000/set_user_info', {
+    const response = await fetch(`${serverURL}/set_user_info`, {
         mode: 'cors',
         method: "POST",
         headers : { 
@@ -467,7 +469,7 @@ export function postRental(payload) {
                 lat = data.features[0].center[1];
                 long = data.features[0].center[0];
             });
-            const response = await fetch('http://localhost:5000/post_rental', {
+            const response = await fetch(`${serverURL}/post_rental`, {
                 mode: 'cors',
                 method: "POST",
                 headers : { 
@@ -512,7 +514,7 @@ export function postRoommate(payload) {
         Promise.all(photos).then(async (urls) => {
             photos = urls;
 
-            const response = await fetch('http://localhost:5000/post_roommate', {
+            const response = await fetch(`${serverURL}/post_roommate`, {
                 mode: 'cors',
                 method: "POST",
                 headers : { 
@@ -552,7 +554,7 @@ export function getOtherUser(uid) {
     return async (dispatch) => {
         const data = new FormData();
         data.append("uid", uid);
-        const response = await fetch('http://localhost:5000/get_other_user', {
+        const response = await fetch(`${serverURL}/get_other_user`, {
             mode: 'cors', // no-cors, *cors, same-origin
             method: "POST",
             body: data
@@ -574,7 +576,7 @@ export async function postExperience(target_uid, message, when) {
         uid: auth.currentUser.uid,
         displayName: auth.currentUser.displayName,
     };
-    const response = await fetch('http://localhost:5000/post_experience', {
+    const response = await fetch(`${serverURL}/post_experience`, {
         mode: 'cors',
         method: "POST",
         headers : { 
@@ -595,7 +597,7 @@ export async function postExperience(target_uid, message, when) {
 
 export async function updateProfileData(newProfileData) {
     const { uid } = auth.currentUser;
-    const response = await fetch('http://localhost:5000/update_profile_data', {
+    const response = await fetch(`${serverURL}/update_profile_data`, {
         mode: 'cors',
         method: "POST",
         headers : { 
@@ -617,7 +619,7 @@ export async function updateProfileData(newProfileData) {
 // Save : Boolean (True -> Add, False -> Remove)
 export async function saveProperty(key, save) {
     const { uid } = auth.currentUser;
-    const response = await fetch('http://localhost:5000/save_property', {
+    const response = await fetch(`${serverURL}/save_property`, {
         mode: 'cors',
         method: "POST",
         headers : { 

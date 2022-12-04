@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -87,7 +88,7 @@ def get_single_article():
 def post_article():
     try:
         article = request.json
-        article['actor']['date'] = datetime.datetime.utcnow()
+        article['actor']['date'] = datetime.datetime.utcnow() # UTC time added here to avoid JSON misformatting
         db.collection(u'articles').add(article)
         return jsonify({"success": True}), 200
     except Exception as e:
@@ -178,4 +179,4 @@ def post_experience():
         return jsonify({f"An error occured: {e}"}), 400
 
 if __name__ == '__main__':
-    app.run(threaded=True)
+    app.run(debug=True, threaded=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
