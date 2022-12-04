@@ -310,7 +310,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     getUserAuth: () => dispatch(getUserAuth()),
-    postRental: (payload) => postRental(payload),
+    postRental: (payload) => dispatch(postRental(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RentalPostalModal);

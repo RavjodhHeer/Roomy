@@ -182,7 +182,7 @@ export function postArticleAPI(payload) {
                 async () => {
                     const downloadURL = await upload.snapshot.ref.getDownloadURL();
                     const response = await fetch('http://localhost:5000/post_article', {
-                        mode: 'cors', // no-cors, *cors, same-origin
+                        mode: 'cors',
                         method: "POST",
                         headers : { 
                             'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ export function postArticleAPI(payload) {
         } else if (payload.video) {
             dispatch(setLoading(true));
             const response = await fetch('http://localhost:5000/post_article', {
-                mode: 'cors', // no-cors, *cors, same-origin
+                mode: 'cors',
                 method: "POST",
                 headers : { 
                     'Content-Type': 'application/json',
@@ -292,8 +292,8 @@ export function getArticlesAPI(pid = null) {
             try{
                 const results = await response.json();
                 const posts = results.posts;
-                posts.map((x)=>{
-                    x.actor.date = new Date(x.actor.date)
+                posts.map((post)=>{
+                    post.actor.date = new Date(post.actor.date);
                 });
                 const ids = results.ids;
                 dispatch(getArticles(posts, ids));
@@ -325,7 +325,7 @@ export function getArticlesAPI(pid = null) {
     };
 }
 
-export function updateArticleAPI(payload) {
+export function updateArticleAPI(payload, onSinglePostPage) {
     return async (dispatch) => {
         const response = await fetch('http://localhost:5000/update_article', {
             mode: 'cors',
@@ -340,6 +340,7 @@ export function updateArticleAPI(payload) {
         );
         try{
             const results = await response.json();
+            dispatch(getArticlesAPI(onSinglePostPage ? payload.id : null));
         } catch (error) {
             console.log(error);
             alert("Problem updating the post");
@@ -428,7 +429,7 @@ export async function setUserInfo(uid, userType, displayName, photoURL) {
         const results = await response.json();
     } catch (error) {
         console.log(error);
-        alert("Problem creating the post");
+        alert("Problem setting user info");
     }
 }
 
@@ -450,95 +451,101 @@ async function uploadImage(img) {
 }
 
 export function postRental(payload) {
-    let photos = [];
-    for (const img of payload.photos) {
-        photos.push(uploadImage(img));
-    }
-    let [lat, long] = [0, 0];
-    Promise.all(photos).then(async (urls) => {
-        photos = urls;
-        const { address } = payload;
-        const geoCodeToken = 'pk.eyJ1IjoibWF0dGhld2dhaW0iLCJhIjoiY2xhYXN6ZnNhMGEzYzNwcnoycjBlZmlnMSJ9.VMZ9zv6-BBkRG_kcYx9naQ';
-        await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${geoCodeToken}`)
-        .then((resp) => resp.json())
-        .then((data) => {
-            lat = data.features[0].center[1];
-            long = data.features[0].center[0];
-        });
-        const response = await fetch('http://localhost:5000/post_rental', {
-            mode: 'cors',
-            method: "POST",
-            headers : { 
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                price: payload.price,
-                bedrooms: payload.bedrooms,
-                sharedBedroom: payload.sharedBedroom,
-                bathrooms: payload.bathrooms,
-                sharedBathroom: payload.sharedBathroom,
-                description: payload.description ? payload.description : 'Description Unavailable',
-                title: payload.title ? payload.title : 'Title Unavailable',
-                preferences: payload.preferences,
-                photos,
-                address: payload.address,
-                coords: {
-                    latitude: lat,
-                    longitude: long,
-                },
-                poster: payload.poster,
-                date: payload.date,
-            })}
-        );
-        try{
-            const results = await response.json();
-        } catch (error) {
-            console.log(error);
-            alert("Problem creating the post");
+    return (dispatch) => {
+        let photos = [];
+        for (const img of payload.photos) {
+            photos.push(uploadImage(img));
         }
-    });
+        let [lat, long] = [0, 0];
+        Promise.all(photos).then(async (urls) => {
+            photos = urls;
+            const { address } = payload;
+            const geoCodeToken = 'pk.eyJ1IjoibWF0dGhld2dhaW0iLCJhIjoiY2xhYXN6ZnNhMGEzYzNwcnoycjBlZmlnMSJ9.VMZ9zv6-BBkRG_kcYx9naQ';
+            await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${geoCodeToken}`)
+            .then((resp) => resp.json())
+            .then((data) => {
+                lat = data.features[0].center[1];
+                long = data.features[0].center[0];
+            });
+            const response = await fetch('http://localhost:5000/post_rental', {
+                mode: 'cors',
+                method: "POST",
+                headers : { 
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    price: payload.price,
+                    bedrooms: payload.bedrooms,
+                    sharedBedroom: payload.sharedBedroom,
+                    bathrooms: payload.bathrooms,
+                    sharedBathroom: payload.sharedBathroom,
+                    description: payload.description ? payload.description : 'Description Unavailable',
+                    title: payload.title ? payload.title : 'Title Unavailable',
+                    preferences: payload.preferences,
+                    photos,
+                    address: payload.address,
+                    coords: {
+                        latitude: lat,
+                        longitude: long,
+                    },
+                    poster: payload.poster,
+                    date: payload.date,
+                })}
+            );
+            try{
+                const results = await response.json();
+                dispatch(getRentalsAPI());
+            } catch (error) {
+                console.log(error);
+                alert("Problem creating rental post");
+            }
+        });
+    }
 }
 
 export function postRoommate(payload) {
-    let photos = [];
-    for (const img of payload.photos) {
-        photos.push(uploadImage(img));
-    }
-    Promise.all(photos).then(async (urls) => {
-        photos = urls;
-
-        const response = await fetch('http://localhost:5000/post_roommate', {
-            mode: 'cors',
-            method: "POST",
-            headers : { 
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                price: payload.price,
-                bedrooms: payload.bedrooms,
-                sharedBedroom: payload.sharedBedroom,
-                bathrooms: payload.bathrooms,
-                sharedBathroom: payload.sharedBathroom,
-                description: payload.description ? payload.description : 'Description Unavailable',
-                title: payload.title ? payload.title : 'Title Unavailable',
-                preferences: payload.preferences,
-                photos,
-                address: payload.address,
-                coords: {
-                    latitude: payload.coords.latitude,
-                    longitude: payload.coords.longitude,
-                },
-                poster: payload.poster,
-                date: payload.date,
-            })}
-        );
-        try{
-            const results = await response.json();
-        } catch (error) {
-            console.log(error);
-            alert("Problem creating the post");
+    return (dispatch) => {
+        let photos = [];
+        for (const img of payload.photos) {
+            photos.push(uploadImage(img));
         }
-    });
+        Promise.all(photos).then(async (urls) => {
+            photos = urls;
+
+            const response = await fetch('http://localhost:5000/post_roommate', {
+                mode: 'cors',
+                method: "POST",
+                headers : { 
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    price: payload.price,
+                    bedrooms: payload.bedrooms,
+                    sharedBedroom: payload.sharedBedroom,
+                    bathrooms: payload.bathrooms,
+                    sharedBathroom: payload.sharedBathroom,
+                    description: payload.description ? payload.description : 'Description Unavailable',
+                    title: payload.title ? payload.title : 'Title Unavailable',
+                    preferences: payload.preferences,
+                    photos,
+                    address: payload.address,
+                    coords: {
+                        latitude: payload.coords.latitude,
+                        longitude: payload.coords.longitude,
+                    },
+                    poster: payload.poster,
+                    date: payload.date,
+                })}
+            );
+            try{
+                const results = await response.json();
+                dispatch(getRoommatesAPI());
+            } catch (error) {
+                console.log(error);
+                alert("Problem posting roommate advertisement");
+            }
+        });
+    }
 }
 
 export function getOtherUser(uid) {
@@ -555,6 +562,7 @@ export function getOtherUser(uid) {
             dispatch(setOtherUser(user));
         } catch (error) {
             dispatch(setOtherUser(null));
+            alert("Problem getting user info");
         }
     };
 }
@@ -581,7 +589,7 @@ export async function postExperience(target_uid, message, when) {
         const results = await response.json();
     } catch (error) {
         console.log(error);
-        alert("Problem creating the post");
+        alert("Problem posting your experience");
     }
 }
 
@@ -602,7 +610,7 @@ export async function updateProfileData(newProfileData) {
         const results = await response.json();
     } catch (error) {
         console.log(error);
-        alert("Problem creating the post");
+        alert("Problem updating profile data");
     }
 }
 
@@ -625,6 +633,6 @@ export async function saveProperty(key, save) {
         const results = await response.json();
     } catch (error) {
         console.log(error);
-        alert("Problem creating the post");
+        alert("Problem saving the rental");
     }
 }
