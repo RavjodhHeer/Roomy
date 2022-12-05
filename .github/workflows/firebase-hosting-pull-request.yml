@@ -28,7 +28,6 @@ jobs:
         with:
           entryPoint: "./Roomy"
           node-version: ${{ matrix.node-version }}
-      - run: cd ./Roomy
-      - run: npm ci
+      - run: cd ./Roomy && npm ci
       - run: npm run build --if-present
       - run: npm run test
