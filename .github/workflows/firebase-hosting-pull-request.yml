@@ -16,3 +16,16 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ROOMY_2D029 }}'
           projectId: roomy-2d029
           entryPoint: "./Roomy"
+  run_react_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          entryPoint: "./Roomy"
+          node-version: ${{ matrix.node-version }}
+      - run: cd ./Roomy && npm ci && npm run build && npm run test
