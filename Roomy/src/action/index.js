@@ -182,32 +182,32 @@ export function postArticleAPI(payload) {
                 },
                 (err) => alert(err),
                 async () => {
-                    const downloadURL = await upload.snapshot.ref.getDownloadURL();
-                    const response = await fetch(`${serverURL}/post_article`, {
-                        mode: 'cors',
-                        method: "POST",
-                        headers : { 
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            actor: {
-                                description: payload.user.email,
-                                title: payload.user.displayName,
-                                date: payload.timestamp,
-                                image: payload.user.photoURL,
-                                uid: auth.currentUser.uid,
+                    try {
+                        const downloadURL = await upload.snapshot.ref.getDownloadURL();
+                        const response = await fetch(`${serverURL}/post_article`, {
+                            mode: 'cors',
+                            method: "POST",
+                            headers : { 
+                                'Content-Type': 'application/json',
                             },
-                            video: payload.video,
-                            sharedImg: downloadURL,
-                            likes: {
-                                count: 0,
-                                whoLiked: [],
-                            },
-                            comments: 0,
-                            description: payload.description,
-                        })}
-                    );
-                    try{
+                            body: JSON.stringify({
+                                actor: {
+                                    description: payload.user.email,
+                                    title: payload.user.displayName,
+                                    date: payload.timestamp,
+                                    image: payload.user.photoURL,
+                                    uid: auth.currentUser.uid,
+                                },
+                                video: payload.video,
+                                sharedImg: downloadURL,
+                                likes: {
+                                    count: 0,
+                                    whoLiked: [],
+                                },
+                                comments: 0,
+                                description: payload.description,
+                            })}
+                        );
                         const results = await response.json();
                     } catch (error) {
                         console.log(error);
@@ -218,31 +218,31 @@ export function postArticleAPI(payload) {
             );
         } else if (payload.video) {
             dispatch(setLoading(true));
-            const response = await fetch(`${serverURL}/post_article`, {
-                mode: 'cors',
-                method: "POST",
-                headers : { 
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    actor: {
-                        description: payload.user.email,
-                        title: payload.user.displayName,
-                        date: payload.timestamp,
-                        image: payload.user.photoURL,
-                        uid: auth.currentUser.uid,
+            try {
+                const response = await fetch(`${serverURL}/post_article`, {
+                    mode: 'cors',
+                    method: "POST",
+                    headers : { 
+                        'Content-Type': 'application/json',
                     },
-                    video: payload.video,
-                    sharedImg: '',
-                    likes: {
-                        count: 0,
-                        whoLiked: [],
-                    },
-                    comments: 0,
-                    description: payload.description,
-                })}
-            );
-            try{
+                    body: JSON.stringify({
+                        actor: {
+                            description: payload.user.email,
+                            title: payload.user.displayName,
+                            date: payload.timestamp,
+                            image: payload.user.photoURL,
+                            uid: auth.currentUser.uid,
+                        },
+                        video: payload.video,
+                        sharedImg: '',
+                        likes: {
+                            count: 0,
+                            whoLiked: [],
+                        },
+                        comments: 0,
+                        description: payload.description,
+                    })}
+                );
                 const results = await response.json();
             } catch (error) {
                 console.log(error);
@@ -251,31 +251,31 @@ export function postArticleAPI(payload) {
             dispatch(setLoading(false));
         } else if (payload.image === '' && payload.video === '') {
             dispatch(setLoading(true));
-            const response = await fetch(`${serverURL}/post_article`, {
-                mode: 'cors', // no-cors, *cors, same-origin
-                method: "POST",
-                headers : { 
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    actor: {
-                        description: payload.user.email,
-                        title: payload.user.displayName,
-                        date: payload.timestamp,
-                        image: payload.user.photoURL,
-                        uid: auth.currentUser.uid,
+            try {
+                const response = await fetch(`${serverURL}/post_article`, {
+                    mode: 'cors',
+                    method: "POST",
+                    headers : { 
+                        'Content-Type': 'application/json',
                     },
-                    video: '',
-                    sharedImg: '',
-                    likes: {
-                        count: 0,
-                        whoLiked: [],
-                    },
-                    comments: 0,
-                    description: payload.description,
-                })}
-            );
-            try{
+                    body: JSON.stringify({
+                        actor: {
+                            description: payload.user.email,
+                            title: payload.user.displayName,
+                            date: payload.timestamp,
+                            image: payload.user.photoURL,
+                            uid: auth.currentUser.uid,
+                        },
+                        video: '',
+                        sharedImg: '',
+                        likes: {
+                            count: 0,
+                            whoLiked: [],
+                        },
+                        comments: 0,
+                        description: payload.description,
+                    })}
+                );
                 const results = await response.json();
             } catch (error) {
                 console.log(error);
@@ -291,8 +291,8 @@ export function getArticlesAPI(pid = null) {
     return async (dispatch) => {
         dispatch(setLoading(true));
         if (pid === null) { // Post on home page
-            const response = await fetch(`${serverURL}/get_articles`);
-            try{
+            try {
+                const response = await fetch(`${serverURL}/get_articles`);
                 const results = await response.json();
                 const posts = results.posts;
                 posts.map((post)=>{
@@ -306,14 +306,14 @@ export function getArticlesAPI(pid = null) {
             }
             dispatch(setLoading(false));
         } else { // Post on its own page
-            const data = new FormData();
-            data.append("pid", pid);
-            const response = await fetch(`${serverURL}/get_single_article`, {
-                mode: 'cors', // no-cors, *cors, same-origin
-                method: "POST",
-                body: data
-            });
-            try{
+            try {
+                const data = new FormData();
+                data.append("pid", pid);
+                const response = await fetch(`${serverURL}/get_single_article`, {
+                    mode: 'cors',
+                    method: "POST",
+                    body: data
+                });
                 const results = await response.json();
                 const posts = results.posts;
                 posts.actor.date = new Date(posts.actor.date);
@@ -330,18 +330,18 @@ export function getArticlesAPI(pid = null) {
 
 export function updateArticleAPI(payload, onSinglePostPage) {
     return async (dispatch) => {
-        const response = await fetch(`${serverURL}/update_article`, {
-            mode: 'cors',
-            method: "POST",
-            headers : { 
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                pid: payload.id,
-                update: payload.update,
-            })}
-        );
-        try{
+        try {
+            const response = await fetch(`${serverURL}/update_article`, {
+                mode: 'cors',
+                method: "POST",
+                headers : { 
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pid: payload.id,
+                    update: payload.update,
+                })}
+            );
             const results = await response.json();
             dispatch(getArticlesAPI(onSinglePostPage ? payload.id : null));
         } catch (error) {
@@ -354,8 +354,8 @@ export function updateArticleAPI(payload, onSinglePostPage) {
 export function getRentalsAPI() {
     return async (dispatch) => {
         dispatch(setLoading(true));
-        const response = await fetch(`${serverURL}/get_rentals`);
-        try{
+        try {
+            const response = await fetch(`${serverURL}/get_rentals`);
             const results = await response.json();
             const rentals = results.rentals;
             rentals.map((x)=>{
@@ -363,8 +363,8 @@ export function getRentalsAPI() {
             });
             const ids = results.ids;
             dispatch(getRentals(rentals, ids));
-
         } catch (error) {
+            console.log(error);
             alert("Problem loading posts");
         }
         dispatch(setLoading(false));
@@ -380,8 +380,8 @@ export function updateRentalsAPI(payload) {
 export function getRoommatesAPI() {
     return async (dispatch) => {
         dispatch(setLoading(true));
-        const response = await fetch(`${serverURL}/get_roommates`);
-        try{
+        try {
+            const response = await fetch(`${serverURL}/get_roommates`);
             const results = await response.json();
             const roommates = results.roommates;
             roommates.map((x)=>{
@@ -404,31 +404,30 @@ export function updateRoommatesAPI(payload) {
 }
 
 export async function setUserInfo(uid, userType, displayName, photoURL) {
-
-    const response = await fetch(`${serverURL}/set_user_info`, {
-        mode: 'cors',
-        method: "POST",
-        headers : { 
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            looking: true,
-            displayName,
-            status: userType || 'Renter',
-            uid,
-            photoURL,
-            experiences: [],
-            preferences: {
-                roomWith: '',
-                pets: '',
-                smoking: '',
+    try {
+        const response = await fetch(`${serverURL}/set_user_info`, {
+            mode: 'cors',
+            method: "POST",
+            headers : { 
+                'Content-Type': 'application/json',
             },
-            phoneNumber: '',
-            gender: '',
-            bio: '',
-        })}
-    );
-    try{
+            body: JSON.stringify({
+                looking: true,
+                displayName,
+                status: userType || 'Renter',
+                uid,
+                photoURL,
+                experiences: [],
+                preferences: {
+                    roomWith: '',
+                    pets: '',
+                    smoking: '',
+                },
+                phoneNumber: '',
+                gender: '',
+                bio: '',
+            })}
+        );
         const results = await response.json();
     } catch (error) {
         console.log(error);
@@ -470,32 +469,32 @@ export function postRental(payload) {
                 lat = data.features[0].center[1];
                 long = data.features[0].center[0];
             });
-            const response = await fetch(`${serverURL}/post_rental`, {
-                mode: 'cors',
-                method: "POST",
-                headers : { 
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    price: payload.price,
-                    bedrooms: payload.bedrooms,
-                    sharedBedroom: payload.sharedBedroom,
-                    bathrooms: payload.bathrooms,
-                    sharedBathroom: payload.sharedBathroom,
-                    description: payload.description ? payload.description : 'Description Unavailable',
-                    title: payload.title ? payload.title : 'Title Unavailable',
-                    preferences: payload.preferences,
-                    photos,
-                    address: payload.address,
-                    coords: {
-                        latitude: lat,
-                        longitude: long,
+            try {
+                const response = await fetch(`${serverURL}/post_rental`, {
+                    mode: 'cors',
+                    method: "POST",
+                    headers : { 
+                        'Content-Type': 'application/json',
                     },
-                    poster: payload.poster,
-                    date: payload.date,
-                })}
-            );
-            try{
+                    body: JSON.stringify({
+                        price: payload.price,
+                        bedrooms: payload.bedrooms,
+                        sharedBedroom: payload.sharedBedroom,
+                        bathrooms: payload.bathrooms,
+                        sharedBathroom: payload.sharedBathroom,
+                        description: payload.description ? payload.description : 'Description Unavailable',
+                        title: payload.title ? payload.title : 'Title Unavailable',
+                        preferences: payload.preferences,
+                        photos,
+                        address: payload.address,
+                        coords: {
+                            latitude: lat,
+                            longitude: long,
+                        },
+                        poster: payload.poster,
+                        date: payload.date,
+                    })}
+                );
                 const results = await response.json();
                 dispatch(getRentalsAPI());
             } catch (error) {
@@ -514,33 +513,32 @@ export function postRoommate(payload) {
         }
         Promise.all(photos).then(async (urls) => {
             photos = urls;
-
-            const response = await fetch(`${serverURL}/post_roommate`, {
-                mode: 'cors',
-                method: "POST",
-                headers : { 
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    price: payload.price,
-                    bedrooms: payload.bedrooms,
-                    sharedBedroom: payload.sharedBedroom,
-                    bathrooms: payload.bathrooms,
-                    sharedBathroom: payload.sharedBathroom,
-                    description: payload.description ? payload.description : 'Description Unavailable',
-                    title: payload.title ? payload.title : 'Title Unavailable',
-                    preferences: payload.preferences,
-                    photos,
-                    address: payload.address,
-                    coords: {
-                        latitude: payload.coords.latitude,
-                        longitude: payload.coords.longitude,
+            try {
+                const response = await fetch(`${serverURL}/post_roommate`, {
+                    mode: 'cors',
+                    method: "POST",
+                    headers : { 
+                        'Content-Type': 'application/json',
                     },
-                    poster: payload.poster,
-                    date: payload.date,
-                })}
-            );
-            try{
+                    body: JSON.stringify({
+                        price: payload.price,
+                        bedrooms: payload.bedrooms,
+                        sharedBedroom: payload.sharedBedroom,
+                        bathrooms: payload.bathrooms,
+                        sharedBathroom: payload.sharedBathroom,
+                        description: payload.description ? payload.description : 'Description Unavailable',
+                        title: payload.title ? payload.title : 'Title Unavailable',
+                        preferences: payload.preferences,
+                        photos,
+                        address: payload.address,
+                        coords: {
+                            latitude: payload.coords.latitude,
+                            longitude: payload.coords.longitude,
+                        },
+                        poster: payload.poster,
+                        date: payload.date,
+                    })}
+                );
                 const results = await response.json();
                 dispatch(getRoommatesAPI());
             } catch (error) {
@@ -553,14 +551,14 @@ export function postRoommate(payload) {
 
 export function getOtherUser(uid) {
     return async (dispatch) => {
-        const data = new FormData();
-        data.append("uid", uid);
-        const response = await fetch(`${serverURL}/get_other_user`, {
-            mode: 'cors', // no-cors, *cors, same-origin
-            method: "POST",
-            body: data
-        });
-        try{
+        try {
+            const data = new FormData();
+            data.append("uid", uid);
+            const response = await fetch(`${serverURL}/get_other_user`, {
+                mode: 'cors',
+                method: "POST",
+                body: data
+            });
             const user = await response.json();
             dispatch(setOtherUser(user));
         } catch (error) {
@@ -571,24 +569,24 @@ export function getOtherUser(uid) {
 }
 
 export async function postExperience(target_uid, message, when) {
-    const data = {
-        experience: message,
-        when,
-        uid: auth.currentUser.uid,
-        displayName: auth.currentUser.displayName,
-    };
-    const response = await fetch(`${serverURL}/post_experience`, {
-        mode: 'cors',
-        method: "POST",
-        headers : { 
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            target_uid: target_uid,
-            exp: data
-        })}
-    );
-    try{
+    try {
+        const data = {
+            experience: message,
+            when,
+            uid: auth.currentUser.uid,
+            displayName: auth.currentUser.displayName,
+        };
+        const response = await fetch(`${serverURL}/post_experience`, {
+            mode: 'cors',
+            method: "POST",
+            headers : { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                target_uid: target_uid,
+                exp: data
+            })}
+        );
         const results = await response.json();
     } catch (error) {
         console.log(error);
@@ -598,18 +596,18 @@ export async function postExperience(target_uid, message, when) {
 
 export async function updateProfileData(newProfileData) {
     const { uid } = auth.currentUser;
-    const response = await fetch(`${serverURL}/update_profile_data`, {
-        mode: 'cors',
-        method: "POST",
-        headers : { 
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            uid: uid,
-            profile: newProfileData
-        })}
-    );
-    try{
+    try {
+        const response = await fetch(`${serverURL}/update_profile_data`, {
+            mode: 'cors',
+            method: "POST",
+            headers : { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                uid: uid,
+                profile: newProfileData
+            })}
+        );
         const results = await response.json();
     } catch (error) {
         console.log(error);
@@ -620,19 +618,19 @@ export async function updateProfileData(newProfileData) {
 // Save : Boolean (True -> Add, False -> Remove)
 export async function saveProperty(key, save) {
     const { uid } = auth.currentUser;
-    const response = await fetch(`${serverURL}/save_property`, {
-        mode: 'cors',
-        method: "POST",
-        headers : { 
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            uid: uid,
-            key: key,
-            save: save,
-        })}
-    );
-    try{
+    try {
+        const response = await fetch(`${serverURL}/save_property`, {
+            mode: 'cors',
+            method: "POST",
+            headers : { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                uid: uid,
+                key: key,
+                save: save,
+            })}
+        );
         const results = await response.json();
     } catch (error) {
         console.log(error);
