@@ -253,7 +253,7 @@ export function postArticleAPI(payload) {
             dispatch(setLoading(true));
             try {
                 const response = await fetch(`${serverURL}/post_article`, {
-                    mode: 'cors', // no-cors, *cors, same-origin
+                    mode: 'cors',
                     method: "POST",
                     headers : { 
                         'Content-Type': 'application/json',
