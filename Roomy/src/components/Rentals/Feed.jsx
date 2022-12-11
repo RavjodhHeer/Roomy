@@ -228,8 +228,10 @@ function Feed(props) {
     useEffect(()=>{
         if(props.user && props.user.userInfo){
             const savedProperties = new Map();
-            for(let elem of userInfo.savedProperties){
-                savedProperties.set(elem, true);
+            if(userInfo.savedProperties){
+                for(let elem of userInfo.savedProperties){
+                    savedProperties.set(elem, true);
+                }
             }
             setBookmarkMap(savedProperties);
         }
