@@ -70,7 +70,7 @@ function ImageDisplay({ images }) {
                 {' '} 
                 {length}
             </Indicator>
-            <img src={images[current]} alt="" style={{ width: '100%', height: 'auto' }} />
+            <img src={images ? images[current] : '/images/no-image-available.png'} alt="" style={{ width: '100%', height: 'auto' }} />
         </Container>
     );
 }

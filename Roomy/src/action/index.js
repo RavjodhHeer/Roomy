@@ -616,24 +616,27 @@ export async function updateProfileData(newProfileData) {
 }
 
 // Save : Boolean (True -> Add, False -> Remove)
-export async function saveProperty(key, save) {
-    const { uid } = auth.currentUser;
-    try {
-        const response = await fetch(`${serverURL}/save_property`, {
-            mode: 'cors',
-            method: "POST",
-            headers : { 
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                uid: uid,
-                key: key,
-                save: save,
-            })}
-        );
-        const results = await response.json();
-    } catch (error) {
-        console.log(error);
-        alert("Problem saving the rental");
-    }
+export function saveProperty(key, save) {
+    return async (dispatch) => {
+        const { uid } = auth.currentUser;
+        try {
+            const response = await fetch(`${serverURL}/save_property`, {
+                mode: 'cors',
+                method: "POST",
+                headers : { 
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    uid: uid,
+                    key: key,
+                    save: save,
+                })}
+            );
+            const results = await response.json();
+            dispatch(getRentalsAPI());
+        } catch (error) {
+            console.log(error);
+            alert("Problem saving the rental");
+        }
+    };
 }

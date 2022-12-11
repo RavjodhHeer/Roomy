@@ -4,6 +4,7 @@ import { saveProperty } from '../../action'; // Like handler in the future
 import { displayTime } from '../../action/commonFunctions';
 import RentalPostalModal from './RentalPostalModal';
 import ImageDisplay from '../Misc/ImageDisplay';
+import { connect } from 'react-redux';
 
 const Container = styled.div`
     flex-direction: column;
@@ -218,12 +219,23 @@ const Body = styled.div`
 
 function Feed(props) {
     const [showModal, setShowModal] = useState('close');
-    const [bookmarkMap, setBookmarkMap] = useState([]);
-
+    const [bookmarkMap, setBookmarkMap] = useState(new Map());
+    const [done, setDone] = useState(false);
     const user = props ? props.user : null;
     const userInfo = user ? user.userInfo : null;
-    const savedProperties = userInfo ? userInfo.savedProperties : null;
     const photoUrl = user ? user.photoURL : '/images/photo.svg';
+
+    useEffect(()=>{
+        if(props.user && props.user.userInfo){
+            const savedProperties = new Map();
+            if(userInfo.savedProperties){
+                for(let elem of userInfo.savedProperties){
+                    savedProperties.set(elem, true);
+                }
+            }
+            setBookmarkMap(savedProperties);
+        }
+    },[props.user]);
 
     useEffect(() => {
         const element = document.getElementById(props.scrollKey);
@@ -250,16 +262,16 @@ function Feed(props) {
         }
     };
 
-    const bookmarkOnClickHandler = (id, key) => {
-        bookmarkMap[key] === '/images/bookmark-filled.svg' ? saveProperty(id, 'False') : saveProperty(id, 'True');
-        const newimage = bookmarkMap[key] === '/images/bookmark-unfilled.svg' ? '/images/bookmark-filled.svg' : '/images/bookmark-unfilled.svg';
-        const nextMap = bookmarkMap.map((img, index) => {
-            if (index === key) {
-                return newimage;
-            }
-            return img;
-        });
-        setBookmarkMap(nextMap);
+    const bookmarkOnClickHandler = (id) => {
+        const temp_savedProperties = bookmarkMap;
+        if(temp_savedProperties.get(id)){
+            props.saveProperty(id, 'False');
+            temp_savedProperties.delete(id);
+        } else {
+            props.saveProperty(id, 'True');
+            temp_savedProperties.set(id, true);
+        }
+        setBookmarkMap(temp_savedProperties);
     };
 
     return (
@@ -290,10 +302,8 @@ function Feed(props) {
                                      </div>
                                  </a>
                                  <button
-                                     onLoad={savedProperties === null || bookmarkMap[key] ? console.log('Need to wait for DB') : setBookmarkMap(bookmarkMap[key] = (savedProperties && savedProperties.includes(props.ids[key])) ? '/images/bookmark-filled.svg' : '/images/bookmark-unfilled.svg')}
-                                     onClick={() => bookmarkOnClickHandler(props.ids[key], key)}
-                                 >
-                                     {bookmarkMap[key] && <img src={bookmarkMap[key]} width="85%" height="85%" alt="" />}
+                                    onClick={() => bookmarkOnClickHandler(props.ids[key])}>
+                                     {<img src={bookmarkMap.get(props.ids[key]) ? '/images/bookmark-filled.svg' : '/images/bookmark-unfilled.svg'} width="85%" height="85%" alt="" />}
                                  </button>
                              </Header>
                              <Description>{rental.description}</Description>
@@ -321,4 +331,10 @@ function Feed(props) {
     );
 }
 
-export default Feed;
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = (dispatch) => ({
+    saveProperty: (id, save) => dispatch(saveProperty(id, save)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feed);
