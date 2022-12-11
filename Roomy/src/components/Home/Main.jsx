@@ -26,6 +26,16 @@ const CommonBox = styled.div`
     box-shadow: 0 0 3px #999, 0 0 0 rgb(0 0 0 / 20%);
 `;
 
+const LoadingBox = styled.div`
+    top: 50px;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    position: relative;
+    border: none;
+`;
+
 const ShareBox = styled(CommonBox)`
     display: flex;
     flex-direction: column;
@@ -290,7 +300,11 @@ function Main(props) {
                 </div>
             </ShareBox>
             <Content>
-                {props.loading && <img src="/images/spin-loader.gif" alt="" />}
+                {props.loading && 
+                    <LoadingBox>
+                        <img src='/images/spin-loader.gif' alt="" />
+                    </LoadingBox>
+                }
                 {props.articles.length > 0
                     && props.articles.map((article, key) => (
                         <Article key={key}>
