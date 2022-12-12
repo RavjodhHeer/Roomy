@@ -8,6 +8,12 @@ module.exports = {
         'react': {
             'version' : 'detect'
         },
+        'import/resolver': {
+            'node': {
+              'paths': ['src'],
+              'extensions': ['.js', '.jsx', '.css']
+            }
+          }
     },
     'extends': [
         'eslint:recommended',
@@ -18,7 +24,7 @@ module.exports = {
             'jsx': true
         },
         'ecmaVersion': 12,
-        'sourceType': 'module'
+        'sourceType': 'module',
     },
     'plugins': [
         'react'
