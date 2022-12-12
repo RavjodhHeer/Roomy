@@ -26,7 +26,7 @@ test('\'Get roommates\' request, should return back 200 status code', async () =
     const data = new FormData();
     const response = await fetch(`${serverURL}/get_roommates`, {
         mode: 'cors', // no-cors, *cors, same-origin
-        method: "GET",
+        method: 'GET',
     });
     expect(response.status).toEqual(200);
 });
@@ -35,17 +35,17 @@ test('\'Get rentals\' request, should return back 200 status code', async () => 
     const data = new FormData();
     const response = await fetch(`${serverURL}/get_rentals`, {
         mode: 'cors', // no-cors, *cors, same-origin
-        method: "GET",
+        method: 'GET',
     });
     expect(response.status).toEqual(200);
 });
 
 test('Get non-existent article request, should return back 200 status code since front-end deals with empty values', async () => {
     const data = new FormData();
-    data.append("pid", 100);
+    data.append('pid', 100);
     const response = await fetch(`${serverURL}/get_single_article`, {
         mode: 'cors', // no-cors, *cors, same-origin
-        method: "POST",
+        method: 'POST',
         body:data,
     });
     expect(response.status).toEqual(200);

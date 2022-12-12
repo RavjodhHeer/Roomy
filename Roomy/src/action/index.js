@@ -186,7 +186,7 @@ export function postArticleAPI(payload) {
                         const downloadURL = await upload.snapshot.ref.getDownloadURL();
                         const response = await fetch(`${serverURL}/post_article`, {
                             mode: 'cors',
-                            method: "POST",
+                            method: 'POST',
                             headers : { 
                                 'Content-Type': 'application/json',
                             },
@@ -211,7 +211,7 @@ export function postArticleAPI(payload) {
                         const results = await response.json();
                     } catch (error) {
                         console.log(error);
-                        alert("Problem creating the post");
+                        alert('Problem creating the post');
                     }
                     dispatch(setLoading(false));
                 },
@@ -221,7 +221,7 @@ export function postArticleAPI(payload) {
             try {
                 const response = await fetch(`${serverURL}/post_article`, {
                     mode: 'cors',
-                    method: "POST",
+                    method: 'POST',
                     headers : { 
                         'Content-Type': 'application/json',
                     },
@@ -246,7 +246,7 @@ export function postArticleAPI(payload) {
                 const results = await response.json();
             } catch (error) {
                 console.log(error);
-                alert("Problem creating the post");
+                alert('Problem creating the post');
             }
             dispatch(setLoading(false));
         } else if (payload.image === '' && payload.video === '') {
@@ -254,7 +254,7 @@ export function postArticleAPI(payload) {
             try {
                 const response = await fetch(`${serverURL}/post_article`, {
                     mode: 'cors',
-                    method: "POST",
+                    method: 'POST',
                     headers : { 
                         'Content-Type': 'application/json',
                     },
@@ -279,7 +279,7 @@ export function postArticleAPI(payload) {
                 const results = await response.json();
             } catch (error) {
                 console.log(error);
-                alert("Problem creating the post");
+                alert('Problem creating the post');
             }
             dispatch(setLoading(false));
         }
@@ -302,16 +302,16 @@ export function getArticlesAPI(pid = null) {
                 dispatch(getArticles(posts, ids));
             } catch (error) {
                 console.log(error);
-                alert("Problem loading posts");
+                alert('Problem loading posts');
             }
             dispatch(setLoading(false));
         } else { // Post on its own page
             try {
                 const data = new FormData();
-                data.append("pid", pid);
+                data.append('pid', pid);
                 const response = await fetch(`${serverURL}/get_single_article`, {
                     mode: 'cors',
-                    method: "POST",
+                    method: 'POST',
                     body: data
                 });
                 const results = await response.json();
@@ -321,7 +321,7 @@ export function getArticlesAPI(pid = null) {
                 dispatch(getArticles([posts], [ids]));
             } catch (error) {
                 console.log(error);
-                alert("Problem loading posts");
+                alert('Problem loading posts');
             }
             dispatch(setLoading(false));
         }
@@ -333,7 +333,7 @@ export function updateArticleAPI(payload, onSinglePostPage) {
         try {
             const response = await fetch(`${serverURL}/update_article`, {
                 mode: 'cors',
-                method: "POST",
+                method: 'POST',
                 headers : { 
                     'Content-Type': 'application/json',
                 },
@@ -346,7 +346,7 @@ export function updateArticleAPI(payload, onSinglePostPage) {
             dispatch(getArticlesAPI(onSinglePostPage ? payload.id : null));
         } catch (error) {
             console.log(error);
-            alert("Problem updating the post");
+            alert('Problem updating the post');
         }
     };
 }
@@ -359,13 +359,13 @@ export function getRentalsAPI() {
             const results = await response.json();
             const rentals = results.rentals;
             rentals.map((x)=>{
-                x.date = new Date(x.date)
+                x.date = new Date(x.date);
             });
             const ids = results.ids;
             dispatch(getRentals(rentals, ids));
         } catch (error) {
             console.log(error);
-            alert("Problem loading posts");
+            alert('Problem loading posts');
         }
         dispatch(setLoading(false));
     };
@@ -385,13 +385,13 @@ export function getRoommatesAPI() {
             const results = await response.json();
             const roommates = results.roommates;
             roommates.map((x)=>{
-                x.date = new Date(x.date)
+                x.date = new Date(x.date);
             });
             const ids = results.ids;
             dispatch(getRoommates(roommates, ids));
 
         } catch (error) {
-            alert("Problem loading posts");
+            alert('Problem loading posts');
         }
         dispatch(setLoading(false));
     };
@@ -407,7 +407,7 @@ export async function setUserInfo(uid, userType, displayName, photoURL) {
     try {
         const response = await fetch(`${serverURL}/set_user_info`, {
             mode: 'cors',
-            method: "POST",
+            method: 'POST',
             headers : { 
                 'Content-Type': 'application/json',
             },
@@ -431,7 +431,7 @@ export async function setUserInfo(uid, userType, displayName, photoURL) {
         const results = await response.json();
     } catch (error) {
         console.log(error);
-        alert("Problem setting user info");
+        alert('Problem setting user info');
     }
 }
 
@@ -464,15 +464,15 @@ export function postRental(payload) {
             const { address } = payload;
             const geoCodeToken = 'pk.eyJ1IjoibWF0dGhld2dhaW0iLCJhIjoiY2xhYXN6ZnNhMGEzYzNwcnoycjBlZmlnMSJ9.VMZ9zv6-BBkRG_kcYx9naQ';
             await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${geoCodeToken}`)
-            .then((resp) => resp.json())
-            .then((data) => {
-                lat = data.features[0].center[1];
-                long = data.features[0].center[0];
-            });
+                .then((resp) => resp.json())
+                .then((data) => {
+                    lat = data.features[0].center[1];
+                    long = data.features[0].center[0];
+                });
             try {
                 const response = await fetch(`${serverURL}/post_rental`, {
                     mode: 'cors',
-                    method: "POST",
+                    method: 'POST',
                     headers : { 
                         'Content-Type': 'application/json',
                     },
@@ -499,10 +499,10 @@ export function postRental(payload) {
                 dispatch(getRentalsAPI());
             } catch (error) {
                 console.log(error);
-                alert("Problem creating rental post");
+                alert('Problem creating rental post');
             }
         });
-    }
+    };
 }
 
 export function postRoommate(payload) {
@@ -516,7 +516,7 @@ export function postRoommate(payload) {
             try {
                 const response = await fetch(`${serverURL}/post_roommate`, {
                     mode: 'cors',
-                    method: "POST",
+                    method: 'POST',
                     headers : { 
                         'Content-Type': 'application/json',
                     },
@@ -543,27 +543,27 @@ export function postRoommate(payload) {
                 dispatch(getRoommatesAPI());
             } catch (error) {
                 console.log(error);
-                alert("Problem posting roommate advertisement");
+                alert('Problem posting roommate advertisement');
             }
         });
-    }
+    };
 }
 
 export function getOtherUser(uid) {
     return async (dispatch) => {
         try {
             const data = new FormData();
-            data.append("uid", uid);
+            data.append('uid', uid);
             const response = await fetch(`${serverURL}/get_other_user`, {
                 mode: 'cors',
-                method: "POST",
+                method: 'POST',
                 body: data
             });
             const user = await response.json();
             dispatch(setOtherUser(user));
         } catch (error) {
             dispatch(setOtherUser(null));
-            alert("Problem getting user info");
+            alert('Problem getting user info');
         }
     };
 }
@@ -578,7 +578,7 @@ export async function postExperience(target_uid, message, when) {
         };
         const response = await fetch(`${serverURL}/post_experience`, {
             mode: 'cors',
-            method: "POST",
+            method: 'POST',
             headers : { 
                 'Content-Type': 'application/json',
             },
@@ -590,7 +590,7 @@ export async function postExperience(target_uid, message, when) {
         const results = await response.json();
     } catch (error) {
         console.log(error);
-        alert("Problem posting your experience");
+        alert('Problem posting your experience');
     }
 }
 
@@ -599,7 +599,7 @@ export async function updateProfileData(newProfileData) {
     try {
         const response = await fetch(`${serverURL}/update_profile_data`, {
             mode: 'cors',
-            method: "POST",
+            method: 'POST',
             headers : { 
                 'Content-Type': 'application/json',
             },
@@ -611,7 +611,7 @@ export async function updateProfileData(newProfileData) {
         const results = await response.json();
     } catch (error) {
         console.log(error);
-        alert("Problem updating profile data");
+        alert('Problem updating profile data');
     }
 }
 
@@ -622,7 +622,7 @@ export function saveProperty(key, save) {
         try {
             const response = await fetch(`${serverURL}/save_property`, {
                 mode: 'cors',
-                method: "POST",
+                method: 'POST',
                 headers : { 
                     'Content-Type': 'application/json',
                 },
@@ -636,7 +636,7 @@ export function saveProperty(key, save) {
             dispatch(getRentalsAPI());
         } catch (error) {
             console.log(error);
-            alert("Problem saving the rental");
+            alert('Problem saving the rental');
         }
     };
 }

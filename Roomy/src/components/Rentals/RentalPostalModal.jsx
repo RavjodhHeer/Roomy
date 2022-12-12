@@ -282,7 +282,7 @@ function RentalPostalModal(props) {
                                         <p>
                                             <label htmlFor="imageFiles">Upload Images</label>
                                         </p>
-                                        {imageFiles && imageFiles.map((imgUrl) => <img src={URL.createObjectURL(imgUrl)} alt="" />)}
+                                        {imageFiles && imageFiles.map((imgUrl, key) => <img key={key} src={URL.createObjectURL(imgUrl)} alt="" />)}
                                     </UploadImage>
                                 ) : null}
                             </Editor>

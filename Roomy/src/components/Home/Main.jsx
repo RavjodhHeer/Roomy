@@ -295,7 +295,7 @@ function Main(props) {
                 <div>
                     {photoUrl ? <img src={photoUrl} alt="" /> : <img src="/images/user.svg" alt="" />}
                     <button onClick={clickHandler} disabled={!!props.loading}>
-                        What's on your mind?
+                        What&#39;s on your mind?
                     </button>
                 </div>
             </ShareBox>
@@ -352,7 +352,7 @@ function Main(props) {
                                 </button>
                                 <button onClick={() => {
                                     navigator.clipboard.writeText(`${window.location.origin}/post/${props.ids[key]}`);
-                                    alert("Copied to clipboard");
+                                    alert('Copied to clipboard');
                                 }}>
                                     <img src="/images/send-icon.svg" alt="" />
                                     <span>Share</span>

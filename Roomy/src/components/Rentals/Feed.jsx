@@ -302,7 +302,7 @@ function Feed(props) {
                                      </div>
                                  </a>
                                  <button
-                                    onClick={() => bookmarkOnClickHandler(props.ids[key])}>
+                                     onClick={() => bookmarkOnClickHandler(props.ids[key])}>
                                      {<img src={bookmarkMap.get(props.ids[key]) ? '/images/bookmark-filled.svg' : '/images/bookmark-unfilled.svg'} width="85%" height="85%" alt="" />}
                                  </button>
                              </Header>
