@@ -18,10 +18,15 @@ def get_other_user():
     Return other person's profile data on profile page
     """
     try:
-        curr_profile = db.collection(u'profiles').document(request.form['uid']).get()
-        return jsonify(curr_profile.to_dict()), 200
+        raw_profile = db.collection(u'profiles').document(request.form['uid']).get()
+        profile = raw_profile.to_dict()
+        for res in profile.get('experiences'): # Attach profile pics to experiences
+            uid = res.get('uid')
+            curr_profile = db.collection(u'profiles').document(uid).get()
+            res['profilePic'] = curr_profile.to_dict()[u'photoURL']
+        return jsonify(profile), 200
     except Exception as e:
-        return f"An error occured: {e}"
+        return jsonify({f"An error occured: {e}"}), 400
 
 @app.route('/get_rentals', methods=['POST','GET'])
 def get_rentals():
