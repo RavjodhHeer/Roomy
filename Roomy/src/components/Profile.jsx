@@ -7,6 +7,9 @@ import { getOtherUser, postExperience, updateProfileData } from '../action';
 import { formatPhoneNumber } from '../action/commonFunctions';
 import Sidebar from './Misc/Sidebar';
 import Header from './Misc/Header';
+import {FormControl, FormLabel, FormControlLabel, FormGroup, 
+    InputLabel, Input, RadioGroup, Radio, Switch, Divider, ListItem,
+    ListItemAvatar, Avatar, ListItemText, TextField} from '@mui/material';
 
 const Container = styled.div`
     grid-area: center;
@@ -120,22 +123,19 @@ const Title = styled.div`
     color: #8f2bb8;
 `;
 
-const SignIn = styled.a`
-    box-shadow: inset 0 0 0 1px #7822C7;
-    border-radius: 25px;
-    color: #7822C7;
-    font-size: 16px;
-    font-weight: 600;
-    transition-duration: 167ms;
-    line-height: 40px;
-    padding: 10px 25px;
-    text-align: center;
-    background-color: transparent;
-    &:hover {
-        background-color: rgba(112, 181, 249, 0.15);
-        box-shadow: inset 0 0 0 2px #7822C7;
-    }
-`;
+const PurpleTextField = styled(TextField)({
+    '& label.Mui-focused': {
+        color: 'purple',
+    },
+    '& .MuiInput-underline:after': {
+        borderBottomColor: 'purple',
+    },
+    '& .MuiOutlinedInput-root': {
+        '&.Mui-focused fieldset': {
+        borderColor: 'purple',
+        },
+    },
+});
 
 function Profile(props) {
     const user = props.user ? props.user : null;
@@ -143,7 +143,7 @@ function Profile(props) {
     const photoUrl = otherUser ? otherUser.photoURL : '/images/photo.svg';
     const myUID = props.user ? props.user.uid : null;
     const [userType, setUserType] = useState('Renter');
-    const [info, changeBio] = useState('About You');
+    const [info, changeBio] = useState('');
     const [editMode, setEditMode] = useState(false);
     const { id } = useParams();
 
@@ -248,15 +248,16 @@ function Profile(props) {
                     </UserInfo>
                 </ArtCard>
                 {/* Make profile public / private */}
-                {editMode
-                    && (
-                        <CommunityCard>
-                            <Title>Profile Visibility</Title>
-                            <span>
-                                <SignIn onClick={() => setProfileVisibility(!visibility)}>{visibility ? 'Make Profile Private' : 'Make Profile Public'}</SignIn>
-                            </span>
-                        </CommunityCard>
-                    )}
+                {editMode && (
+                    <CommunityCard>
+                        <Title>Profile Visibility</Title>
+                        <span>
+                            <FormGroup sx={{ m: 2 }}>
+                                <FormControlLabel control={<Switch checked={visibility} onChange={(e)=>setProfileVisibility(e.target.checked)} />} label={visibility ? "Public" : "Private" } />
+                            </FormGroup>
+                        </span>
+                    </CommunityCard>
+                )}
                 { visibility || (otherUser && user && otherUser.uid === user.uid) ? (
                     <>
                         <CommunityCard>
@@ -285,16 +286,25 @@ function Profile(props) {
                                             && (
                                                 <>
                                                     <div>
-                                                        <h2>Bio:</h2>
-                                                        <textarea type="text" placeholder="Edit Bio" value={info} onChange={(e) => changeBio(e.target.value)} id="bio" />
+                                                        <PurpleTextField multiline label="Bio" margin="dense" placeholder='Tell Us About Yourself' variant="outlined" value={info} onChange={(e) => changeBio(e.target.value)} id="bio" />
                                                     </div>
                                                     <div>
-                                                        <h2>Phone Number:</h2>
-                                                        <input type="number" placeholder="Edit Bio" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} id="phoneNumber" />
+                                                        <PurpleTextField label="Phone Number" margin="dense" placeholder='1112223333' variant="outlined" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} id="phoneNumber" />
                                                     </div>
                                                     <div>
-                                                        <h2>I identify as:</h2>
-                                                        <input type="text" placeholder="Your Gender" value={gender} onChange={(e) => setGender(e.target.value)} id="gender" />
+                                                        <FormControl margin="dense" color="secondary">
+                                                            <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel>
+                                                            <RadioGroup
+                                                                aria-labelledby="demo-controlled-radio-buttons-group"
+                                                                name="controlled-radio-buttons-group"
+                                                                value={gender}
+                                                                onChange={(e) => setGender(e.target.value)}
+                                                            >
+                                                                <FormControlLabel value="Female" control={<Radio color='secondary'/>} label="Female" />
+                                                                <FormControlLabel value="Male" control={<Radio color='secondary'/>} label="Male" />
+                                                                <FormControlLabel value="Non-Binary" control={<Radio color='secondary'/>} label="Non-Binary" />
+                                                            </RadioGroup>
+                                                        </FormControl>
                                                     </div>
                                                 </>
                                             )}
@@ -338,16 +348,22 @@ function Profile(props) {
                                             && (
                                                 <>
                                                     <div>
-                                                        <h2>Prefers to room with:</h2>
-                                                        <input type="text" placeholder="Male / Female / Any" value={roomWith} onChange={(e) => setRoomWith(e.target.value)} />
+                                                        <FormControl color="secondary" variant="standard" margin='dense' style={{width:'15%'}}>
+                                                            <InputLabel shrink htmlFor="component-helper">Roommate Gender</InputLabel>
+                                                            <Input id="component-helper" placeholder='Male / Female / Any' aria-describedby="component-helper-text" value={roomWith} onChange={(e) => setRoomWith(e.target.value)} />
+                                                        </FormControl>
                                                     </div>
                                                     <div>
-                                                        <h2>Are you OK with pets? / Do you have any?</h2>
-                                                        <textarea type="text" placeholder="Are you OK with pets? / Do you have any?" value={pets} onChange={(e) => setPets(e.target.value)} />
+                                                        <FormControl color="secondary" variant="standard" margin='dense' style={{width:'15%'}}>
+                                                            <InputLabel shrink htmlFor="component-helper">Pets</InputLabel>
+                                                            <Input id="component-helper" placeholder='Are you OK with pets? / Do you have any?' aria-describedby="component-helper-text" value={pets} onChange={(e) => setPets(e.target.value)} />
+                                                        </FormControl>
                                                     </div>
                                                     <div>
-                                                        <h2>Do you want to live with a smoker?</h2>
-                                                        <input type="text" placeholder="Yes / No" value={smoking} onChange={(e) => setSmoking(e.target.value)} />
+                                                        <FormControl color="secondary" variant="standard" margin='dense' style={{width:'15%'}}>
+                                                            <InputLabel shrink htmlFor="component-helper">Smokers</InputLabel>
+                                                            <Input id="component-helper" placeholder='Are you OK with living with smokers?' aria-describedby="component-helper-text" value={smoking} onChange={(e) => setSmoking(e.target.value)} />
+                                                        </FormControl>
                                                     </div>
                                                 </>
                                             )}
@@ -379,32 +395,26 @@ function Profile(props) {
                                     </span>
                                 </a>
                             )}
-                            {otherUser && otherUser.experiences && otherUser.experiences.length
-                                ? (
-                                    <>
-                                        {otherUser.experiences.map((exp, index) => (
-                                            <a key={index}>
-                                                <span>
-                                                    Poster:
-                                                    {exp.displayName}
-                                                </span>
-                                                <h3>
-                                                    Experience:
-                                                    {exp.experience}
-                                                </h3>
-                                                <span>
-                                                    When:
-                                                    {exp.when}
-                                                </span>
-                                            </a>
-                                        ))}
-                                    </>
-                                )
-                                : (
-                                    <a>
-                                        <span>No Experiences Listed</span>
-                                    </a>
-                                )}
+                            {otherUser && otherUser.experiences && otherUser.experiences.length ? (
+                                <>
+                                    {otherUser.experiences.map((exp, index) => (
+                                        <div key={index}>
+                                            <ListItem>
+                                                <ListItemAvatar>
+                                                    <Avatar src={exp.profilePic} />
+                                                </ListItemAvatar>
+                                                <ListItemText primary={exp.displayName} secondary={exp.experience} />
+                                                <p>When: {exp.when}</p>
+                                            </ListItem>
+                                            <Divider />
+                                        </div>
+                                    ))}
+                                </>
+                            ) : (
+                                <a>
+                                    <span>No Experiences Listed</span>
+                                </a>
+                            )}
                         </CommunityCard>
                     </>
                 )
