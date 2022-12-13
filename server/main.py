@@ -13,6 +13,10 @@ db = firestore.client()
 
 @app.route('/get_other_user', methods=['POST','GET'])
 def get_other_user():
+    """
+    Request Input: uid (string)\n
+    Return other person's profile data on profile page
+    """
     try:
         curr_profile = db.collection(u'profiles').document(request.form['uid']).get()
         return jsonify(curr_profile.to_dict()), 200
@@ -21,6 +25,9 @@ def get_other_user():
 
 @app.route('/get_rentals', methods=['POST','GET'])
 def get_rentals():
+    """
+    Return all available rentals
+    """
     try:
         query = db.collection(u'rentals').order_by(u'date', direction=firestore.Query.DESCENDING)
         results = query.stream()
@@ -41,6 +48,9 @@ def get_rentals():
 
 @app.route('/get_roommates', methods=['POST','GET'])
 def get_roommates():
+    """
+    Return all available roommates
+    """
     try:
         query = db.collection(u'roommates').order_by(u'date', direction=firestore.Query.DESCENDING)
         results = query.stream()
@@ -61,6 +71,9 @@ def get_roommates():
 
 @app.route('/get_articles', methods=['POST','GET'])
 def get_articles():
+    """
+    Return all main page posts
+    """
     try:
         query = db.collection(u'articles').order_by(u'actor.date', direction=firestore.Query.DESCENDING)
         results = query.stream()
@@ -76,6 +89,10 @@ def get_articles():
 
 @app.route('/get_single_article', methods=['POST','GET'])
 def get_single_article():
+    """
+    Request Input: pid (string)\n
+    Return single main page post
+    """
     try:
         pid = request.form['pid']
         curr_post = db.collection(u'articles').document(pid).get()
@@ -86,6 +103,10 @@ def get_single_article():
 
 @app.route('/post_article', methods=['POST'])
 def post_article():
+    """
+    Request Input: article (dictionary)\n
+    Posts single main page post
+    """
     try:
         article = request.json
         article['actor']['date'] = datetime.datetime.utcnow() # UTC time added here to avoid JSON misformatting
@@ -96,6 +117,10 @@ def post_article():
 
 @app.route('/post_rental', methods=['POST'])
 def post_rental():
+    """
+    Request Input: rental (dictionary)\n
+    Posts single rental advertisement
+    """
     try:
         rental = request.json
         rental['date'] = datetime.datetime.utcnow()
@@ -106,6 +131,10 @@ def post_rental():
 
 @app.route('/post_roommate', methods=['POST'])
 def post_roommate():
+    """
+    Request Input: roommate (dictionary)\n
+    Posts single roommate advertisement
+    """
     try:
         roommate = request.json
         roommate['date'] = datetime.datetime.utcnow()
@@ -116,6 +145,10 @@ def post_roommate():
 
 @app.route('/set_user_info', methods=['POST'])
 def set_user_info():
+    """
+    Request Input: user_info (dictionary)\n
+    Initially set user info when first creating account
+    """
     try:
         info = request.json
         uid = info['uid']
@@ -126,6 +159,10 @@ def set_user_info():
 
 @app.route('/update_profile_data', methods=['POST'])
 def update_profile_data():
+    """
+    Request Input: user_info (dictionary)\n
+    Update existing user info
+    """
     try:
         info = request.json
         uid = info['uid']
@@ -137,6 +174,10 @@ def update_profile_data():
 
 @app.route('/update_article', methods=['POST'])
 def update_article():
+    """
+    Request Input: article_info (dictionary)\n
+    Update existing post on main page
+    """
     try:
         info = request.json
         pid = info['pid']
@@ -148,6 +189,10 @@ def update_article():
 
 @app.route('/save_property', methods=['POST'])
 def save_property():
+    """
+    Request Input: uid (string), key (string), save (string)\n
+    Add / remove given property from user saved property list
+    """
     try:
         info = request.json
         uid = info['uid']
@@ -167,6 +212,10 @@ def save_property():
 
 @app.route('/post_experience', methods=['POST'])
 def post_experience():
+    """
+    Request Input: target_uid (string), exp (dictionary)\n
+    Add experience with another user
+    """
     try:
         info = request.json
         target_uid = info['target_uid']
