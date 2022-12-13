@@ -9,7 +9,7 @@ import Sidebar from './Misc/Sidebar';
 import Header from './Misc/Header';
 import {FormControl, FormLabel, FormControlLabel, FormGroup, 
     InputLabel, Input, RadioGroup, Radio, Switch, Divider, ListItem,
-    ListItemAvatar, Avatar, ListItemText, TextField} from '@mui/material';
+    ListItemAvatar, Avatar, ListItemText, TextField, Typography} from '@mui/material';
 
 const Container = styled.div`
     grid-area: center;
@@ -166,7 +166,10 @@ function Profile(props) {
         } else {
             setUserType('Renter');
         }
-        if (otherUser) {
+    }, [user]);
+
+    useEffect(() => {
+        if(otherUser){
             changeBio(otherUser.bio);
             setPhoneNumber(otherUser.phoneNumber);
             setGender(otherUser.gender);
@@ -175,7 +178,7 @@ function Profile(props) {
             setPets(otherUser.preferences ? otherUser.preferences.pets : null);
             setSmoking(otherUser.preferences ? otherUser.preferences.smoking : null);
         }
-    }, [user]);
+    }, [otherUser]);
 
     const changeTo = (uType) => {
         db.collection('profiles').doc(auth.currentUser.uid).update({
@@ -266,18 +269,20 @@ function Profile(props) {
                                 {!editMode
                                     ? (
                                         <>
-                                            <a>
-                                                <h1>Bio:</h1>
-                                                <span>{otherUser && otherUser.bio && otherUser.bio.length ? otherUser.bio : 'This user has no bio.'}</span>
-                                            </a>
-                                            <a>
-                                                <h1>Phone Number:</h1>
-                                                <span>{otherUser && otherUser.phoneNumber && otherUser.phoneNumber.length ? formatPhoneNumber(otherUser.phoneNumber) : 'This user has no phone number linked.'}</span>
-                                            </a>
-                                            <a>
-                                                <h1>Gender:</h1>
-                                                <span>{otherUser && otherUser.gender && otherUser.gender.length ? otherUser.gender : 'This user doesn\'t have their gender set.'}</span>
-                                            </a>
+                                            <Typography variant="h6" >Bio:</Typography>
+                                            <Typography variant="subtitle1" gutterBottom>
+                                                {otherUser && otherUser.bio && otherUser.bio.length ? otherUser.bio : 'This user has no bio.'}
+                                            </Typography>
+                                            <Divider />
+                                            <Typography variant="h6" >Phone Number:</Typography>
+                                            <Typography variant="subtitle1" gutterBottom>
+                                                {otherUser && otherUser.phoneNumber && otherUser.phoneNumber.length ? formatPhoneNumber(otherUser.phoneNumber) : 'This user has no phone number linked.'}
+                                            </Typography>
+                                            <Divider />
+                                            <Typography variant="h6" >Gender:</Typography>
+                                            <Typography variant="subtitle1" gutterBottom>
+                                                {otherUser && otherUser.gender && otherUser.gender.length ? otherUser.gender : 'This user doesn\'t have their gender set.'}
+                                            </Typography>
                                         </>
                                     )
                                     : (
@@ -286,7 +291,8 @@ function Profile(props) {
                                             && (
                                                 <>
                                                     <div>
-                                                        <PurpleTextField multiline label="Bio" margin="dense" placeholder='Tell Us About Yourself' variant="outlined" value={info} onChange={(e) => changeBio(e.target.value)} id="bio" />
+                                                        <PurpleTextField multiline rows={4} maxRows={6} variant="outlined" label="Bio" margin="dense" placeholder='Tell Us About Yourself' 
+                                                        value={info} onChange={(e) => changeBio(e.target.value)} id="bio" />
                                                     </div>
                                                     <div>
                                                         <PurpleTextField label="Phone Number" margin="dense" placeholder='1112223333' variant="outlined" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} id="phoneNumber" />
@@ -328,18 +334,20 @@ function Profile(props) {
                                 {!editMode
                                     ? (
                                         <>
-                                            <a>
-                                                <h1>Gender Preference:</h1>
-                                                <span>{otherUser && otherUser.preferences && otherUser.preferences.roomWith ? otherUser.preferences.roomWith : 'Any'}</span>
-                                            </a>
-                                            <a>
-                                                <h1>Pets:</h1>
-                                                <span>{otherUser && otherUser.preferences && otherUser.preferences.pets ? otherUser.preferences.pets : 'OK with pets'}</span>
-                                            </a>
-                                            <a>
-                                                <h1>Do they want to live with a smoker:</h1>
-                                                <span>{otherUser && otherUser.preferences && otherUser.preferences.smoking ? otherUser.preferences.smoking : 'Doesn\'t matter'}</span>
-                                            </a>
+                                            <Typography variant="h6" sx={{fontWeight: 'bold'}} >Gender Preference:</Typography>
+                                            <Typography variant="subtitle1" gutterBottom>
+                                                {otherUser && otherUser.preferences && otherUser.preferences.roomWith ? otherUser.preferences.roomWith : 'Any'}
+                                            </Typography>
+                                            <Divider />
+                                            <Typography variant="h6" >Pets:</Typography>
+                                            <Typography variant="subtitle1" gutterBottom>
+                                                {otherUser && otherUser.preferences && otherUser.preferences.pets ? otherUser.preferences.pets : 'OK with pets'}
+                                            </Typography>
+                                            <Divider />
+                                            <Typography variant="h6" >Living With A Smoker:</Typography>
+                                            <Typography variant="subtitle1" gutterBottom>
+                                                {otherUser && otherUser.preferences && otherUser.preferences.smoking ? otherUser.preferences.smoking : 'Doesn\'t matter'}
+                                            </Typography>
                                         </>
                                     )
                                     : (
