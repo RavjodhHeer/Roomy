@@ -269,17 +269,17 @@ function Profile(props) {
                                 {!editMode
                                     ? (
                                         <>
-                                            <Typography variant="h6" >Bio:</Typography>
+                                            <Typography variant="h6" sx={{fontWeight: 'bold'}}>Bio:</Typography>
                                             <Typography variant="subtitle1" gutterBottom>
                                                 {otherUser && otherUser.bio && otherUser.bio.length ? otherUser.bio : 'This user has no bio.'}
                                             </Typography>
                                             <Divider />
-                                            <Typography variant="h6" >Phone Number:</Typography>
+                                            <Typography variant="h6" sx={{fontWeight: 'bold'}}>Phone Number:</Typography>
                                             <Typography variant="subtitle1" gutterBottom>
                                                 {otherUser && otherUser.phoneNumber && otherUser.phoneNumber.length ? formatPhoneNumber(otherUser.phoneNumber) : 'This user has no phone number linked.'}
                                             </Typography>
                                             <Divider />
-                                            <Typography variant="h6" >Gender:</Typography>
+                                            <Typography variant="h6" sx={{fontWeight: 'bold'}}>Gender:</Typography>
                                             <Typography variant="subtitle1" gutterBottom>
                                                 {otherUser && otherUser.gender && otherUser.gender.length ? otherUser.gender : 'This user doesn\'t have their gender set.'}
                                             </Typography>
@@ -334,17 +334,17 @@ function Profile(props) {
                                 {!editMode
                                     ? (
                                         <>
-                                            <Typography variant="h6" sx={{fontWeight: 'bold'}} >Gender Preference:</Typography>
+                                            <Typography variant="h6" sx={{fontWeight: 'bold'}}>Gender Preference:</Typography>
                                             <Typography variant="subtitle1" gutterBottom>
                                                 {otherUser && otherUser.preferences && otherUser.preferences.roomWith ? otherUser.preferences.roomWith : 'Any'}
                                             </Typography>
                                             <Divider />
-                                            <Typography variant="h6" >Pets:</Typography>
+                                            <Typography variant="h6" sx={{fontWeight: 'bold'}}>Pets:</Typography>
                                             <Typography variant="subtitle1" gutterBottom>
                                                 {otherUser && otherUser.preferences && otherUser.preferences.pets ? otherUser.preferences.pets : 'OK with pets'}
                                             </Typography>
                                             <Divider />
-                                            <Typography variant="h6" >Living With A Smoker:</Typography>
+                                            <Typography variant="h6" sx={{fontWeight: 'bold'}}>Living With A Smoker:</Typography>
                                             <Typography variant="subtitle1" gutterBottom>
                                                 {otherUser && otherUser.preferences && otherUser.preferences.smoking ? otherUser.preferences.smoking : 'Doesn\'t matter'}
                                             </Typography>
